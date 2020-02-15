@@ -28,17 +28,18 @@ class MainWindow(QWidget):
         self.gap = QLabel()
 
         self.equipLabel = QLabel()
-        self.equipLabel.setText("Widok ekwipunku:")
+        self.equipLabel.setText("Zarządzanie ekwipunkiem")
         self.equipLabel.setAlignment(Qt.AlignCenter)
+        self.equipLabel.setFont(font)
 
         self.ekwipunek = QPushButton("Ekwipunek wojska")
 
         self.layout = QVBoxLayout()
 
-        self.setWindowTitle("Menu glowne")
+        self.setWindowTitle("Menu główne")
         self.set_jednostki()
         self.set_layout()
-        self.setMinimumSize(600, 600)
+        self.setMinimumSize(500, 500)
 
         self.unitwindow = None
         self.equipment_window = EquipmentListWindow()
