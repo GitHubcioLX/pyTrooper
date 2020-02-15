@@ -1,6 +1,7 @@
 import PyQt5
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
+from EquipmentListWindow import EquipmentListWindow
 
 # GUI
 app = QApplication([])
@@ -17,6 +18,13 @@ class MainWindow(QWidget):
         self.setWindowTitle("Menu glowne")
         self.set_jednostki()
         self.set_layout()
+        self.ekwipunek.clicked.connect(self.open_equipment)
+
+
+    def open_equipment(self):
+        self.equipment_window = EquipmentListWindow()
+        self.equipment_window.show()
+
 
     def set_jednostki(self):
         self.jednostki.addItem("Kurwa dupa chuj")
