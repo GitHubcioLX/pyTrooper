@@ -28,6 +28,7 @@ class MainWindow(QWidget):
         self.setWindowTitle("Menu glowne")
         self.set_jednostki()
         self.set_layout()
+        self.setMinimumSize(600, 600)
         self.ekwipunek.clicked.connect(self.open_equipment)
         self.jednostkiT.cellDoubleClicked.connect(self.open_jednostki)
 
@@ -49,7 +50,8 @@ class MainWindow(QWidget):
         self.jednostkiT.setItem(0, 0, item)
         self.jednostkiT.setItem(0, 1, QTableWidgetItem("dupa"))
         self.jednostkiT.setHorizontalHeaderLabels(['Identyfikator', 'Nazwa'])
-
+        self.jednostkiT.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.jednostkiT.verticalHeader().setSectionResizeMode(QHeaderView.Fixed)
 
     def open_jednostki(self, rowid):
         item = self.jednostkiT.itemAt(0, 1)
