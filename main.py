@@ -19,8 +19,7 @@ class MainWindow(QWidget):
         self.naglowek.setAlignment(Qt.AlignCenter)
         self.naglowek.setFont(font)
 
-        self.jednostki = QListWidget()
-        self.jednostkiT = QTableWidget()
+        self.jednostki = QTableWidget()
 
         self.addButton = QPushButton("Dodaj")
 
@@ -40,26 +39,22 @@ class MainWindow(QWidget):
         self.setMinimumSize(600, 600)
 
         self.ekwipunek.clicked.connect(self.open_equipment)
-        self.jednostkiT.cellDoubleClicked.connect(self.open_jednostki)
+        self.jednostki.cellDoubleClicked.connect(self.open_jednostki)
 
     def open_equipment(self):
         self.equipment_window = EquipmentListWindow()
         self.equipment_window.show()
 
     def set_jednostki(self):
-        self.jednostki.addItem("Kurwa dupa chuj")
-        self.jednostki.addItem("Kurwa chuj dupa")
-        self.jednostki.addItem("Dupa kurwa chuj")
-        self.jednostki.addItem("Chuj kurwa dupa")
-        self.jednostkiT.setRowCount(20)
-        self.jednostkiT.setColumnCount(2)
+        self.jednostki.setRowCount(20)
+        self.jednostki.setColumnCount(2)
         item = QTableWidgetItem("kurwa")
         item.setFlags(item.flags() & ~Qt.ItemIsEditable)
-        self.jednostkiT.setItem(0, 0, item)
-        self.jednostkiT.setItem(0, 1, QTableWidgetItem("dupa"))
-        self.jednostkiT.setHorizontalHeaderLabels(['Identyfikator', 'Nazwa'])
-        self.jednostkiT.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        self.jednostkiT.verticalHeader().setSectionResizeMode(QHeaderView.Fixed)
+        self.jednostki.setItem(0, 0, item)
+        self.jednostki.setItem(0, 1, QTableWidgetItem("dupa"))
+        self.jednostki.setHorizontalHeaderLabels(['Identyfikator', 'Nazwa'])
+        self.jednostki.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.jednostki.verticalHeader().setSectionResizeMode(QHeaderView.Fixed)
 
     def open_jednostki(self, rowid):
         item = self.jednostkiT.itemAt(0, 1)
@@ -67,7 +62,7 @@ class MainWindow(QWidget):
 
     def set_layout(self):
         self.layout.addWidget(self.naglowek)
-        self.layout.addWidget(self.jednostkiT)
+        self.layout.addWidget(self.jednostki)
         self.layout.addWidget(self.addButton)
         self.layout.addWidget(self.gap)
         self.layout.addWidget(self.equipLabel)
