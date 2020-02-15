@@ -20,6 +20,7 @@ class MainWindow(QWidget):
         self.naglowek.setAlignment(Qt.AlignCenter)
         self.naglowek.setFont(font)
         self.jednostki = QListWidget()
+        self.addButton = QPushButton("Dodaj")
         self.gap = QLabel()
         self.ekwipunek = QPushButton("Ekwipunek wojska")
         self.layout = QVBoxLayout()
@@ -43,6 +44,7 @@ class MainWindow(QWidget):
     def set_layout(self):
         self.layout.addWidget(self.naglowek)
         self.layout.addWidget(self.jednostki)
+        self.layout.addWidget(self.addButton)
         self.layout.addWidget(self.gap)
         self.layout.addWidget(self.ekwipunek)
         self.layout.addWidget(self.gap)
