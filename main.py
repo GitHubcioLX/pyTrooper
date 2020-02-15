@@ -3,6 +3,8 @@ from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from EquipmentListWindow import EquipmentListWindow
+from UnitManagement import UnitManagement
+import sys
 
 # GUI
 app = QApplication([])
@@ -38,11 +40,13 @@ class MainWindow(QWidget):
         self.set_layout()
         self.setMinimumSize(600, 600)
 
+        self.unitwindow = None
+        self.equipment_window = EquipmentListWindow()
+
         self.ekwipunek.clicked.connect(self.open_equipment)
         self.jednostki.cellDoubleClicked.connect(self.open_jednostki)
 
     def open_equipment(self):
-        self.equipment_window = EquipmentListWindow()
         self.equipment_window.show()
 
     def set_jednostki(self):
@@ -52,13 +56,18 @@ class MainWindow(QWidget):
         item.setFlags(item.flags() & ~Qt.ItemIsEditable)
         self.jednostki.setItem(0, 0, item)
         self.jednostki.setItem(0, 1, QTableWidgetItem("dupa"))
+        item = QTableWidgetItem("chuj")
+        item.setFlags(item.flags() & ~Qt.ItemIsEditable)
+        self.jednostki.setItem(1, 0, item)
+        self.jednostki.setItem(1, 1, QTableWidgetItem("cipa"))
         self.jednostki.setHorizontalHeaderLabels(['Identyfikator', 'Nazwa'])
         self.jednostki.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.jednostki.verticalHeader().setSectionResizeMode(QHeaderView.Fixed)
 
     def open_jednostki(self, rowid):
-        item = self.jednostkiT.itemAt(0, 1)
-        print(item.text())
+        item = self.jednostki.item(rowid, 0)
+        self.unitwindow = UnitManagement(item.text())
+        self.unitwindow.show()
 
     def set_layout(self):
         self.layout.addWidget(self.naglowek)
@@ -69,6 +78,9 @@ class MainWindow(QWidget):
         self.layout.addWidget(self.ekwipunek)
         self.layout.addWidget(self.gap)
         self.setLayout(self.layout)
+
+    def closeEvent(self, QCloseEvent):
+        app.closeAllWindows()
 
 
 main_window = MainWindow()

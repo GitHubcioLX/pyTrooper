@@ -113,7 +113,7 @@ class UnitManagement(QTabWidget):
         self.setLayout(self.layout)
 
 
-main_window = UnitManagement("420")
+'''main_window = UnitManagement("420")
 main_window.show()
 
-app.exec_()
+app.exec_()'''
