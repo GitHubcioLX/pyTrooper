@@ -1,6 +1,7 @@
 import PyQt5
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
 from EquipmentListWindow import EquipmentListWindow
 
 # GUI
@@ -12,7 +13,14 @@ app = QApplication([])
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
+        self.naglowek = QLabel()
+        self.naglowek.setText("Zarządzanie jednostką")
+        font = QFont()
+        font.setBold(True)
+        self.naglowek.setAlignment(Qt.AlignCenter)
+        self.naglowek.setFont(font)
         self.jednostki = QListWidget()
+        self.gap = QLabel()
         self.ekwipunek = QPushButton("Ekwipunek wojska")
         self.layout = QVBoxLayout()
         self.setWindowTitle("Menu glowne")
@@ -33,8 +41,11 @@ class MainWindow(QWidget):
         self.jednostki.addItem("Chuj kurwa dupa")
 
     def set_layout(self):
+        self.layout.addWidget(self.naglowek)
         self.layout.addWidget(self.jednostki)
+        self.layout.addWidget(self.gap)
         self.layout.addWidget(self.ekwipunek)
+        self.layout.addWidget(self.gap)
         self.setLayout(self.layout)
 
 
