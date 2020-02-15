@@ -20,6 +20,7 @@ class MainWindow(QWidget):
         self.naglowek.setAlignment(Qt.AlignCenter)
         self.naglowek.setFont(font)
         self.jednostki = QListWidget()
+        self.jednostkiT = QTableWidget()
         self.addButton = QPushButton("Dodaj")
         self.gap = QLabel()
         self.ekwipunek = QPushButton("Ekwipunek wojska")
@@ -28,6 +29,7 @@ class MainWindow(QWidget):
         self.set_jednostki()
         self.set_layout()
         self.ekwipunek.clicked.connect(self.open_equipment)
+        self.jednostkiT.cellDoubleClicked.connect(self.open_jednostki)
 
 
     def open_equipment(self):
@@ -40,10 +42,23 @@ class MainWindow(QWidget):
         self.jednostki.addItem("Kurwa chuj dupa")
         self.jednostki.addItem("Dupa kurwa chuj")
         self.jednostki.addItem("Chuj kurwa dupa")
+        self.jednostkiT.setRowCount(10)
+        self.jednostkiT.setColumnCount(2)
+        item = QTableWidgetItem("kurwa")
+        item.setFlags(item.flags() & ~Qt.ItemIsEditable)
+        self.jednostkiT.setItem(0, 0, item)
+        self.jednostkiT.setItem(0, 1, QTableWidgetItem("dupa"))
+        self.jednostkiT.setHorizontalHeaderLabels(['Identyfikator', 'Nazwa'])
+
+
+    def open_jednostki(self, rowid):
+        item = self.jednostkiT.itemAt(0, 1)
+        print(item.text())
+
 
     def set_layout(self):
         self.layout.addWidget(self.naglowek)
-        self.layout.addWidget(self.jednostki)
+        self.layout.addWidget(self.jednostkiT)
         self.layout.addWidget(self.addButton)
         self.layout.addWidget(self.gap)
         self.layout.addWidget(self.ekwipunek)
