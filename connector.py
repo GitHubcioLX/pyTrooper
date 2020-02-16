@@ -68,6 +68,14 @@ class Connector:
         return res
 
     @staticmethod
+    def get_dict(tablename, columns, id, idname, idtype):
+        dict = {}
+        res = Connector.get_record(tablename, columns, id, idname, idtype)
+        for i, x in enumerate(res, 0):
+            dict[columns[i]] = x
+        return dict
+
+    @staticmethod
     def get_filtered(tablename, columns, filters):
         cur = Connector.conn.cursor()
         columns = Connector.column_formatter(columns)
@@ -144,6 +152,4 @@ class Connector:
 
 
 if __name__ == "__main__":
-    Connector.table_names()
-    print(Connector.get_table_data("jednostki", ["identyfikator", "nazwa"]))
-    print(Connector.get_record("jednostki", None, 1, "identyfikator", int))
+    print(Connector.get_dict("jednostki", ["identyfikator"], 1, "identyfikator", int))
