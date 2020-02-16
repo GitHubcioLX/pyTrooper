@@ -1,5 +1,9 @@
 import psycopg2
 from config import *
+from ErrorPopUp import ErrorPopUp
+from ErrorFormatter import  ErrorFormatter
+
+error_window = None
 
 
 class Connector:
@@ -51,8 +55,14 @@ class Connector:
     def get_table_data(tablename, columns):
         cur = Connector.conn.cursor()
         columns = Connector.column_formatter(columns)
-        cur.execute("SELECT " + columns +
-                    " FROM " + tablename + ";")
+        try:
+            cur.execute("SELECT " + columns +
+                        " FROM " + tablename + ";")
+        except psycopg2.Error as err:
+            global error_window
+            error_window = ErrorPopUp(ErrorFormatter.get_error(err.pgcode))
+            error_window.show()
+
         res = cur.fetchall()
         cur.close()
         return res
@@ -61,14 +71,20 @@ class Connector:
     def get_record(tablename, columns, id, idname, idtype):
         cur = Connector.conn.cursor()
         columns = Connector.column_formatter(columns)
-        if idtype is int:
-            cur.execute("SELECT " + columns +
-                        " FROM " + tablename +
-                        " WHERE " + idname + " = " + str(id) + ";")
-        else:
-            cur.execute("SELECT " + columns +
-                        " FROM " + tablename +
-                        " WHERE " + idname + " LIKE " + id + ";")
+        try:
+            if idtype is int:
+                cur.execute("SELECT " + columns +
+                            " FROM " + tablename +
+                            " WHERE " + idname + " = " + str(id) + ";")
+            else:
+                cur.execute("SELECT " + columns +
+                            " FROM " + tablename +
+                            " WHERE " + idname + " LIKE " + id + ";")
+        except psycopg2.Error as err:
+            global error_window
+            error_window = ErrorPopUp(ErrorFormatter.get_error(err.pgcode))
+            error_window.show()
+
         res = cur.fetchone()
         cur.close()
         return res
@@ -78,9 +94,15 @@ class Connector:
         cur = Connector.conn.cursor()
         columns = Connector.column_formatter(columns)
         values = Connector.value_formatter(values)
-        cur.execute("INSERT INTO " + tablename +
+        try:
+            cur.execute("INSERT INTO " + tablename +
                     " (" + columns + ") " +
                     "VALUES (" + values + ");")
+        except psycopg2.Error as err:
+            global error_window
+            error_window = ErrorPopUp(ErrorFormatter.get_error(err.pgcode))
+            error_window.show()
+
         cur.close()
         Connector.conn.commit()
 
@@ -89,7 +111,12 @@ class Connector:
         if ids:
             cur = Connector.conn.cursor()
             ids = Connector.delete_formatter(ids, idname, idtype)
-            cur.execute("DELETE FROM " + tablename + " WHERE " + ids + ";")
+            try:
+                cur.execute("DELETE FROM " + tablename + " WHERE " + ids + ";")
+            except psycopg2.Error as err:
+                global error_window
+                error_window = ErrorPopUp(ErrorFormatter.get_error(err.pgcode))
+                error_window.show()
             Connector.conn.commit()
 
     @staticmethod
