@@ -1,18 +1,25 @@
 import psycopg2
 from config import *
 
-conn = psycopg2.connect(host=host, database=database, user=user, password=password)
 
-cur = conn.cursor()
+class Connector:
+    conn = psycopg2.connect(host=host, database=database, user=user, password=password)
 
-cur.execute("SELECT table_name " +
-            "FROM information_schema.tables " +
-            "WHERE table_schema='public' " +
-            "AND table_type='BASE TABLE';")
+    @staticmethod
+    def table_names():
+        cur = Connector.conn.cursor()
+        cur.execute("SELECT table_name " +
+                "FROM information_schema.tables " +
+                "WHERE table_schema='public' " +
+                "AND table_type='BASE TABLE';")
 
-res = cur.fetchall()
+        res = cur.fetchall()
+        print(res)
+        cur.close()
 
-print(res)
+    @staticmethod
+    def close_connection():
+        Connector.conn.close()
 
-cur.close()
-conn.close()
+
+Connector.table_names()
