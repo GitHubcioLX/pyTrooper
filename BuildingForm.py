@@ -10,6 +10,7 @@ class BuildingForm(QWidget):
         self.layout = QFormLayout()
         self.set_form()
         self.addButton = QPushButton("Zapisz")
+        self.layout.addRow(QLabel())
         self.layout.addRow(self.addButton)
         self.setLayout(self.layout)
 
