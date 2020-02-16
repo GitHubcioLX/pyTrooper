@@ -8,12 +8,12 @@ from BuildingForm import BuildingForm
 create_view = None
 
 
-def show_add_windows(type, id):
+'''def show_add_windows(type, id):
     types = {
         "budynki": lambda x: BuildingForm(x)
     }
     create_view = types.get(type)(id)
-    create_view.show()
+    create_view.show()'''
 
 
 def set_info_tab(id_jednostki):
@@ -38,34 +38,6 @@ def set_info_tab(id_jednostki):
     buttonsLayout.addWidget(przydzialy)
     buttonsLayout.addWidget(zamowienia)
     buttons.setLayout(buttonsLayout)
-    layout.addWidget(buttons)
-    tab.setLayout(layout)
-    return tab
-
-
-def create_list_tab(column_names, items, type, id):
-    tab = QWidget()
-    layout = QVBoxLayout()
-
-    tabela = create_table(column_names, items)
-    # lista = QListWidget()
-    # for item in items:
-    #    lista.addItem(item)
-    # layout.addWidget(lista)
-    layout.addWidget(tabela)
-
-    buttons = QGroupBox("Zarządzanie")
-    boxLayout = QHBoxLayout()
-    addButton = QPushButton("Dodaj")
-    rmvButton = QPushButton("Usuń")
-    editButton = QPushButton("Edytuj")
-    boxLayout.addWidget(addButton)
-    boxLayout.addWidget(rmvButton)
-    boxLayout.addWidget(editButton)
-    buttons.setLayout(boxLayout)
-
-    addButton.clicked.connect(show_add_windows(type, id))
-
     layout.addWidget(buttons)
     tab.setLayout(layout)
     return tab

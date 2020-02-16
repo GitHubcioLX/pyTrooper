@@ -47,7 +47,6 @@ class MainWindow(QWidget):
         self.unitcreation = None
         self.equipment_window = EquipmentListWindow()
 
-
     def create_unit(self):
         self.unitcreation = UnitForm(self)
         self.unitcreation.show()

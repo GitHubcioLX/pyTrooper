@@ -2,8 +2,9 @@ import PyQt5
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
-from Utilities import set_info_tab, create_list_tab
+from Utilities import set_info_tab, create_table
 from connector import Connector
+from BuildingForm import BuildingForm
 
 # GUI
 # app = QApplication([])
@@ -17,16 +18,51 @@ class UnitManagement(QTabWidget):
     def __init__(self, id_jednostki):
         global budynki, oficerowie, pojazdy
         super().__init__()
+        self.unit_id = id_jednostki
         self.setWindowTitle("Zarządzanie jednostką")
         self.setMinimumSize(400, 350)
         self.infoTab = set_info_tab(id_jednostki)
-        self.listTab1 = create_list_tab(["Oznaczenie", "Rola"], Connector.get_filtered("budynki", ["oznaczenie", "rola_budynku"], " WHERE id_jednostki = " + id_jednostki), "budynki", id_jednostki)
-        self.listTab2 = create_list_tab(["ID", "Model"], Connector.get_filtered("pojazdy", ["id_pojazdu", "model"], " WHERE id_jednostki = " + id_jednostki), "pojazdy", id_jednostki)
-        self.listTab3 = create_list_tab(["Imię", "Nazwisko", "PESEL"], Connector.get_filtered("oficerowie", ["imie", "nazwisko", "pesel"], " WHERE id_jednostki = " + id_jednostki), "oficerowie", id_jednostki)
+        self.listTab1 = self.create_list_tab(["Oznaczenie", "Rola"], Connector.get_filtered("budynki", ["oznaczenie", "rola_budynku"], " WHERE id_jednostki = " + id_jednostki), "budynki")
+        self.listTab2 = self.create_list_tab(["ID", "Model"], Connector.get_filtered("pojazdy", ["id_pojazdu", "model"], " WHERE id_jednostki = " + id_jednostki), "pojazdy")
+        self.listTab3 = self.create_list_tab(["Imię", "Nazwisko", "PESEL"], Connector.get_filtered("oficerowie", ["imie", "nazwisko", "pesel"], " WHERE id_jednostki = " + id_jednostki), "oficerowie")
         self.addTab(self.infoTab, "Ogólne")
         self.addTab(self.listTab1, "Budynki")
         self.addTab(self.listTab2, "Pojazdy")
         self.addTab(self.listTab3, "Oficerowie")
+        self.addWindow = None
+
+    def create_list_tab(self, column_names, items, type):
+        tab = QWidget()
+        layout = QVBoxLayout()
+
+        tabela = create_table(column_names, items)
+        # lista = QListWidget()
+        # for item in items:
+        #    lista.addItem(item)
+        # layout.addWidget(lista)
+        layout.addWidget(tabela)
+
+        buttons = QGroupBox("Zarządzanie")
+        boxLayout = QHBoxLayout()
+        addButton = QPushButton("Dodaj")
+        rmvButton = QPushButton("Usuń")
+        editButton = QPushButton("Edytuj")
+        boxLayout.addWidget(addButton)
+        boxLayout.addWidget(rmvButton)
+        boxLayout.addWidget(editButton)
+        buttons.setLayout(boxLayout)
+
+        #addButton.clicked.connect(show_add_windows(type, id))
+        if type == "budynki":
+            addButton.clicked.connect(self.add_building)
+
+        layout.addWidget(buttons)
+        tab.setLayout(layout)
+        return tab
+
+    def add_building(self):
+        self.addWindow = BuildingForm(self.unit_id)
+        self.addWindow.show()
 
 
 '''main_window = UnitManagement("420")
