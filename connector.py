@@ -32,10 +32,10 @@ class Connector:
         output = ""
         if idtype is int:
             for field in ids:
-                output += field + " = " + idname + " OR "
+                output += idname + " = " + field + " OR "
         else:
             for field in ids:
-                output += field + " LIKE " + idname + " OR "
+                output += idname + " LIKE '" + field + "' OR "
         output = output[:-4]
         return output
 
@@ -132,6 +132,7 @@ class Connector:
                 cur.execute("DELETE FROM " + tablename + " WHERE " + ids + ";")
             except psycopg2.Error as err:
                 global error_window
+                print(err.pgerror)
                 error_window = ErrorPopUp(ErrorFormatter.get_error(err.pgcode))
                 error_window.show()
             Connector.conn.commit()

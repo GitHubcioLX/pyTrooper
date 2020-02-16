@@ -100,7 +100,7 @@ class UnitManagement(QTabWidget):
             for x in selection:
                 res.append(self.tabela_budynki.item(x.row(), 0).text())
             res = list(dict.fromkeys(res))
-            Connector.delete_items("budynki", res, "oznaczenie", int)
+            Connector.delete_items("budynki", res, "oznaczenie", str)
             self.refresh_buildings()
 
 '''main_window = UnitManagement("420")
