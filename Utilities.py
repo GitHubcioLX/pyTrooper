@@ -2,6 +2,7 @@ import PyQt5
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
+from connector import Connector
 
 
 def set_info_tab(id_jednostki):
@@ -9,10 +10,13 @@ def set_info_tab(id_jednostki):
     layout = QVBoxLayout()
     info = QGroupBox("Informacje")
     infoLayout = QFormLayout()
+
+    unit_data = Connector.get_record("jednostki", None, id_jednostki, "identyfikator", int)
+
     infoLayout.addRow("Identyfikator: ", QLabel(id_jednostki))
-    infoLayout.addRow("Nazwa: ", QLabel("Jednostka Testowa Jebanej Piechoty Miejskiej"))
-    infoLayout.addRow("Miasto: ", QLabel("Poznan"))
-    infoLayout.addRow("Rodzaj: ", QLabel("Pizdowata masa"))
+    infoLayout.addRow("Nazwa: ", QLabel(unit_data[1]))
+    infoLayout.addRow("Miasto: ", QLabel(unit_data[3]))
+    infoLayout.addRow("Rodzaj: ", QLabel(unit_data[2]))
     info.setLayout(infoLayout)
     layout.addWidget(info)
 
@@ -33,10 +37,10 @@ def create_list_tab(column_names, items):
     layout = QVBoxLayout()
 
     tabela = create_table(column_names, items)
-    #lista = QListWidget()
-    #for item in items:
+    # lista = QListWidget()
+    # for item in items:
     #    lista.addItem(item)
-    #layout.addWidget(lista)
+    # layout.addWidget(lista)
     layout.addWidget(tabela)
 
     buttons = QGroupBox("Zarządzanie")
@@ -80,3 +84,13 @@ def create_table(column_names, items):
         table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
 
     return table
+
+
+label_to_collumn = {
+    "UnitForm": {
+        "Identyfikator: ": "identyfikator",
+        "Nazwa: ": "nazwa",
+        "Rodzaj: ": "rodzaj",
+        "Miasto: ": "miasto"
+    }
+}
