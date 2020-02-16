@@ -8,8 +8,10 @@ class BuildingForm(QWidget):
         super().__init__()
         self.setWindowTitle("Formularz (budynek)")
         self.layout = QFormLayout()
-        self.addButton = QPushButton("Zatwierdź")
         self.set_form()
+        self.addButton = QPushButton("Zapisz")
+        self.layout.addRow(QLabel())
+        self.layout.addRow(self.addButton)
         self.setLayout(self.layout)
 
     def set_form(self):
@@ -19,8 +21,6 @@ class BuildingForm(QWidget):
         self.layout.addRow("Docelowa liczba personelu: ", empCount)
         role = QLineEdit()
         self.layout.addRow("Rola budynku: ", role)
-        confirm = QPushButton("Zapisz")
-        self.layout.addRow(confirm)
 
 
 if __name__ == "__main__":
