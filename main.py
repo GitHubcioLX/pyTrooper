@@ -4,7 +4,8 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from EquipmentListWindow import EquipmentListWindow
 from UnitManagement import UnitManagement
-import sys
+from connector import Connector
+from Utilities import create_table
 
 # GUI
 app = QApplication([])
@@ -51,19 +52,7 @@ class MainWindow(QWidget):
         self.equipment_window.show()
 
     def set_jednostki(self):
-        self.jednostki.setRowCount(20)
-        self.jednostki.setColumnCount(2)
-        item = QTableWidgetItem("kurwa")
-        item.setFlags(item.flags() & ~Qt.ItemIsEditable)
-        self.jednostki.setItem(0, 0, item)
-        self.jednostki.setItem(0, 1, QTableWidgetItem("dupa"))
-        item = QTableWidgetItem("chuj")
-        item.setFlags(item.flags() & ~Qt.ItemIsEditable)
-        self.jednostki.setItem(1, 0, item)
-        self.jednostki.setItem(1, 1, QTableWidgetItem("cipa"))
-        self.jednostki.setHorizontalHeaderLabels(['Identyfikator', 'Nazwa'])
-        self.jednostki.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        self.jednostki.verticalHeader().setSectionResizeMode(QHeaderView.Fixed)
+        self.jednostki = create_table(['Identyfikator', 'Nazwa'], Connector.get_table_data("jednostki", ["identyfikator", "nazwa"]))
 
     def open_jednostki(self, rowid):
         item = self.jednostki.item(rowid, 0)
