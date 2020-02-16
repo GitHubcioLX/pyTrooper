@@ -9,9 +9,9 @@ class Connector:
     def table_names():
         cur = Connector.conn.cursor()
         cur.execute("SELECT table_name " +
-                "FROM information_schema.tables " +
-                "WHERE table_schema='public' " +
-                "AND table_type='BASE TABLE';")
+                    "FROM information_schema.tables " +
+                    "WHERE table_schema='public' " +
+                    "AND table_type='BASE TABLE';")
 
         res = cur.fetchall()
         print(res)
@@ -22,4 +22,5 @@ class Connector:
         Connector.conn.close()
 
 
-Connector.table_names()
+if __name__ == "__main__":
+    Connector.table_names()
