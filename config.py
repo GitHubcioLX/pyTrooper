@@ -12,7 +12,7 @@ formatter = {"identyfikator": "Identyfikator",
              "liczba_personelu": "Liczba personelu",
              "rola_budynku": "Rola",
              "id_jednostki": "Identyfikator jednostki",
-             "PESEL": "PESEL",
+             "pesel": "PESEL",
              "imie": "Imię",
              "nazwisko": "Nazwisko",
              "data_ur": "Data urodzenia",
@@ -46,3 +46,12 @@ formatter = {"identyfikator": "Identyfikator",
              "data_zam": "Data złożenia zamówienia",
              "deadline": "Maksymalny termin realizacji"
              }
+
+column_names = {"jednostki": ["identyfikator", "nazwa", "rodzaj", "miasto"],
+                "oficerowie": ["imie", "nazwisko", "ranga", "pesel", "data_ur", "grupa_krwi", "wyznanie",
+                               "id_jednostki", "budynek"],
+                "budynki": ["oznaczenie", "rola_budynku", "liczba_personelu", "id_jednostki"],
+                "ekwipunek": ["typ", "producent", "model", "numer_seryjny", "data_produkcji", "data_waznosci"],
+                "pojazdy": ["rodzaj", "producent", "model", "rok_produkcji", "masa", "liczba_zalogi", "zasieg",
+                            "rejestracja", "id_jednostki", "status"],
+                "rangi": ["nazwa_rangi", "liczba_przepustek", "poziom_uprawnien", "zold"]}
