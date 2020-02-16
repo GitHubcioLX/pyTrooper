@@ -3,6 +3,17 @@ from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from connector import Connector
+from BuildingForm import BuildingForm
+
+create_view = None
+
+
+def show_add_windows(type, id):
+    types = {
+        "budynki": lambda x: BuildingForm(x)
+    }
+    create_view = types.get(type)(id)
+    create_view.show()
 
 
 def set_info_tab(id_jednostki):
@@ -32,7 +43,7 @@ def set_info_tab(id_jednostki):
     return tab
 
 
-def create_list_tab(column_names, items):
+def create_list_tab(column_names, items, type, id):
     tab = QWidget()
     layout = QVBoxLayout()
 
@@ -52,6 +63,8 @@ def create_list_tab(column_names, items):
     boxLayout.addWidget(rmvButton)
     boxLayout.addWidget(editButton)
     buttons.setLayout(boxLayout)
+
+    addButton.clicked.connect(show_add_windows(type, id))
 
     layout.addWidget(buttons)
     tab.setLayout(layout)
