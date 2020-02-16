@@ -19,6 +19,8 @@ class BuildingForm(QWidget):
         self.layout.addRow("Docelowa liczba personelu: ", empCount)
         role = QLineEdit()
         self.layout.addRow("Rola budynku: ", role)
+        confirm = QPushButton("Zapisz")
+        self.layout.addRow(confirm)
 
 
 if __name__ == "__main__":
