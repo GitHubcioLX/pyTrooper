@@ -68,6 +68,23 @@ class Connector:
         return res
 
     @staticmethod
+    def get_filtered(tablename, columns, filters):
+        cur = Connector.conn.cursor()
+        columns = Connector.column_formatter(columns)
+        try:
+            cur.execute("SELECT " + columns +
+                        " FROM " + tablename + filters + ";")
+        except psycopg2.Error as err:
+            global error_window
+            print(err.pgerror)
+            error_window = ErrorPopUp(ErrorFormatter.get_error(err.pgcode))
+            error_window.show()
+
+        res = cur.fetchall()
+        cur.close()
+        return res
+
+    @staticmethod
     def get_record(tablename, columns, id, idname, idtype):
         cur = Connector.conn.cursor()
         columns = Connector.column_formatter(columns)

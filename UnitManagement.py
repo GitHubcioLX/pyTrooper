@@ -3,6 +3,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from Utilities import set_info_tab, create_list_tab
+from connector import Connector
 
 # GUI
 # app = QApplication([])
@@ -19,9 +20,9 @@ class UnitManagement(QTabWidget):
         self.setWindowTitle("Zarządzanie jednostką")
         self.setMinimumSize(400, 350)
         self.infoTab = set_info_tab(id_jednostki)
-        self.listTab1 = create_list_tab(["Oznaczenie", "Rola"], budynki)
-        self.listTab2 = create_list_tab(["ID", "Model"], pojazdy)
-        self.listTab3 = create_list_tab(["Imię", "Nazwisko", "PESEL"], oficerowie)
+        self.listTab1 = create_list_tab(["Oznaczenie", "Rola"], Connector.get_filtered("budynki", ["oznaczenie", "rola_budynku"], " WHERE id_jednostki = " + id_jednostki))
+        self.listTab2 = create_list_tab(["ID", "Model"], Connector.get_filtered("pojazdy", ["id_pojazdu", "model"], " WHERE id_jednostki = " + id_jednostki))
+        self.listTab3 = create_list_tab(["Imię", "Nazwisko", "PESEL"], Connector.get_filtered("oficerowie", ["imie", "nazwisko", "pesel"], " WHERE id_jednostki = " + id_jednostki))
         self.addTab(self.infoTab, "Ogólne")
         self.addTab(self.listTab1, "Budynki")
         self.addTab(self.listTab2, "Pojazdy")
