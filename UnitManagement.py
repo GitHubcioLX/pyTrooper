@@ -30,7 +30,7 @@ class UnitManagement(QTabWidget):
         self.listTab3 = None
         self.refresh_officers()
         self.addWindow = None
-        self.self.setCurrentIndex(0)
+        self.setCurrentIndex(0)
 
     def refresh_buildings(self):
         self.removeTab(1)
