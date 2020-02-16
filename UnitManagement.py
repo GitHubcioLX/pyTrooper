@@ -30,6 +30,7 @@ class UnitManagement(QTabWidget):
         self.listTab3 = None
         self.refresh_officers()
         self.addWindow = None
+        self.tabela_budynki = None
 
     def refresh_buildings(self):
         self.removeTab(1)
@@ -80,6 +81,8 @@ class UnitManagement(QTabWidget):
         # addButton.clicked.connect(show_add_windows(type, id))
         if type == "budynki":
             addButton.clicked.connect(self.add_building)
+            rmvButton.clicked.connect(self.delete_buildings)
+            self.tabela_budynki = tabela
 
         layout.addWidget(buttons)
         tab.setLayout(layout)
@@ -90,6 +93,15 @@ class UnitManagement(QTabWidget):
         self.addWindow.commited.connect(self.refresh_buildings)
         self.addWindow.show()
 
+    def delete_buildings(self):
+        selection = self.tabela_budynki.selectedItems()
+        if selection:
+            res = []
+            for x in selection:
+                res.append(self.tabela_budynki.item(x.row(), 0).text())
+            res = list(dict.fromkeys(res))
+            Connector.delete_items("budynki", res, "oznaczenie", int)
+            self.refresh_buildings()
 
 '''main_window = UnitManagement("420")
 main_window.show()
