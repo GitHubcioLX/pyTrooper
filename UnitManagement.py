@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import *
 from BuildingForm import BuildingForm
 from BuildingPreview import BuildingPreview
 from VehicleForm import VehicleForm
+from VehiclePreview import VehiclePreview
 from Utilities import set_info_tab, create_table
 from connector import Connector
 
@@ -91,6 +92,7 @@ class UnitManagement(QTabWidget):
             addButton.clicked.connect(self.add_vehicle)
             rmvButton.clicked.connect(self.delete_vehicles)
             self.tabela_pojazdy = tabela
+            self.tabela_pojazdy.cellDoubleClicked.connect(self.vehicle_preview)
 
         layout.addWidget(buttons)
         tab.setLayout(layout)
@@ -129,6 +131,11 @@ class UnitManagement(QTabWidget):
     def building_preview(self, rowid):
         item = self.tabela_budynki.item(rowid, 0)
         self.previewWindow = BuildingPreview(item.text())
+        self.previewWindow.show()
+
+    def vehicle_preview(self, rowid):
+        item = self.tabela_pojazdy.item(rowid, 0)
+        self.previewWindow = VehiclePreview(item.text())
         self.previewWindow.show()
 
 '''main_window = UnitManagement("420")
