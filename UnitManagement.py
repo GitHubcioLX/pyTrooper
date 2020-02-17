@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import *
 
 from BuildingForm import BuildingForm
 from BuildingPreview import BuildingPreview
+from VehicleForm import VehicleForm
 from Utilities import set_info_tab, create_table
 from connector import Connector
 
@@ -86,6 +87,10 @@ class UnitManagement(QTabWidget):
             rmvButton.clicked.connect(self.delete_buildings)
             self.tabela_budynki = tabela
             self.tabela_budynki.cellDoubleClicked.connect(self.building_preview)
+        if type == "pojazdy":
+            addButton.clicked.connect(self.add_vehicle)
+            rmvButton.clicked.connect(self.delete_vehicles)
+            self.tabela_pojazdy = tabela
 
         layout.addWidget(buttons)
         tab.setLayout(layout)
@@ -94,6 +99,11 @@ class UnitManagement(QTabWidget):
     def add_building(self):
         self.addWindow = BuildingForm(self.unit_id)
         self.addWindow.commited.connect(self.refresh_buildings)
+        self.addWindow.show()
+
+    def add_vehicle(self):
+        self.addWindow = VehicleForm(self.unit_id, "Dostępny")
+        self.addWindow.commited.connect(self.refresh_vechicles)
         self.addWindow.show()
 
     def delete_buildings(self):
@@ -105,6 +115,16 @@ class UnitManagement(QTabWidget):
             res = list(dict.fromkeys(res))
             Connector.delete_items("budynki", res, "oznaczenie", str)
             self.refresh_buildings()
+
+    def delete_vehicles(self):
+        selection = self.tabela_pojazdy.selectedItems()
+        if selection:
+            res = []
+            for x in selection:
+                res.append(self.tabela_pojazdy.item(x.row(), 0).text())
+            res = list(dict.fromkeys(res))
+            Connector.delete_items("pojazdy", res, "id_pojazdu", int)
+            self.refresh_vechicles()
 
     def building_preview(self, rowid):
         item = self.tabela_budynki.item(rowid, 0)
