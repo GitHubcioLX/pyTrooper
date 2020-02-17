@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import *
 
 from BuildingForm import BuildingForm
+from BuildingPreview import BuildingPreview
 from Utilities import set_info_tab, create_table
 from connector import Connector
 
@@ -30,6 +31,7 @@ class UnitManagement(QTabWidget):
         self.listTab3 = None
         self.refresh_officers()
         self.addWindow = None
+        self.previewWindow = None
         self.setCurrentIndex(0)
 
     def refresh_buildings(self):
@@ -83,6 +85,7 @@ class UnitManagement(QTabWidget):
             addButton.clicked.connect(self.add_building)
             rmvButton.clicked.connect(self.delete_buildings)
             self.tabela_budynki = tabela
+            self.tabela_budynki.cellDoubleClicked.connect(self.building_preview)
 
         layout.addWidget(buttons)
         tab.setLayout(layout)
@@ -102,6 +105,11 @@ class UnitManagement(QTabWidget):
             res = list(dict.fromkeys(res))
             Connector.delete_items("budynki", res, "oznaczenie", str)
             self.refresh_buildings()
+
+    def building_preview(self, rowid):
+        item = self.tabela_budynki.item(rowid, 0)
+        self.previewWindow = BuildingPreview(item.text())
+        self.previewWindow.show()
 
 '''main_window = UnitManagement("420")
 main_window.show()

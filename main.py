@@ -28,14 +28,13 @@ class MainWindow(QWidget):
         self.addButton = QPushButton("Dodaj")
         self.delButton = QPushButton("Usuń")
 
-        self.gap = QLabel()
-
         self.equipLabel = QLabel()
         self.equipLabel.setText("Zarządzanie ekwipunkiem")
         self.equipLabel.setAlignment(Qt.AlignCenter)
         self.equipLabel.setFont(font)
 
         self.ekwipunek = QPushButton("Ekwipunek wojska")
+        self.rangi = QPushButton("Rangi")
 
         self.layout = QVBoxLayout()
 
@@ -75,14 +74,29 @@ class MainWindow(QWidget):
             self.set_jednostki()
 
     def set_layout(self):
-        self.layout.addWidget(self.naglowek)
-        self.layout.addWidget(self.jednostki)
-        self.layout.addWidget(self.addButton)
-        self.layout.addWidget(self.delButton)
-        self.layout.addWidget(self.gap)
-        self.layout.addWidget(self.equipLabel)
-        self.layout.addWidget(self.ekwipunek)
-        self.layout.addWidget(self.gap)
+        #self.layout.addWidget(self.naglowek)
+        #self.layout.addWidget(self.jednostki)
+        button_box = QGroupBox("Zarządzanie jednostką")
+        b_box_layout = QGridLayout()
+        b_box_layout.addWidget(self.jednostki, 0, 0, 1, 2)
+        b_box_layout.addWidget(self.addButton, 1, 0)
+        b_box_layout.addWidget(self.delButton, 1, 1)
+        button_box.setLayout(b_box_layout)
+        self.layout.addWidget(button_box)
+        #self.layout.addWidget(QLabel())
+        #self.layout.addWidget(self.equipLabel)
+        eq_box = QGroupBox("Zarządzanie ekwipunkiem")
+        eq_box_layout = QVBoxLayout()
+        eq_box_layout.addWidget(self.ekwipunek)
+        eq_box.setLayout(eq_box_layout)
+        self.layout.addWidget(eq_box)
+        #self.layout.addWidget(self.ekwipunek)
+        #self.layout.addWidget(QLabel())
+        rank_box = QGroupBox("Zarządzanie rangami")
+        rank_box_layout = QVBoxLayout()
+        rank_box_layout.addWidget(self.rangi)
+        rank_box.setLayout(rank_box_layout)
+        self.layout.addWidget(rank_box)
         self.setLayout(self.layout)
 
         self.addButton.clicked.connect(self.create_unit)

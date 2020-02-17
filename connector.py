@@ -104,7 +104,7 @@ class Connector:
             else:
                 cur.execute("SELECT " + columns +
                             " FROM " + tablename +
-                            " WHERE " + idname + " LIKE " + id + ";")
+                            " WHERE " + idname + " LIKE '" + id + "';")
         except psycopg2.Error as err:
             global error_window
             error_window = ErrorPopUp(ErrorFormatter.get_error(err.pgcode))

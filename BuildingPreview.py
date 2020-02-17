@@ -1,17 +1,18 @@
 import PyQt5
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
+from Utilities import create_info_box
 
 mock_personel = ["Andrzej Konopka", "Stefan Orzech", "Marian Ziemny", "Grzegorz Włoski"]
 
 
 class BuildingPreview(QWidget):
-    def __init__(self, id_jednostki, oznaczenie):
+    def __init__(self, oznaczenie):
         global mock_personel
         super().__init__()
         self.setWindowTitle("Podgląd budynku")
         self.layout = QVBoxLayout()
-        info = set_info_box(oznaczenie, id_jednostki)
+        info = create_info_box("budynki", oznaczenie, "oznaczenie", str)
         self.layout.addWidget(info)
 
         personel_box = QGroupBox("Personel")
@@ -39,6 +40,6 @@ def set_info_box(oznaczenie, id_jednostki):
 
 if __name__ == "__main__":
     app = QApplication([])
-    window = BuildingPreview("34529", "AB3")
+    window = BuildingPreview("A05")
     window.show()
     app.exec_()

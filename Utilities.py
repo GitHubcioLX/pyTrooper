@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from connector import Connector
 from BuildingForm import BuildingForm
+from config import formatter, column_names
 
 create_view = None
 
@@ -14,6 +15,16 @@ create_view = None
     }
     create_view = types.get(type)(id)
     create_view.show()'''
+
+
+def create_info_box(tablename, id, idname, idtype):
+    box = QGroupBox("Informacje")
+    layout = QFormLayout()
+    data = Connector.get_dict(tablename, column_names[tablename], id, idname, idtype)
+    for k, v in data.items():
+        layout.addRow(formatter[k] + ": ", QLabel(str(v)))
+    box.setLayout(layout)
+    return box
 
 
 def set_info_tab(id_jednostki):
