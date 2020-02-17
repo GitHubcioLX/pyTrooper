@@ -1,7 +1,7 @@
 import psycopg2
 from config import *
 from ErrorPopUp import ErrorPopUp
-from ErrorFormatter import  ErrorFormatter
+from ErrorFormatter import ErrorFormatter
 
 error_window = None
 
@@ -121,14 +121,30 @@ class Connector:
         values = Connector.value_formatter(values)
         try:
             cur.execute("INSERT INTO " + tablename +
-                    " (" + columns + ") " +
-                    "VALUES (" + values + ");")
+                        " (" + columns + ") " +
+                        "VALUES (" + values + ");")
         except psycopg2.Error as err:
             global error_window
             error_window = ErrorPopUp(ErrorFormatter.get_error(err.pgcode))
             error_window.show()
 
         cur.close()
+        Connector.conn.commit()
+
+    @staticmethod
+    def create_vechicle(input):
+        for x in input:
+            if x is None:
+                x = "NULL"
+            x = str(x)
+        print(input)
+        cur = Connector.conn.cursor()
+        try:
+            cur.execute("CALL public.create_vechicle(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);", input)
+        except psycopg2.Error as err:
+            global error_window
+            error_window = ErrorPopUp(ErrorFormatter.get_error(err.pgcode))
+            error_window.show()
         Connector.conn.commit()
 
     @staticmethod
@@ -152,4 +168,5 @@ class Connector:
 
 
 if __name__ == "__main__":
-    print(Connector.get_dict("jednostki", ["identyfikator"], 1, "identyfikator", int))
+    # print(Connector.get_dict("jednostki", ["identyfikator"], 1, "identyfikator", int))
+    Connector.create_vechicle(['Samochód', 'Jeep', 'Wrangler2', 2340, 5, 600, 'Dostępny', 2015, 'UA54320', 1, None])
