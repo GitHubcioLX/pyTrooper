@@ -1,6 +1,6 @@
-import PyQt5
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
+
 from connector import Connector
 
 
@@ -20,7 +20,7 @@ class VehicleForm(QWidget):
         self.setLayout(self.layout)
         self.setMinimumSize(280, 200)
 
-        #self.addButton.clicked.connect(self.confirm)
+        self.addButton.clicked.connect(self.confirm)
 
     def set_form(self):
         self.rodzaj = QLineEdit()
@@ -49,10 +49,18 @@ class VehicleForm(QWidget):
         zasieg = self.zasieg.text()
         rok = self.rok.text()
         rejestracja = self.rejestracja.text()
-        '''Connector.insert_row("pojazdy",
-                             ["rodzaj", "producent", "model", "masa", "liczba_zalogi", "zasieg", "status", "rok_produkcji", "rejestracja", "id_jednostki"],
-                             [rodzaj, producent, model, masa, zaloga, zasieg, self.status, rok, rejestracja, self.id_jednostki])
-        self.commited.emit()'''
+        Connector.create_vechicle([rodzaj,
+                                  producent,
+                                  model,
+                                  masa,
+                                  zaloga,
+                                  zasieg,
+                                  self.status,
+                                  rok,
+                                  rejestracja,
+                                  self.id_jednostki,
+                                  None])
+        self.commited.emit()
         self.close()
 
 
