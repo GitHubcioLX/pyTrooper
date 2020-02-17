@@ -46,7 +46,7 @@ class UnitManagement(QTabWidget):
 
     def refresh_vechicles(self):
         self.removeTab(2)
-        self.listTab2 = self.create_list_tab(["ID", "Model"], Connector.get_filtered("pojazdy", ["id_pojazdu", "model"],
+        self.listTab2 = self.create_list_tab(["ID", "Producent", "Model"], Connector.get_filtered("pojazdy", ["id_pojazdu", "producent", "model"],
                                                                                      " WHERE id_jednostki = " + self.unit_id),
                                              "pojazdy")
         self.insertTab(2, self.listTab2, "Pojazdy")
