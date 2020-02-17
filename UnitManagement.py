@@ -29,7 +29,7 @@ class UnitManagement(QTabWidget):
         self.listTab1 = None
         self.refresh_buildings()
         self.listTab2 = None
-        self.refresh_vechicles()
+        self.refresh_vehicles()
         self.listTab3 = None
         self.refresh_officers()
         self.addWindow = None
@@ -44,11 +44,10 @@ class UnitManagement(QTabWidget):
         self.insertTab(1, self.listTab1, "Budynki")
         self.setCurrentIndex(1)
 
-    def refresh_vechicles(self):
+    def refresh_vehicles(self):
         self.removeTab(2)
         self.listTab2 = self.create_list_tab(["ID", "Producent", "Model"], Connector.get_filtered("pojazdy", ["id_pojazdu", "producent", "model"],
-                                                                                     " WHERE id_jednostki = " + self.unit_id),
-                                             "pojazdy")
+                                                                                     " WHERE id_jednostki = " + self.unit_id), "pojazdy")
         self.insertTab(2, self.listTab2, "Pojazdy")
         self.setCurrentIndex(2)
 
@@ -56,8 +55,7 @@ class UnitManagement(QTabWidget):
         self.removeTab(3)
         self.listTab3 = self.create_list_tab(["Imię", "Nazwisko", "PESEL"],
                                              Connector.get_filtered("oficerowie", ["imie", "nazwisko", "pesel"],
-                                                                    " WHERE id_jednostki = " + self.unit_id),
-                                             "oficerowie")
+                                                                    " WHERE id_jednostki = " + self.unit_id), "oficerowie")
         self.insertTab(3, self.listTab3, "Oficerowie")
         self.setCurrentIndex(3)
 
@@ -105,7 +103,7 @@ class UnitManagement(QTabWidget):
 
     def add_vehicle(self):
         self.addWindow = VehicleForm(self.unit_id, "Dostępny")
-        self.addWindow.commited.connect(self.refresh_vechicles)
+        self.addWindow.commited.connect(self.refresh_vehicles)
         self.addWindow.show()
 
     def delete_buildings(self):
@@ -126,7 +124,7 @@ class UnitManagement(QTabWidget):
                 res.append(self.tabela_pojazdy.item(x.row(), 0).text())
             res = list(dict.fromkeys(res))
             Connector.delete_items("pojazdy", res, "id_pojazdu", int)
-            self.refresh_vechicles()
+            self.refresh_vehicles()
 
     def building_preview(self, rowid):
         item = self.tabela_budynki.item(rowid, 0)
@@ -137,8 +135,3 @@ class UnitManagement(QTabWidget):
         item = self.tabela_pojazdy.item(rowid, 0)
         self.previewWindow = VehiclePreview(item.text())
         self.previewWindow.show()
-
-'''main_window = UnitManagement("420")
-main_window.show()
-
-app.exec_()'''
