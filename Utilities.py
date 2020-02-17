@@ -21,8 +21,12 @@ def create_info_box(tablename, id, idname, idtype):
     box = QGroupBox("Informacje")
     layout = QFormLayout()
     data = Connector.get_dict(tablename, column_names[tablename], id, idname, idtype)
+    font = QFont()
+    font.setBold(True)
     for k, v in data.items():
-        layout.addRow(formatter[k] + ": ", QLabel(str(v)))
+        label = QLabel(str(v))
+        label.setFont(font)
+        layout.addRow(formatter[k] + ": ", label)
     box.setLayout(layout)
     return box
 
