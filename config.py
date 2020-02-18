@@ -54,4 +54,4 @@ column_names = {"jednostki": ["identyfikator", "nazwa", "rodzaj", "miasto"],
                 "ekwipunek": ["typ", "producent", "model", "numer_seryjny", "data_produkcji", "data_waznosci"],
                 "pojazdy": ["rodzaj", "producent", "model", "rok_produkcji", "masa", "liczba_zalogi", "zasieg",
                             "rejestracja", "id_jednostki", "status"],
-                "rangi": ["nazwa_rangi", "liczba_przepustek", "poziom_uprawnien", "zold"]}
+                "rangi": ["nazwa_rangi", "liczba_przepustek", "poziom_upr", "zold"]}
