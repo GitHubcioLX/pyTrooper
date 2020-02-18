@@ -7,6 +7,7 @@ from UnitManagement import UnitManagement
 from connector import Connector
 from Utilities import create_table
 from UnitForm import UnitForm
+from RankManagement import RankManagement
 
 # GUI
 app = QApplication([])
@@ -45,6 +46,7 @@ class MainWindow(QWidget):
         self.unitwindow = None
         self.unitcreation = None
         self.equipment_window = EquipmentListWindow()
+        self.rangi = RankManagement()
 
     def create_unit(self):
         self.unitcreation = UnitForm(self)
@@ -62,6 +64,9 @@ class MainWindow(QWidget):
         item = self.jednostki.item(rowid, 0)
         self.unitwindow = UnitManagement(item.text())
         self.unitwindow.show()
+
+    def open_rangi(self):
+        self.rangi.show()
 
     def delete_items(self):
         selection = self.jednostki.selectedItems()
@@ -103,6 +108,7 @@ class MainWindow(QWidget):
         self.ekwipunek.clicked.connect(self.open_equipment)
         self.jednostki.cellDoubleClicked.connect(self.open_jednostki)
         self.delButton.clicked.connect(self.delete_items)
+        self.rangi.clicked.connect(self.open_rangi)
 
     def closeEvent(self, QCloseEvent):
         app.closeAllWindows()
