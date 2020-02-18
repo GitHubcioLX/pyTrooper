@@ -40,15 +40,23 @@ class Connector:
         return output
 
     @staticmethod
-    def table_names():
+    def update_formatter(columns, values):
+        output = ""
+        for i, x in enumerate(columns, 0):
+            output += x + " = " + values[i] + ", "
+        output = output[:-2]
+        return output
+
+    @staticmethod
+    def get_enum(name):
         cur = Connector.conn.cursor()
-        cur.execute("SELECT table_name " +
-                    "FROM information_schema.tables " +
-                    "WHERE table_schema='public' " +
-                    "AND table_type='BASE TABLE';")
+        cur.execute("SELECT unnest(enum_range(NULL::" + name + "))")
         res = cur.fetchall()
-        print(res)
         cur.close()
+        arr = []
+        for x in res:
+            arr.append(x[0])
+        return arr
 
     @staticmethod
     def get_table_data(tablename, columns):
@@ -131,6 +139,25 @@ class Connector:
         Connector.conn.commit()
 
     @staticmethod
+    def update_row(tablename, columns, values, id, idname, idtype):
+        cur = Connector.conn.cursor()
+        data = Connector.update_formatter(columns, values)
+        try:
+            if idtype is int:
+                cur.execute("UPDATE " + tablename + " SET [" + data + "]" +
+                            " WHERE " + idname + " = " + str(id) + ";")
+            else:
+                cur.execute("UPDATE " + tablename + " SET [" + data + "]" +
+                            " WHERE " + idname + " LIKE '" + id + "';")
+        except psycopg2.Error as err:
+            global error_window
+            error_window = ErrorPopUp(ErrorFormatter.get_error(err.pgcode))
+            error_window.show()
+
+        cur.close()
+        Connector.conn.commit()
+
+    @staticmethod
     def create_vehicle(input):
         for x in input:
             if x is None:
@@ -168,4 +195,5 @@ class Connector:
 
 if __name__ == "__main__":
     # print(Connector.get_dict("jednostki", ["identyfikator"], 1, "identyfikator", int))
-    Connector.create_vehicle(['Samochód', 'Jeep', 'Wrangler2', 2340, 5, 600, 'Dostępny', 2015, 'UA54320', 1, None])
+    # Connector.create_vehicle(['Samochód', 'Jeep', 'Wrangler2', 2340, 5, 600, 'Dostępny', 2015, 'UA54320', 1, None])
+    print(Connector.get_enum("status_type"))
