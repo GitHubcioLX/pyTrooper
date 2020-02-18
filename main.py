@@ -88,6 +88,7 @@ class MainWindow(QWidget):
             self.unit_box_layout.addWidget(self.addButton, 1, 0)
             self.unit_box_layout.addWidget(self.delButton, 1, 1)
             self.unit_box.setLayout(self.unit_box_layout)
+            self.jednostki.cellDoubleClicked.connect(self.open_jednostki)
 
     def set_layout(self):
         #self.layout.addWidget(self.naglowek)
