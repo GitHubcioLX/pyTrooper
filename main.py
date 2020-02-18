@@ -41,8 +41,10 @@ class MainWindow(QWidget):
 
         self.setWindowTitle("Menu główne")
         self.setMinimumSize(500, 500)
+        self.unit_box = None
+        self.unit_box_layout = None
         self.set_jednostki()
-        #self.set_layout()
+        self.set_layout()
 
         self.unitwindow = None
         self.unitcreation = None
@@ -58,7 +60,7 @@ class MainWindow(QWidget):
 
     def set_jednostki(self):
         self.jednostki = create_table(['Identyfikator', 'Nazwa'], Connector.get_table_data("jednostki", ["identyfikator", "nazwa"]))
-        self.set_layout()
+        self.refresh_unit_box()
 
     def open_jednostki(self, rowid):
         item = self.jednostki.item(rowid, 0)
@@ -78,18 +80,25 @@ class MainWindow(QWidget):
             Connector.delete_items("jednostki", res, "identyfikator", int)
             self.set_jednostki()
 
+    def refresh_unit_box(self):
+        if self.unit_box_layout:
+            while self.unit_box_layout.itemAt(0):
+                self.unit_box_layout.removeItem(self.unit_box_layout.itemAt(0))
+            self.unit_box_layout.addWidget(self.jednostki, 0, 0, 1, 2)
+            self.unit_box_layout.addWidget(self.addButton, 1, 0)
+            self.unit_box_layout.addWidget(self.delButton, 1, 1)
+            self.unit_box.setLayout(self.unit_box_layout)
+
     def set_layout(self):
         #self.layout.addWidget(self.naglowek)
         #self.layout.addWidget(self.jednostki)
-        while self.layout.itemAt(0):
-            self.layout.removeItem(self.layout.itemAt(0))
-        button_box = QGroupBox("Zarządzanie jednostką")
-        b_box_layout = QGridLayout()
-        b_box_layout.addWidget(self.jednostki, 0, 0, 1, 2)
-        b_box_layout.addWidget(self.addButton, 1, 0)
-        b_box_layout.addWidget(self.delButton, 1, 1)
-        button_box.setLayout(b_box_layout)
-        self.layout.addWidget(button_box)
+        self.unit_box = QGroupBox("Zarządzanie jednostką")
+        self.unit_box_layout = QGridLayout()
+        self.unit_box_layout.addWidget(self.jednostki, 0, 0, 1, 2)
+        self.unit_box_layout.addWidget(self.addButton, 1, 0)
+        self.unit_box_layout.addWidget(self.delButton, 1, 1)
+        self.unit_box.setLayout(self.unit_box_layout)
+        self.layout.addWidget(self.unit_box)
         #self.layout.addWidget(QLabel())
         #self.layout.addWidget(self.equipLabel)
         eq_box = QGroupBox("Zarządzanie ekwipunkiem")
