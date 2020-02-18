@@ -47,7 +47,7 @@ class MainWindow(QWidget):
         self.unitwindow = None
         self.unitcreation = None
         self.equipment_window = EquipmentListWindow()
-        self.rangi = RankManagement()
+        self.rankWindow = RankManagement()
 
     def create_unit(self):
         self.unitcreation = UnitForm(self)
@@ -66,7 +66,7 @@ class MainWindow(QWidget):
         self.unitwindow.show()
 
     def open_rangi(self):
-        self.rangi.show()
+        self.rankWindow.show()
 
     def delete_items(self):
         selection = self.jednostki.selectedItems()
