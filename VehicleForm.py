@@ -49,7 +49,7 @@ class VehicleForm(QWidget):
         zasieg = self.zasieg.text()
         rok = self.rok.text()
         rejestracja = self.rejestracja.text()
-        Connector.create_vechicle([rodzaj,
+        Connector.create_vehicle([rodzaj,
                                   producent,
                                   model,
                                   masa,
