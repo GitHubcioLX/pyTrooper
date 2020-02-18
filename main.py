@@ -41,6 +41,7 @@ class MainWindow(QWidget):
         self.setWindowTitle("Menu główne")
         self.setMinimumSize(500, 500)
         self.set_jednostki()
+        #self.set_layout()
 
         self.unitwindow = None
         self.unitcreation = None
@@ -54,7 +55,6 @@ class MainWindow(QWidget):
         self.equipment_window.show()
 
     def set_jednostki(self):
-        self.layout.removeWidget(self.jednostki)
         self.jednostki = create_table(['Identyfikator', 'Nazwa'], Connector.get_table_data("jednostki", ["identyfikator", "nazwa"]))
         self.set_layout()
 
@@ -76,6 +76,8 @@ class MainWindow(QWidget):
     def set_layout(self):
         #self.layout.addWidget(self.naglowek)
         #self.layout.addWidget(self.jednostki)
+        while self.layout.itemAt(0):
+            self.layout.removeItem(self.layout.itemAt(0))
         button_box = QGroupBox("Zarządzanie jednostką")
         b_box_layout = QGridLayout()
         b_box_layout.addWidget(self.jednostki, 0, 0, 1, 2)
