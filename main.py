@@ -40,7 +40,7 @@ class MainWindow(QWidget):
         self.layout = QVBoxLayout()
 
         self.setWindowTitle("Menu główne")
-        self.setMinimumSize(500, 500)
+        self.setMinimumSize(480, 500)
         self.unit_box = None
         self.unit_box_layout = None
         self.set_jednostki()

@@ -7,9 +7,10 @@ from connector import Connector
 class BuildingForm(QWidget):
     commited = pyqtSignal()
 
-    def __init__(self, id_jednostki):
+    def __init__(self, id_jednostki, oznaczenie=None):
         super().__init__()
         self.id_jednostki = id_jednostki
+        self.oznaczenie = oznaczenie
         self.setWindowTitle("Formularz (budynek)")
         self.layout = QFormLayout()
         self.set_form()
@@ -21,20 +22,34 @@ class BuildingForm(QWidget):
         self.addButton.clicked.connect(self.confirm)
 
     def set_form(self):
-        self.sign = QLineEdit()
-        self.layout.addRow("Oznaczenie: ", self.sign)
-        self.empCount = QLineEdit()
-        self.layout.addRow("Docelowa liczba personelu: ", self.empCount)
         self.role = QLineEdit()
+        self.empCount = QLineEdit()
+        if self.oznaczenie:
+            oldData = Connector.get_record("budynki", ["rola_budynku", "liczba_personelu"], self.oznaczenie,
+                                           "oznaczenie", str)
+            self.role.setText(str(oldData[0]))
+            self.empCount.setText(str(oldData[1]))
+            self.sign = QLabel(self.oznaczenie)
+        else:
+            self.sign = QLineEdit()
+        self.layout.addRow("Oznaczenie: ", self.sign)
         self.layout.addRow("Rola budynku: ", self.role)
+        self.layout.addRow("Docelowa liczba personelu: ", self.empCount)
 
     def confirm(self):
         sign = self.sign.text()
         empCount = self.empCount.text()
         role = self.role.text()
-        if(Connector.insert_row("budynki", ["oznaczenie", "liczba_personelu", "rola_budynku", "id_jednostki"], [sign, empCount, role, self.id_jednostki])):
-            self.commited.emit()
-            self.close()
+        if self.oznaczenie:
+            if(Connector.update_row("budynki", ["liczba_personelu", "rola_budynku"],
+                                     [empCount, role], self.oznaczenie, "oznaczenie", str)):
+                self.commited.emit()
+                self.close()
+        else:
+            if(Connector.insert_row("budynki", ["oznaczenie", "liczba_personelu", "rola_budynku", "id_jednostki"],
+                                     [sign, empCount, role, self.id_jednostki])):
+                self.commited.emit()
+                self.close()
 
 
 if __name__ == "__main__":
