@@ -34,7 +34,8 @@ def create_info_box(tablename, id, idname, idtype):
 def set_info_tab(id_jednostki):
     tab = QWidget()
     layout = QVBoxLayout()
-    info = QGroupBox("Informacje")
+    info = create_info_box("jednostki", id_jednostki, "identyfikator", int)
+    '''info = QGroupBox("Informacje")
     infoLayout = QFormLayout()
 
     unit_data = Connector.get_record("jednostki", None, id_jednostki, "identyfikator", int)
@@ -43,7 +44,7 @@ def set_info_tab(id_jednostki):
     infoLayout.addRow("Nazwa: ", QLabel(unit_data[1]))
     infoLayout.addRow("Miasto: ", QLabel(unit_data[3]))
     infoLayout.addRow("Rodzaj: ", QLabel(unit_data[2]))
-    info.setLayout(infoLayout)
+    info.setLayout(infoLayout)'''
     layout.addWidget(info)
 
     buttons = QGroupBox("Zarządzanie")

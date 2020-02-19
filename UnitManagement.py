@@ -4,6 +4,8 @@ from BuildingForm import BuildingForm
 from BuildingPreview import BuildingPreview
 from VehicleForm import VehicleForm
 from VehiclePreview import VehiclePreview
+from OfficerForm import OfficerForm
+from OfficerPreview import OfficerPreview
 from Utilities import set_info_tab, create_table
 from connector import Connector
 
@@ -91,6 +93,11 @@ class UnitManagement(QTabWidget):
             rmvButton.clicked.connect(self.delete_vehicles)
             self.tabela_pojazdy = tabela
             self.tabela_pojazdy.cellDoubleClicked.connect(self.vehicle_preview)
+        if type == "oficerowie":
+            addButton.clicked.connect(self.add_officer)
+            rmvButton.clicked.connect(self.delete_officers)
+            self.tabela_oficerowie = tabela
+            self.tabela_oficerowie.cellDoubleClicked.connect(self.officer_preview)
 
         layout.addWidget(buttons)
         tab.setLayout(layout)
@@ -104,6 +111,11 @@ class UnitManagement(QTabWidget):
     def add_vehicle(self):
         self.addWindow = VehicleForm(self.unit_id, "Dostępny")
         self.addWindow.commited.connect(self.refresh_vehicles)
+        self.addWindow.show()
+
+    def add_officer(self):
+        self.addWindow = OfficerForm(self.unit_id)
+        self.addWindow.commited.connect(self.refresh_officers)
         self.addWindow.show()
 
     def delete_buildings(self):
@@ -126,6 +138,16 @@ class UnitManagement(QTabWidget):
             Connector.delete_items("pojazdy", res, "id_pojazdu", int)
             self.refresh_vehicles()
 
+    def delete_officers(self):
+        selection = self.tabela_oficerowie.selectedItems()
+        if selection:
+            res = []
+            for x in selection:
+                res.append(self.tabela_oficerowie.item(x.row(), 2).text())
+            res = list(dict.fromkeys(res))
+            Connector.delete_items("oficerowie", res, "pesel", str)
+            self.refresh_officers()
+
     def building_preview(self, rowid):
         item = self.tabela_budynki.item(rowid, 0)
         self.previewWindow = BuildingPreview(item.text())
@@ -134,4 +156,9 @@ class UnitManagement(QTabWidget):
     def vehicle_preview(self, rowid):
         item = self.tabela_pojazdy.item(rowid, 0)
         self.previewWindow = VehiclePreview(item.text())
+        self.previewWindow.show()
+
+    def officer_preview(self, rowid):
+        item = self.tabela_oficerowie.item(rowid, 2)
+        self.previewWindow = OfficerPreview(item.text())
         self.previewWindow.show()

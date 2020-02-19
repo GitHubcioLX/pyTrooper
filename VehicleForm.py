@@ -23,7 +23,8 @@ class VehicleForm(QWidget):
         self.addButton.clicked.connect(self.confirm)
 
     def set_form(self):
-        self.rodzaj = QLineEdit()
+        self.rodzaj = QComboBox()
+        self.rodzaj.addItems(Connector.get_enum("rodzaj_pojazdu_type"))
         self.layout.addRow("Rodzaj: ", self.rodzaj)
         self.producent = QLineEdit()
         self.layout.addRow("Producent: ", self.producent)
@@ -41,7 +42,7 @@ class VehicleForm(QWidget):
         self.layout.addRow("Rejestracja: ", self.rejestracja)
 
     def confirm(self):
-        rodzaj = self.rodzaj.text()
+        rodzaj = self.rodzaj.currentText()
         producent = self.producent.text()
         model = self.model.text()
         masa = self.masa.text()

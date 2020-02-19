@@ -33,7 +33,8 @@ class OfficerForm(QWidget):
         self.layout.addRow(" ", QLabel("Format daty: <b>RRRR-MM-DD<\b>"))
         self.wyznanie = QLineEdit()
         self.layout.addRow("Wyznanie: ", self.wyznanie)
-        self.grupa_krwi = QLineEdit()
+        self.grupa_krwi = QComboBox()
+        self.grupa_krwi.addItems(Connector.get_enum("grupa_krwi_type"))
         self.layout.addRow("Grupa krwi: ", self.grupa_krwi)
         self.ranga = QComboBox()
         rangi = Connector.get_table_data("rangi", ["nazwa_rangi"])
@@ -42,7 +43,8 @@ class OfficerForm(QWidget):
         self.ranga.addItems(rangi)
         self.layout.addRow("Ranga: ", self.ranga)
         self.budynek = QComboBox()
-        budynki = Connector.get_table_data("budynki", ["oznaczenie"])
+        filter = " WHERE id_jednostki = " + str(self.id_jednostki);
+        budynki = Connector.get_filtered("budynki", ["oznaczenie"], filter)
         for i in range(len(budynki)):
             budynki[i] = budynki[i][0]
         self.budynek.addItems(budynki)
@@ -54,7 +56,7 @@ class OfficerForm(QWidget):
         imie = self.imie.text()
         nazwisko = self.nazwisko.text()
         data_ur = self.data_ur.text()
-        grupa_krwi = self.grupa_krwi.text()
+        grupa_krwi = self.grupa_krwi.currentText()
         wyznanie = self.wyznanie.text()
         ranga = self.ranga.currentText()
         budynek = self.budynek.currentText()

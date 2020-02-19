@@ -10,7 +10,7 @@ class BuildingPreview(QWidget):
     def __init__(self, oznaczenie):
         global mock_personel
         super().__init__()
-        self.setWindowTitle("Podgląd budynku")
+        self.setWindowTitle("Dane budynku")
         self.layout = QVBoxLayout()
         info = create_info_box("budynki", oznaczenie, "oznaczenie", str)
         self.layout.addWidget(info)

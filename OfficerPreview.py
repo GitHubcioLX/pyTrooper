@@ -4,19 +4,19 @@ from PyQt5.QtWidgets import *
 from Utilities import create_info_box
 
 
-class VehiclePreview(QWidget):
-    def __init__(self, id_pojazdu):
+class OfficerPreview(QWidget):
+    def __init__(self, pesel):
         super().__init__()
-        self.setWindowTitle("Dane pojazdu")
+        self.setWindowTitle("Dane oficera")
         self.layout = QVBoxLayout()
-        info = create_info_box("pojazdy", id_pojazdu, "id_pojazdu", int)
+        info = create_info_box("oficerowie", pesel, "pesel", str)
         self.layout.addWidget(info)
-        self.setMinimumSize(270, 200)
+        self.setMinimumSize(300, 230)
         self.setLayout(self.layout)
 
 
 if __name__ == "__main__":
     app = QApplication([])
-    window = VehiclePreview("1")
+    window = OfficerPreview("1")
     window.show()
     app.exec_()
