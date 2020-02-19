@@ -91,7 +91,6 @@ class Connector:
                         " FROM " + tablename + filters + ";")
         except psycopg2.Error as err:
             global error_window
-            print(err.pgerror)
             error_window = ErrorPopUp(ErrorFormatter.get_error(err.pgcode))
             error_window.show()
 
@@ -144,10 +143,10 @@ class Connector:
         data = Connector.update_formatter(columns, values)
         try:
             if idtype is int:
-                cur.execute("UPDATE " + tablename + " SET [" + data + "]" +
+                cur.execute("UPDATE " + tablename + " SET " + data +
                             " WHERE " + idname + " = " + str(id) + ";")
             else:
-                cur.execute("UPDATE " + tablename + " SET [" + data + "]" +
+                cur.execute("UPDATE " + tablename + " SET " + data +
                             " WHERE " + idname + " LIKE '" + id + "';")
         except psycopg2.Error as err:
             global error_window
@@ -169,7 +168,6 @@ class Connector:
         except psycopg2.Error as err:
             global error_window
             error_window = ErrorPopUp(ErrorFormatter.get_error(err.pgcode))
-            print(err.pgerror)
             error_window.show()
         Connector.conn.commit()
 
@@ -182,7 +180,6 @@ class Connector:
                 cur.execute("DELETE FROM " + tablename + " WHERE " + ids + ";")
             except psycopg2.Error as err:
                 global error_window
-                print(err.pgerror)
                 error_window = ErrorPopUp(ErrorFormatter.get_error(err.pgcode))
                 error_window.show()
             Connector.conn.commit()
