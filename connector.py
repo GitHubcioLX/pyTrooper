@@ -181,7 +181,7 @@ class Connector:
             global error_window
             error_window = ErrorPopUp(ErrorFormatter.get_error(err.pgcode))
             error_window.show()
-            
+
         cur.close
         Connector.conn.commit()
         return correct
