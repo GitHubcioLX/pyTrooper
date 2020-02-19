@@ -43,7 +43,13 @@ class Connector:
     def update_formatter(columns, values):
         output = ""
         for i, x in enumerate(columns, 0):
-            output += x + " = " + values[i] + ", "
+            print(type(values[i]))
+            if type(values[i]) is str:
+                temp = "'" + values[i] + "'"
+                print(temp)
+            else:
+                temp = values[i]
+            output += x + " = " + temp + ", "
         output = output[:-2]
         return output
 
@@ -144,12 +150,13 @@ class Connector:
         data = Connector.update_formatter(columns, values)
         try:
             if idtype is int:
-                cur.execute("UPDATE " + tablename + " SET [" + data + "]" +
+                cur.execute("UPDATE " + tablename + " SET " + data + "" +
                             " WHERE " + idname + " = " + str(id) + ";")
             else:
-                cur.execute("UPDATE " + tablename + " SET [" + data + "]" +
+                cur.execute("UPDATE " + tablename + " SET " + data + "" +
                             " WHERE " + idname + " LIKE '" + id + "';")
         except psycopg2.Error as err:
+            print(err.pgerror)
             global error_window
             error_window = ErrorPopUp(ErrorFormatter.get_error(err.pgcode))
             error_window.show()
@@ -196,4 +203,5 @@ class Connector:
 if __name__ == "__main__":
     # print(Connector.get_dict("jednostki", ["identyfikator"], 1, "identyfikator", int))
     # Connector.create_vehicle(['Samochód', 'Jeep', 'Wrangler2', 2340, 5, 600, 'Dostępny', 2015, 'UA54320', 1, None])
-    print(Connector.get_enum("status_type"))
+    #print(Connector.get_enum("status_type"))
+    Connector.update_row("pojazdy", ["model", "masa"], ["Mały", "2"], 0, "id_pojazdu", int)
