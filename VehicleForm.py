@@ -32,7 +32,7 @@ class VehicleForm(QWidget):
         self.zasieg = QLineEdit()
         self.rok = QLineEdit()
         self.rejestracja = QLineEdit()
-        if self.id_pojazdu:
+        if self.id_pojazdu is not None:
             oldData = Connector.get_record("pojazdy", ["rodzaj", "producent", "model", "rok_produkcji", "masa",
                                                        "liczba_zalogi", "zasieg", "rejestracja", "status"],
                                            self.id_pojazdu, "id_pojazdu", int)
@@ -65,7 +65,7 @@ class VehicleForm(QWidget):
         rok = self.rok.text()
         rejestracja = self.rejestracja.text()
         id_zamowienia = None
-        if self.id_pojazdu:
+        if self.id_pojazdu is not None:
             if(Connector.update_row("pojazdy", ["rodzaj", "producent", "model", "rok_produkcji", "masa",
                                                 "liczba_zalogi", "zasieg", "rejestracja", "status"],
                                     [rodzaj, producent, model, rok, masa, zaloga, zasieg, rejestracja, self.status],
@@ -90,6 +90,6 @@ class VehicleForm(QWidget):
 
 if __name__ == "__main__":
     app = QApplication([])
-    window = VehicleForm('1', None, '1')
+    window = VehicleForm('1', None, 0)
     window.show()
     app.exec_()

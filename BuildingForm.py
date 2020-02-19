@@ -24,7 +24,7 @@ class BuildingForm(QWidget):
     def set_form(self):
         self.role = QLineEdit()
         self.empCount = QLineEdit()
-        if self.oznaczenie:
+        if self.oznaczenie is not None:
             oldData = Connector.get_record("budynki", ["rola_budynku", "liczba_personelu"], self.oznaczenie,
                                            "oznaczenie", str)
             self.role.setText(str(oldData[0]))
@@ -40,7 +40,7 @@ class BuildingForm(QWidget):
         sign = self.sign.text()
         empCount = self.empCount.text()
         role = self.role.text()
-        if self.oznaczenie:
+        if self.oznaczenie is not None:
             if(Connector.update_row("budynki", ["liczba_personelu", "rola_budynku"],
                                      [empCount, role], self.oznaczenie, "oznaczenie", str)):
                 self.commited.emit()
