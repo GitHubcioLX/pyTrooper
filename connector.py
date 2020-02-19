@@ -43,10 +43,8 @@ class Connector:
     def update_formatter(columns, values):
         output = ""
         for i, x in enumerate(columns, 0):
-            print(type(values[i]))
             if type(values[i]) is str:
                 temp = "'" + values[i] + "'"
-                print(temp)
             else:
                 temp = values[i]
             output += x + " = " + temp + ", "
