@@ -2,6 +2,7 @@ import PyQt5
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from Utilities import create_info_box
+from connector import Connector
 
 mock_personel = ["Andrzej Konopka", "Stefan Orzech", "Marian Ziemny", "Grzegorz Włoski"]
 
@@ -18,8 +19,10 @@ class BuildingPreview(QWidget):
         personel_box = QGroupBox("Personel")
         p_box_layout = QVBoxLayout()
         personel = QListWidget()
-        for pracownik in mock_personel:
-            personel.addItem(pracownik)
+        filter = " WHERE budynek = '" + str(oznaczenie) + "'";
+        data = Connector.get_filtered("oficerowie", ["imie", "nazwisko"], filter)
+        for pracownik in data:
+            personel.addItem(pracownik[0] + " " + pracownik[1])
         p_box_layout.addWidget(personel)
         personel_box.setLayout(p_box_layout)
         self.layout.addWidget(personel_box)

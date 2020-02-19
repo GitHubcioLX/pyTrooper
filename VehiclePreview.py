@@ -11,7 +11,7 @@ class VehiclePreview(QWidget):
         self.layout = QVBoxLayout()
         info = create_info_box("pojazdy", id_pojazdu, "id_pojazdu", int)
         self.layout.addWidget(info)
-        self.setMinimumSize(270, 200)
+        self.setMinimumSize(280, 200)
         self.setLayout(self.layout)
 
 
