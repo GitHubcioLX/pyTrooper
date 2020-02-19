@@ -126,6 +126,7 @@ class Connector:
 
     @staticmethod
     def insert_row(tablename, columns, values):
+        correct = True
         cur = Connector.conn.cursor()
         columns = Connector.column_formatter(columns)
         values = Connector.value_formatter(values)
@@ -134,15 +135,18 @@ class Connector:
                         " (" + columns + ") " +
                         "VALUES (" + values + ");")
         except psycopg2.Error as err:
+            correct = False
             global error_window
             error_window = ErrorPopUp(ErrorFormatter.get_error(err.pgcode))
             error_window.show()
 
         cur.close()
         Connector.conn.commit()
+        return correct
 
     @staticmethod
     def update_row(tablename, columns, values, id, idname, idtype):
+        correct = True
         cur = Connector.conn.cursor()
         data = Connector.update_formatter(columns, values)
         try:
@@ -153,12 +157,14 @@ class Connector:
                 cur.execute("UPDATE " + tablename + " SET " + data +
                             " WHERE " + idname + " LIKE '" + id + "';")
         except psycopg2.Error as err:
+            correct = False
             global error_window
             error_window = ErrorPopUp(ErrorFormatter.get_error(err.pgcode))
             error_window.show()
 
         cur.close()
         Connector.conn.commit()
+        return correct
 
     @staticmethod
     def create_vehicle(input):

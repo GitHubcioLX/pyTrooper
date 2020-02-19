@@ -50,7 +50,7 @@ class VehicleForm(QWidget):
         zasieg = self.zasieg.text()
         rok = self.rok.text()
         rejestracja = self.rejestracja.text()
-        Connector.create_vehicle([rodzaj,
+        if(Connector.create_vehicle([rodzaj,
                                   producent,
                                   model,
                                   masa,
@@ -60,9 +60,9 @@ class VehicleForm(QWidget):
                                   rok,
                                   rejestracja,
                                   self.id_jednostki,
-                                  None])
-        self.commited.emit()
-        self.close()
+                                  None])):
+            self.commited.emit()
+            self.close()
 
 
 if __name__ == "__main__":

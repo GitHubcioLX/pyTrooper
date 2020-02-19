@@ -32,9 +32,9 @@ class BuildingForm(QWidget):
         sign = self.sign.text()
         empCount = self.empCount.text()
         role = self.role.text()
-        Connector.insert_row("budynki", ["oznaczenie", "liczba_personelu", "rola_budynku", "id_jednostki"], [sign, empCount, role, self.id_jednostki])
-        self.commited.emit()
-        self.close()
+        if(Connector.insert_row("budynki", ["oznaczenie", "liczba_personelu", "rola_budynku", "id_jednostki"], [sign, empCount, role, self.id_jednostki])):
+            self.commited.emit()
+            self.close()
 
 
 if __name__ == "__main__":

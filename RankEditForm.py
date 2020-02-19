@@ -38,10 +38,10 @@ class RankEditForm(QWidget):
         przepustki = self.przepustki.text()
         uprawnienia = self.uprawnienia.text()
         zold = self.zold.text()
-        Connector.update_row("rangi", ["liczba_przepustek", "poziom_upr", "zold"],
-                             [przepustki, uprawnienia, zold], self.nazwa, "nazwa_rangi", str)
-        #self.commited.emit()
-        self.close()
+        if(Connector.update_row("rangi", ["liczba_przepustek", "poziom_upr", "zold"],
+                             [przepustki, uprawnienia, zold], self.nazwa, "nazwa_rangi", str)):
+            #self.commited.emit()
+            self.close()
 
 
 if __name__ == "__main__":

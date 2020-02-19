@@ -35,9 +35,9 @@ class UnitForm(QWidget):
         name = self.name.text()
         type = self.type.text()
         city = self.city.text()
-        Connector.insert_row("jednostki", ["identyfikator", "nazwa", "rodzaj", "miasto"], [id, name, type, city])
-        self.commited.emit()
-        self.close()
+        if(Connector.insert_row("jednostki", ["identyfikator", "nazwa", "rodzaj", "miasto"], [id, name, type, city])):
+            self.commited.emit()
+            self.close()
 
 
 if __name__ == "__main__":

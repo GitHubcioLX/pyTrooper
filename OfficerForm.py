@@ -60,10 +60,10 @@ class OfficerForm(QWidget):
         wyznanie = self.wyznanie.text()
         ranga = self.ranga.currentText()
         budynek = self.budynek.currentText()
-        Connector.insert_row("oficerowie", ["pesel", "imie", "nazwisko", "data_ur", "wyznanie", "id_jednostki", "budynek", "ranga", "grupa_krwi"],
-                            [pesel, imie, nazwisko, data_ur, wyznanie, self.id_jednostki, budynek, ranga, grupa_krwi])
-        self.commited.emit()
-        self.close()
+        if(Connector.insert_row("oficerowie", ["pesel", "imie", "nazwisko", "data_ur", "wyznanie", "id_jednostki", "budynek", "ranga", "grupa_krwi"],
+                            [pesel, imie, nazwisko, data_ur, wyznanie, self.id_jednostki, budynek, ranga, grupa_krwi])):
+            self.commited.emit()
+            self.close()
 
 
 if __name__ == "__main__":
