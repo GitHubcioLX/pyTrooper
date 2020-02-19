@@ -4,7 +4,8 @@ class ErrorFormatter:
         "23505": "Istnieje już jednostka o takim identyfikatorze",
         "22P02": "Identyfikator nie może być pusty oraz musi być liczbą",
         "22001": "Podany ciąg znaków jest za długi",
-        "22008": "Podano datę w złym formacie"
+        "22008": "Podano datę w złym formacie",
+        "42601": "Wprowadzono niedozowlone znaki: ', *. /. \\, \""
     }
 
     @staticmethod

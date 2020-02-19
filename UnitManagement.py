@@ -12,12 +12,6 @@ from connector import Connector
 # GUI
 # app = QApplication([])
 
-budynki = [["AB3", "Wychodek"], ["DG2", "Toaleta"], ["BG7", "Urynał"], ["QV1", "Ubikacja"], ["HU1", "Kibel"]]
-oficerowie = [["Stasiek", "Dupas", "9450245291"], ["Krzysiek", "Kasztan", "9150258790"],
-              ["Wiechu", "Szachista", "5540235263"]]
-pojazdy = [["1", "Maluch"], ["2", "BMW"], ["3", "Silvia"], ["4", "Corolla"], ["5", "Rudy"], ["6", "Jagdpanzer"],
-           ["7", "Rower"], ["8", "Turbosmiglowiec"]]
-
 
 class UnitManagement(QTabWidget):
     def __init__(self, id_jednostki):
