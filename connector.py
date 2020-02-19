@@ -168,6 +168,7 @@ class Connector:
 
     @staticmethod
     def create_vehicle(input):
+        correct = True
         for x in input:
             if x is None:
                 x = "NULL"
@@ -176,10 +177,14 @@ class Connector:
         try:
             cur.execute("CALL public.create_vehicle(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);", input)
         except psycopg2.Error as err:
+            correct = False
             global error_window
             error_window = ErrorPopUp(ErrorFormatter.get_error(err.pgcode))
             error_window.show()
+            
+        cur.close
         Connector.conn.commit()
+        return correct
 
     @staticmethod
     def delete_items(tablename, ids, idname, idtype):
