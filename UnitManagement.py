@@ -86,6 +86,7 @@ class UnitManagement(QTabWidget):
         if type == "pojazdy":
             addButton.clicked.connect(self.add_vehicle)
             rmvButton.clicked.connect(self.delete_vehicles)
+            editButton.clicked.connect(self.edit_vehicle)
             self.tabela_pojazdy = tabela
             self.tabela_pojazdy.cellDoubleClicked.connect(self.vehicle_preview)
         if type == "oficerowie":
@@ -119,6 +120,14 @@ class UnitManagement(QTabWidget):
             id = self.tabela_budynki.item(selection[0].row(), 0).text()
             self.addWindow = BuildingForm(self.unit_id, id)
             self.addWindow.commited.connect(self.refresh_buildings)
+            self.addWindow.show()
+
+    def edit_vehicle(self):
+        selection = self.tabela_pojazdy.selectedItems()
+        if len(selection) == 1:
+            id = self.tabela_pojazdy.item(selection[0].row(), 0).text()
+            self.addWindow = VehicleForm(self.unit_id, None, id)
+            self.addWindow.commited.connect(self.refresh_vehicles)
             self.addWindow.show()
 
     def delete_buildings(self):

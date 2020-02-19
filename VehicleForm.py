@@ -36,7 +36,6 @@ class VehicleForm(QWidget):
             oldData = Connector.get_record("pojazdy", ["rodzaj", "producent", "model", "rok_produkcji", "masa",
                                                        "liczba_zalogi", "zasieg", "rejestracja", "status"],
                                            self.id_pojazdu, "id_pojazdu", int)
-            print(oldData)
             self.rodzaj.setCurrentText(oldData[0])
             self.producent.setText(oldData[1])
             self.model.setText(oldData[2])
