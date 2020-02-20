@@ -70,7 +70,7 @@ class MainWindow(QWidget):
     def set_jednostki(self):
         self.jednostki = create_table(['Identyfikator', 'Nazwa'],
                                       Connector.get_filtered("jednostki", ["identyfikator", "nazwa"],
-                                                             " WHERE nazwa LIKE '%" + self.filter.text() + "%'"))
+                                                             " WHERE UPPER(nazwa) LIKE UPPER('%" + self.filter.text() + "%')"))
         self.refresh_unit_box()
 
     def open_jednostki(self, rowid):
