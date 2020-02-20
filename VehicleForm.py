@@ -1,6 +1,8 @@
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
 from connector import Connector
+from config import rx
 
 
 class VehicleForm(QWidget):
@@ -26,12 +28,19 @@ class VehicleForm(QWidget):
         self.rodzaj = QComboBox()
         self.rodzaj.addItems(Connector.get_enum("rodzaj_pojazdu_type"))
         self.producent = QLineEdit()
+        self.producent.setValidator(QRegExpValidator(QRegExp(rx)))
         self.model = QLineEdit()
+        self.model.setValidator(QRegExpValidator(QRegExp(rx)))
         self.masa = QLineEdit()
+        self.masa.setValidator(QIntValidator())
         self.zaloga = QLineEdit()
+        self.zaloga.setValidator(QIntValidator())
         self.zasieg = QLineEdit()
+        self.zasieg.setValidator(QIntValidator())
         self.rok = QLineEdit()
+        self.rok.setValidator(QIntValidator())
         self.rejestracja = QLineEdit()
+        self.rejestracja.setValidator(QRegExpValidator(QRegExp(rx)))
         if self.id_pojazdu is not None:
             oldData = Connector.get_record("pojazdy", ["rodzaj", "producent", "model", "rok_produkcji", "masa",
                                                        "liczba_zalogi", "zasieg", "rejestracja", "status"],
