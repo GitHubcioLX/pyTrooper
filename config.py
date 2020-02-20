@@ -1,3 +1,4 @@
+from PyQt5.QtCore import QRegExp
 
 host = 'localhost'
 database = 'DBS'
@@ -55,3 +56,5 @@ column_names = {"jednostki": ["identyfikator", "nazwa", "rodzaj", "miasto"],
                 "pojazdy": ["rodzaj", "producent", "model", "rok_produkcji", "masa", "liczba_zalogi", "zasieg",
                             "rejestracja", "id_jednostki", "status"],
                 "rangi": ["nazwa_rangi", "liczba_przepustek", "poziom_upr", "zold"]}
+
+rx = QRegExp("[\\w\\d .,-:]*")

@@ -9,6 +9,7 @@ from connector import Connector
 from Utilities import create_table
 from UnitForm import UnitForm
 from RankManagement import RankManagement
+from config import rx
 
 # GUI
 app = QApplication([])
@@ -26,7 +27,6 @@ class MainWindow(QWidget):
         self.naglowek.setFont(font)
 
         self.filter = QLineEdit()
-        rx = QRegExp("[\\w\\d .,]*")
         self.filter.setValidator(QRegExpValidator(QRegExp(rx)))
         self.filter.setPlaceholderText("Wyszukaj nazwę...")
         #self.filter.textEdited.connect(self.set_jednostki)
