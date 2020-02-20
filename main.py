@@ -25,6 +25,10 @@ class MainWindow(QWidget):
         self.naglowek.setAlignment(Qt.AlignCenter)
         self.naglowek.setFont(font)
 
+        self.filter = QLineEdit()
+        self.filter.setPlaceholderText("Wyszukaj...")
+        self.filter.returnPressed.connect(self.set_jednostki)
+
         self.jednostki = QTableWidget()
 
         self.addButton = QPushButton("Dodaj")
@@ -61,7 +65,7 @@ class MainWindow(QWidget):
         self.equipment_window.show()
 
     def set_jednostki(self):
-        self.jednostki = create_table(['Identyfikator', 'Nazwa'], Connector.get_table_data("jednostki", ["identyfikator", "nazwa"]))
+        self.jednostki = create_table(['Identyfikator', 'Nazwa'], Connector.get_filtered("jednostki", ["identyfikator", "nazwa"], " WHERE nazwa LIKE '%" + self.filter.text() + "%'"))
         self.refresh_unit_box()
 
     def open_jednostki(self, rowid):
@@ -92,9 +96,10 @@ class MainWindow(QWidget):
         if self.unit_box_layout:
             while self.unit_box_layout.itemAt(0):
                 self.unit_box_layout.removeItem(self.unit_box_layout.itemAt(0))
-            self.unit_box_layout.addWidget(self.jednostki, 0, 0, 1, 2)
-            self.unit_box_layout.addWidget(self.addButton, 1, 0)
-            self.unit_box_layout.addWidget(self.delButton, 1, 1)
+            self.unit_box_layout.addWidget(self.filter, 0, 0, 1, 2)
+            self.unit_box_layout.addWidget(self.jednostki, 1, 0, 1, 2)
+            self.unit_box_layout.addWidget(self.addButton, 2, 0)
+            self.unit_box_layout.addWidget(self.delButton, 2, 1)
             self.unit_box.setLayout(self.unit_box_layout)
             self.jednostki.cellDoubleClicked.connect(self.open_jednostki)
 
@@ -103,9 +108,10 @@ class MainWindow(QWidget):
         #self.layout.addWidget(self.jednostki)
         self.unit_box = QGroupBox("Zarządzanie jednostką")
         self.unit_box_layout = QGridLayout()
-        self.unit_box_layout.addWidget(self.jednostki, 0, 0, 1, 2)
-        self.unit_box_layout.addWidget(self.addButton, 1, 0)
-        self.unit_box_layout.addWidget(self.delButton, 1, 1)
+        self.unit_box_layout.addWidget(self.filter, 0, 0, 1, 2)
+        self.unit_box_layout.addWidget(self.jednostki, 1, 0, 1, 2)
+        self.unit_box_layout.addWidget(self.addButton, 2, 0)
+        self.unit_box_layout.addWidget(self.delButton, 2, 1)
         self.unit_box.setLayout(self.unit_box_layout)
         self.layout.addWidget(self.unit_box)
         #self.layout.addWidget(QLabel())
