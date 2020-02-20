@@ -22,7 +22,7 @@ class AssignManagement(QTabWidget):
     def refresh_eq_assignments(self):
         self.removeTab(0)
         self.listTab1 = self.create_list_tab(["Od", "Do", "PESEL oficera", "Numer seryjny"],
-                                             Connector.get_filtered("Przydzial-ekwipunek", ["data_od", "data_do", "pesel_oficera", "numer_seryjny"],
+                                             Connector.get_filtered('"Przydzial-ekwipunek"', ["data_od", "data_do", "pesel_oficera", "numer_seryjny"],
                                                                     " WHERE (SELECT id_jednostki FROM oficerowie WHERE pesel LIKE pesel_oficera) = " + self.unit_id),
                                              "ekwipunek")
         self.insertTab(1, self.listTab1, "Ekwipunek")
@@ -31,7 +31,7 @@ class AssignManagement(QTabWidget):
     def refresh_vh_assignments(self):
         self.removeTab(1)
         self.listTab2 = self.create_list_tab(["Od", "Do", "PESEL oficera", "ID pojazdu"],
-                                             Connector.get_filtered("public.\"Przydzial-ekwipunek\"", ["data_od", "data_do", "pesel_oficera", "id_pojazdu"],
+                                             Connector.get_filtered('"Przydzial-pojazd"', ["data_od", "data_do", "pesel_oficera", "id_pojazdu"],
                                                                     " WHERE (SELECT id_jednostki FROM oficerowie WHERE pesel LIKE pesel_oficera) = " + self.unit_id),
                                              "pojazdy")
         self.insertTab(1, self.listTab1, "Pojazdy")
@@ -56,11 +56,11 @@ class AssignManagement(QTabWidget):
 
         # addButton.clicked.connect(show_add_windows(type, id))
         if type == "ekwipunek":
-            addButton.clicked.connect(self.add_building)
-            rmvButton.clicked.connect(self.delete_buildings)
-            editButton.clicked.connect(self.edit_building)
+            addButton.clicked.connect(self.add_assignment)
+            rmvButton.clicked.connect(self.delete_assignments)
+            editButton.clicked.connect(self.edit_assignment)
             self.tabela_budynki = tabela
-            self.tabela_budynki.cellDoubleClicked.connect(self.building_preview)
+            self.tabela_budynki.cellDoubleClicked.connect(self.assignment_preview)
         if type == "pojazdy":
             addButton.clicked.connect(self.add_vehicle)
             rmvButton.clicked.connect(self.delete_vehicles)
