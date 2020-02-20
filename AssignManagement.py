@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import *
 
-from Utilities import set_info_tab, create_table
+from Utilities import create_table
+from AssignmentPreview import AssignmentPreview
 from connector import Connector
 
 
@@ -54,13 +55,13 @@ class AssignManagement(QTabWidget):
 
         # addButton.clicked.connect(show_add_windows(type, id))
         if type == "ekwipunek":
-            addButton.clicked.connect(self.add_assignment)
-            rmvButton.clicked.connect(self.delete_assignments)
+            #addButton.clicked.connect(self.add_assignment)
+            #rmvButton.clicked.connect(self.delete_assignments)
             self.tabela_eq = tabela
             self.tabela_eq.cellDoubleClicked.connect(self.eq_assignment_preview)
         if type == "pojazdy":
-            addButton.clicked.connect(self.add_assignment)
-            rmvButton.clicked.connect(self.delete_assignments)
+            #addButton.clicked.connect(self.add_assignment)
+            #rmvButton.clicked.connect(self.delete_assignments)
             self.tabela_pojazdy = tabela
             self.tabela_pojazdy.cellDoubleClicked.connect(self.vh_assignment_preview)
 
@@ -84,13 +85,17 @@ class AssignManagement(QTabWidget):
             self.refresh_buildings()
 
     def eq_assignment_preview(self, rowid):
-        item = self.tabela_eq.item(rowid, 0)
-        self.previewWindow = BuildingPreview(item.text())
+        data_od = self.tabela_eq.item(rowid, 0)
+        pesel = self.tabela_eq.item(rowid, 2)
+        nr_seryjny = self.tabela_eq.item(rowid, 3)
+        self.previewWindow = AssignmentPreview("ekwipunek", data_od.text(), pesel.text(), nr_seryjny.text())
         self.previewWindow.show()
 
     def vh_assignment_preview(self, rowid):
-        item = self.tabela_pojazdy.item(rowid, 0)
-        self.previewWindow = BuildingPreview(item.text())
+        data_od = self.tabela_pojazdy.item(rowid, 0)
+        pesel = self.tabela_pojazdy.item(rowid, 2)
+        id_pojazdu = self.tabela_pojazdy.item(rowid, 3)
+        self.previewWindow = AssignmentPreview("pojazd", data_od.text(), pesel.text(), id_pojazdu.text())
         self.previewWindow.show()
 
 
