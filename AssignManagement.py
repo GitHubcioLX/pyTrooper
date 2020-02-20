@@ -24,7 +24,8 @@ class AssignManagement(QTabWidget):
         self.removeTab(0)
         self.listTab1 = self.create_list_tab(["Od", "Do", "PESEL oficera", "Numer seryjny"],
                                              Connector.get_filtered('"Przydzial-ekwipunek"', ["data_od", "data_do", "pesel_oficera", "numer_seryjny"],
-                                                                    " WHERE (SELECT id_jednostki FROM oficerowie WHERE pesel LIKE pesel_oficera) = " + self.unit_id),
+                                                                    " WHERE (SELECT id_jednostki FROM oficerowie WHERE pesel LIKE pesel_oficera) = " + self.unit_id
+                                                                    + " ORDER BY data_od ASC"),
                                              "ekwipunek")
         self.insertTab(0, self.listTab1, "Ekwipunek")
         self.setCurrentIndex(0)
@@ -33,7 +34,8 @@ class AssignManagement(QTabWidget):
         self.removeTab(1)
         self.listTab2 = self.create_list_tab(["Od", "Do", "PESEL oficera", "ID pojazdu"],
                                              Connector.get_filtered('"Przydzial-pojazd"', ["data_od", "data_do", "pesel_oficera", "id_pojazdu"],
-                                                                    " WHERE (SELECT id_jednostki FROM oficerowie WHERE pesel LIKE pesel_oficera) = " + self.unit_id),
+                                                                    " WHERE (SELECT id_jednostki FROM oficerowie WHERE pesel LIKE pesel_oficera) = " + self.unit_id
+                                                                    + " ORDER BY data_od ASC"),
                                              "pojazdy")
         self.insertTab(1, self.listTab2, "Pojazdy")
         self.setCurrentIndex(1)
