@@ -112,7 +112,6 @@ class UnitManagement(QTabWidget):
             self.filter_budynki = filter
             self.filter_budynki.returnPressed.connect(self.refresh_buildings)
             layout.addWidget(self.filter_budynki)
-            print("test")
             self.tabela_budynki = tabela
             self.tabela_budynki.cellDoubleClicked.connect(self.building_preview)
         if type == "pojazdy":
