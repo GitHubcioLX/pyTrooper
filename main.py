@@ -26,8 +26,9 @@ class MainWindow(QWidget):
         self.naglowek.setFont(font)
 
         self.filter = QLineEdit()
-        self.filter.setPlaceholderText("Wyszukaj...")
-        self.filter.returnPressed.connect(self.set_jednostki)
+        self.filter.setPlaceholderText("Wyszukaj nazwę...")
+        self.filter.textEdited.connect(self.set_jednostki)
+        #self.filter.returnPressed.connect(self.set_jednostki)
 
         self.jednostki = QTableWidget()
 
@@ -65,7 +66,9 @@ class MainWindow(QWidget):
         self.equipment_window.show()
 
     def set_jednostki(self):
-        self.jednostki = create_table(['Identyfikator', 'Nazwa'], Connector.get_filtered("jednostki", ["identyfikator", "nazwa"], " WHERE nazwa LIKE '%" + self.filter.text() + "%'"))
+        self.jednostki = create_table(['Identyfikator', 'Nazwa'],
+                                      Connector.get_filtered("jednostki", ["identyfikator", "nazwa"],
+                                                             " WHERE nazwa LIKE '%" + self.filter.text() + "%'"))
         self.refresh_unit_box()
 
     def open_jednostki(self, rowid):
