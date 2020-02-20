@@ -26,9 +26,11 @@ class MainWindow(QWidget):
         self.naglowek.setFont(font)
 
         self.filter = QLineEdit()
+        rx = QRegExp("[\\w\\d .,]*")
+        self.filter.setValidator(QRegExpValidator(QRegExp(rx)))
         self.filter.setPlaceholderText("Wyszukaj nazwę...")
-        self.filter.textEdited.connect(self.set_jednostki)
-        #self.filter.returnPressed.connect(self.set_jednostki)
+        #self.filter.textEdited.connect(self.set_jednostki)
+        self.filter.returnPressed.connect(self.set_jednostki)
 
         self.jednostki = QTableWidget()
 
