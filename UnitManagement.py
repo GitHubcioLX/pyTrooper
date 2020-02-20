@@ -7,9 +7,10 @@ from BuildingPreview import BuildingPreview
 from DeletionConfirmation import DeletionConfirmation
 from OfficerForm import OfficerForm
 from OfficerPreview import OfficerPreview
-from Utilities import set_info_tab, create_table
+from Utilities import create_table, create_info_box
 from VehicleForm import VehicleForm
 from VehiclePreview import VehiclePreview
+from AssignManagement import AssignManagement
 from config import rx
 from connector import Connector
 
@@ -20,7 +21,7 @@ class UnitManagement(QTabWidget):
         self.unit_id = id_jednostki
         self.setWindowTitle("Zarządzanie jednostką")
         self.setMinimumSize(400, 350)
-        self.infoTab = set_info_tab(id_jednostki)
+        self.infoTab = self.set_info_tab()
         self.insertTab(0, self.infoTab, "Ogólne")
         self.listTab1 = None
         self.filter_budynki = QLineEdit()
@@ -34,6 +35,7 @@ class UnitManagement(QTabWidget):
         self.addWindow = None
         self.previewWindow = None
         self.deleteWindow = None
+        self.assignmentWindow = None
         self.setCurrentIndex(0)
 
     def refresh_buildings(self):
@@ -237,3 +239,25 @@ class UnitManagement(QTabWidget):
         item = self.tabela_oficerowie.item(rowid, 2)
         self.previewWindow = OfficerPreview(item.text())
         self.previewWindow.show()
+
+    def set_info_tab(self):
+        tab = QWidget()
+        layout = QVBoxLayout()
+        info = create_info_box("jednostki", self.unit_id, "identyfikator", int)
+        layout.addWidget(info)
+
+        buttons = QGroupBox("Zarządzanie")
+        buttonsLayout = QHBoxLayout()
+        self.przydzialy = QPushButton("Przydziały")
+        self.przydzialy.clicked.connect(self.assignment_window)
+        self.zamowienia = QPushButton("Zamówienia")
+        buttonsLayout.addWidget(self.przydzialy)
+        buttonsLayout.addWidget(self.zamowienia)
+        buttons.setLayout(buttonsLayout)
+        layout.addWidget(buttons)
+        tab.setLayout(layout)
+        return tab
+
+    def assignment_window(self):
+        self.assignmentWindow = AssignManagement(self.unit_id)
+        self.assignmentWindow.show()
