@@ -1,8 +1,9 @@
 import PyQt5
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
 from connector import Connector
-
+from config import rx
 
 class UnitForm(QWidget):
     commited = pyqtSignal()
@@ -22,12 +23,19 @@ class UnitForm(QWidget):
 
     def set_form(self):
         self.id = QLineEdit()
+        self.id.setValidator(QIntValidator())
         self.layout.addRow("Identyfikator: ", self.id)
         self.name = QLineEdit()
+        self.name.setMaxLength(30)
+        self.name.setValidator(QRegExpValidator(QRegExp(rx)))
         self.layout.addRow("Nazwa: ", self.name)
         self.type = QLineEdit()
+        self.type.setMaxLength(20)
+        self.type.setValidator(QRegExpValidator(QRegExp(rx)))
         self.layout.addRow("Rodzaj: ", self.type)
         self.city = QLineEdit()
+        self.city.setMaxLength(20)
+        self.city.setValidator(QRegExpValidator(QRegExp(rx)))
         self.layout.addRow("Miasto: ", self.city)
 
     def confirm(self):

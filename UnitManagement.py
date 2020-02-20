@@ -41,8 +41,8 @@ class UnitManagement(QTabWidget):
         self.listTab1 = self.create_list_tab(["Oznaczenie", "Rola"],
                                              Connector.get_filtered("budynki", ["oznaczenie", "rola_budynku"],
                                                                     " WHERE id_jednostki = " + self.unit_id +
-                                                                    " AND oznaczenie LIKE '%" +
-                                                                    self.filter_budynki.text() + "%'"),
+                                                                    " AND UPPER(oznaczenie) LIKE UPPER('%" +
+                                                                    self.filter_budynki.text() + "%')"),
                                              "budynki")
         self.insertTab(1, self.listTab1, "Budynki")
         self.setCurrentIndex(1)
@@ -52,10 +52,10 @@ class UnitManagement(QTabWidget):
         self.listTab2 = self.create_list_tab(["ID", "Producent", "Model"],
                                              Connector.get_filtered("pojazdy", ["id_pojazdu", "producent", "model"],
                                                                     " WHERE id_jednostki = " + self.unit_id +
-                                                                    " AND (model LIKE '%" +
-                                                                    self.filter_pojazdy.text() + "%'" +
-                                                                    " OR producent LIKE '%" +
-                                                                    self.filter_pojazdy.text() + "%')"),
+                                                                    " AND (UPPER(model) LIKE UPPER('%" +
+                                                                    self.filter_pojazdy.text() + "%')" +
+                                                                    " OR UPPER(producent) LIKE UPPER('%" +
+                                                                    self.filter_pojazdy.text() + "%'))"),
                                              "pojazdy")
         self.insertTab(2, self.listTab2, "Pojazdy")
         self.setCurrentIndex(2)
@@ -65,12 +65,12 @@ class UnitManagement(QTabWidget):
         self.listTab3 = self.create_list_tab(["Imię", "Nazwisko", "PESEL"],
                                              Connector.get_filtered("oficerowie", ["imie", "nazwisko", "pesel"],
                                                                     " WHERE id_jednostki = " + self.unit_id +
-                                                                    " AND (imie LIKE '%" +
-                                                                    self.filter_oficerowie.text() + "%'" +
-                                                                    " OR nazwisko LIKE '%" +
-                                                                    self.filter_oficerowie.text() + "%'" +
-                                                                    " OR pesel LIKE '%" +
-                                                                    self.filter_oficerowie.text() + "%')"),
+                                                                    " AND (UPPER(imie) LIKE UPPER('%" +
+                                                                    self.filter_oficerowie.text() + "%')" +
+                                                                    " OR UPPER(nazwisko) LIKE UPPER('%" +
+                                                                    self.filter_oficerowie.text() + "%')" +
+                                                                    " OR UPPER(pesel) LIKE UPPER('%" +
+                                                                    self.filter_oficerowie.text() + "%'))"),
                                              "oficerowie")
         self.insertTab(3, self.listTab3, "Oficerowie")
         self.setCurrentIndex(3)

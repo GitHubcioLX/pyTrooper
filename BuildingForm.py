@@ -1,7 +1,9 @@
 import PyQt5
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
 from connector import Connector
+from config import rx
 
 
 class BuildingForm(QWidget):
@@ -23,7 +25,10 @@ class BuildingForm(QWidget):
 
     def set_form(self):
         self.role = QLineEdit()
+        self.role.setMaxLength(20)
+        self.role.setValidator(QRegExpValidator(QRegExp(rx)))
         self.empCount = QLineEdit()
+        self.empCount.setValidator(QIntValidator())
         if self.oznaczenie is not None:
             oldData = Connector.get_record("budynki", ["rola_budynku", "liczba_personelu"], self.oznaczenie,
                                            "oznaczenie", str)
@@ -32,6 +37,8 @@ class BuildingForm(QWidget):
             self.sign = QLabel(self.oznaczenie)
         else:
             self.sign = QLineEdit()
+            self.sign.setValidator(QRegExpValidator(QRegExp(rx)))
+            self.sign.setMaxLength(3)
         self.layout.addRow("Oznaczenie: ", self.sign)
         self.layout.addRow("Rola budynku: ", self.role)
         self.layout.addRow("Docelowa liczba personelu: ", self.empCount)
