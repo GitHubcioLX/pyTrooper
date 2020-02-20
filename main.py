@@ -101,8 +101,8 @@ class MainWindow(QWidget):
         if self.unit_box_layout:
             while self.unit_box_layout.itemAt(0):
                 self.unit_box_layout.removeItem(self.unit_box_layout.itemAt(0))
-            self.unit_box_layout.addWidget(self.filter, 0, 0, 1, 2)
-            self.unit_box_layout.addWidget(self.jednostki, 1, 0, 1, 2)
+            self.unit_box_layout.addWidget(self.jednostki, 0, 0, 1, 2)
+            self.unit_box_layout.addWidget(self.filter, 1, 0, 1, 2)
             self.unit_box_layout.addWidget(self.addButton, 2, 0)
             self.unit_box_layout.addWidget(self.delButton, 2, 1)
             self.unit_box.setLayout(self.unit_box_layout)
@@ -113,8 +113,8 @@ class MainWindow(QWidget):
         #self.layout.addWidget(self.jednostki)
         self.unit_box = QGroupBox("Zarządzanie jednostką")
         self.unit_box_layout = QGridLayout()
-        self.unit_box_layout.addWidget(self.filter, 0, 0, 1, 2)
-        self.unit_box_layout.addWidget(self.jednostki, 1, 0, 1, 2)
+        self.unit_box_layout.addWidget(self.jednostki, 0, 0, 1, 2)
+        self.unit_box_layout.addWidget(self.filter, 1, 0, 1, 2)
         self.unit_box_layout.addWidget(self.addButton, 2, 0)
         self.unit_box_layout.addWidget(self.delButton, 2, 1)
         self.unit_box.setLayout(self.unit_box_layout)

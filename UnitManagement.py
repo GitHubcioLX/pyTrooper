@@ -1,13 +1,16 @@
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
 from BuildingForm import BuildingForm
 from BuildingPreview import BuildingPreview
-from VehicleForm import VehicleForm
-from VehiclePreview import VehiclePreview
+from DeletionConfirmation import DeletionConfirmation
 from OfficerForm import OfficerForm
 from OfficerPreview import OfficerPreview
-from DeletionConfirmation import DeletionConfirmation
 from Utilities import set_info_tab, create_table
+from VehicleForm import VehicleForm
+from VehiclePreview import VehiclePreview
+from config import rx
 from connector import Connector
 
 
@@ -20,10 +23,13 @@ class UnitManagement(QTabWidget):
         self.infoTab = set_info_tab(id_jednostki)
         self.insertTab(0, self.infoTab, "Ogólne")
         self.listTab1 = None
+        self.filter_budynki = QLineEdit()
         self.refresh_buildings()
         self.listTab2 = None
+        self.filter_pojazdy = QLineEdit()
         self.refresh_vehicles()
         self.listTab3 = None
+        self.filter_oficerowie = QLineEdit()
         self.refresh_officers()
         self.addWindow = None
         self.previewWindow = None
@@ -34,14 +40,23 @@ class UnitManagement(QTabWidget):
         self.removeTab(1)
         self.listTab1 = self.create_list_tab(["Oznaczenie", "Rola"],
                                              Connector.get_filtered("budynki", ["oznaczenie", "rola_budynku"],
-                                                                    " WHERE id_jednostki = " + self.unit_id), "budynki")
+                                                                    " WHERE id_jednostki = " + self.unit_id +
+                                                                    " AND oznaczenie LIKE '%" +
+                                                                    self.filter_budynki.text() + "%'"),
+                                             "budynki")
         self.insertTab(1, self.listTab1, "Budynki")
         self.setCurrentIndex(1)
 
     def refresh_vehicles(self):
         self.removeTab(2)
-        self.listTab2 = self.create_list_tab(["ID", "Producent", "Model"], Connector.get_filtered("pojazdy", ["id_pojazdu", "producent", "model"],
-                                                                                     " WHERE id_jednostki = " + self.unit_id), "pojazdy")
+        self.listTab2 = self.create_list_tab(["ID", "Producent", "Model"],
+                                             Connector.get_filtered("pojazdy", ["id_pojazdu", "producent", "model"],
+                                                                    " WHERE id_jednostki = " + self.unit_id +
+                                                                    " AND (model LIKE '%" +
+                                                                    self.filter_pojazdy.text() + "%'" +
+                                                                    " OR producent LIKE '%" +
+                                                                    self.filter_pojazdy.text() + "%')"),
+                                             "pojazdy")
         self.insertTab(2, self.listTab2, "Pojazdy")
         self.setCurrentIndex(2)
 
@@ -49,7 +64,14 @@ class UnitManagement(QTabWidget):
         self.removeTab(3)
         self.listTab3 = self.create_list_tab(["Imię", "Nazwisko", "PESEL"],
                                              Connector.get_filtered("oficerowie", ["imie", "nazwisko", "pesel"],
-                                                                    " WHERE id_jednostki = " + self.unit_id), "oficerowie")
+                                                                    " WHERE id_jednostki = " + self.unit_id +
+                                                                    " AND (imie LIKE '%" +
+                                                                    self.filter_oficerowie.text() + "%'" +
+                                                                    " OR nazwisko LIKE '%" +
+                                                                    self.filter_oficerowie.text() + "%'" +
+                                                                    " OR pesel LIKE '%" +
+                                                                    self.filter_oficerowie.text() + "%')"),
+                                             "oficerowie")
         self.insertTab(3, self.listTab3, "Oficerowie")
         self.setCurrentIndex(3)
 
@@ -64,11 +86,16 @@ class UnitManagement(QTabWidget):
         # layout.addWidget(lista)
         layout.addWidget(tabela)
 
+        filter = QLineEdit()
+        filter.setValidator(QRegExpValidator(QRegExp(rx)))
+        filter.setPlaceholderText("Wyszukaj...")
+
         buttons = QGroupBox("Zarządzanie")
         boxLayout = QHBoxLayout()
         addButton = QPushButton("Dodaj")
         rmvButton = QPushButton("Usuń")
         editButton = QPushButton("Edytuj")
+
         boxLayout.addWidget(addButton)
         boxLayout.addWidget(rmvButton)
         boxLayout.addWidget(editButton)
@@ -79,18 +106,28 @@ class UnitManagement(QTabWidget):
             addButton.clicked.connect(self.add_building)
             rmvButton.clicked.connect(self.delete_buildings)
             editButton.clicked.connect(self.edit_building)
+            self.filter_budynki = filter
+            self.filter_budynki.returnPressed.connect(self.refresh_buildings)
+            layout.addWidget(self.filter_budynki)
+            print("test")
             self.tabela_budynki = tabela
             self.tabela_budynki.cellDoubleClicked.connect(self.building_preview)
         if type == "pojazdy":
             addButton.clicked.connect(self.add_vehicle)
             rmvButton.clicked.connect(self.delete_vehicles)
             editButton.clicked.connect(self.edit_vehicle)
+            self.filter_pojazdy = filter
+            self.filter_pojazdy.returnPressed.connect(self.refresh_vehicles)
+            layout.addWidget(self.filter_pojazdy)
             self.tabela_pojazdy = tabela
             self.tabela_pojazdy.cellDoubleClicked.connect(self.vehicle_preview)
         if type == "oficerowie":
             addButton.clicked.connect(self.add_officer)
             rmvButton.clicked.connect(self.delete_officers)
             editButton.clicked.connect(self.edit_officer)
+            self.filter_oficerowie = filter
+            self.filter_oficerowie.returnPressed.connect(self.refresh_officers)
+            layout.addWidget(self.filter_oficerowie)
             self.tabela_oficerowie = tabela
             self.tabela_oficerowie.cellDoubleClicked.connect(self.officer_preview)
 
