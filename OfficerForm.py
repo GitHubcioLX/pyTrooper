@@ -7,9 +7,10 @@ from connector import Connector
 class OfficerForm(QWidget):
     commited = pyqtSignal()
 
-    def __init__(self, id_jednostki):
+    def __init__(self, id_jednostki, pesel=None):
         super().__init__()
         self.id_jednostki = id_jednostki
+        self.oldPesel = pesel
         self.setWindowTitle("Formularz (oficer)")
         self.layout = QFormLayout()
         self.set_form()
@@ -23,36 +24,48 @@ class OfficerForm(QWidget):
 
     def set_form(self):
         self.imie = QLineEdit()
-        self.layout.addRow("Imię: ", self.imie)
         self.nazwisko = QLineEdit()
-        self.layout.addRow("Nazwisko: ", self.nazwisko)
-        self.pesel = QLineEdit()
-        self.layout.addRow("PESEL: ", self.pesel)
         self.data_ur = QLineEdit()
-        self.layout.addRow("Data urodzenia: ", self.data_ur)
-        self.layout.addRow(" ", QLabel("Format daty: <b>RRRR-MM-DD<\b>"))
         self.wyznanie = QLineEdit()
-        self.layout.addRow("Wyznanie: ", self.wyznanie)
         self.grupa_krwi = QComboBox()
         self.grupa_krwi.addItems(Connector.get_enum("grupa_krwi_type"))
-        self.layout.addRow("Grupa krwi: ", self.grupa_krwi)
         self.ranga = QComboBox()
         rangi = Connector.get_table_data("rangi", ["nazwa_rangi"])
         for i in range(len(rangi)):
             rangi[i] = rangi[i][0]
         self.ranga.addItems(rangi)
-        self.layout.addRow("Ranga: ", self.ranga)
         self.budynek = QComboBox()
         filter = " WHERE id_jednostki = " + str(self.id_jednostki);
         budynki = Connector.get_filtered("budynki", ["oznaczenie"], filter)
         for i in range(len(budynki)):
             budynki[i] = budynki[i][0]
         self.budynek.addItems(budynki)
+        if self.oldPesel is not None:
+            oldData = Connector.get_record("oficerowie", ["imie", "nazwisko", "ranga", "data_ur", "grupa_krwi",
+                                                          "wyznanie", "budynek"],
+                                           self.oldPesel, "pesel", str)
+            self.imie.setText(oldData[0])
+            self.nazwisko.setText(oldData[1])
+            self.pesel = QLabel(self.oldPesel)
+            self.ranga.setCurrentText(oldData[2])
+            self.data_ur.setText(str(oldData[3]))
+            self.grupa_krwi.setCurrentText(oldData[4])
+            self.wyznanie.setText(oldData[5])
+            self.budynek.setCurrentText(oldData[6])
+        else:
+            self.pesel = QLineEdit()
+        self.layout.addRow("Imię: ", self.imie)
+        self.layout.addRow("Nazwisko: ", self.nazwisko)
+        self.layout.addRow("PESEL: ", self.pesel)
+        self.layout.addRow("Data urodzenia: ", self.data_ur)
+        self.layout.addRow("", QLabel("Format daty: <b>RRRR-MM-DD<\b>"))
+        self.layout.addRow("Wyznanie: ", self.wyznanie)
+        self.layout.addRow("Grupa krwi: ", self.grupa_krwi)
+        self.layout.addRow("Ranga: ", self.ranga)
         self.layout.addRow("Budynek: ", self.budynek)
 
 
     def confirm(self):
-        pesel = self.pesel.text()
         imie = self.imie.text()
         nazwisko = self.nazwisko.text()
         data_ur = self.data_ur.text()
@@ -60,10 +73,21 @@ class OfficerForm(QWidget):
         wyznanie = self.wyznanie.text()
         ranga = self.ranga.currentText()
         budynek = self.budynek.currentText()
-        if(Connector.insert_row("oficerowie", ["pesel", "imie", "nazwisko", "data_ur", "wyznanie", "id_jednostki", "budynek", "ranga", "grupa_krwi"],
-                            [pesel, imie, nazwisko, data_ur, wyznanie, self.id_jednostki, budynek, ranga, grupa_krwi])):
-            self.commited.emit()
-            self.close()
+        if self.oldPesel is not None:
+            if (Connector.update_row("oficerowie",
+                                     ["imie", "nazwisko", "data_ur", "wyznanie", "budynek", "ranga", "grupa_krwi"],
+                                     [imie, nazwisko, data_ur, wyznanie, budynek, ranga, grupa_krwi], self.oldPesel,
+                                     "pesel", str)):
+                self.commited.emit()
+                self.close()
+        else:
+            pesel = self.pesel.text()
+            if(Connector.insert_row("oficerowie", ["pesel", "imie", "nazwisko", "data_ur", "wyznanie", "id_jednostki",
+                                                   "budynek", "ranga", "grupa_krwi"],
+                                    [pesel, imie, nazwisko, data_ur, wyznanie, self.id_jednostki, budynek, ranga,
+                                    grupa_krwi])):
+                self.commited.emit()
+                self.close()
 
 
 if __name__ == "__main__":

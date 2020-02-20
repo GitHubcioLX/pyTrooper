@@ -37,7 +37,6 @@ class BuildingForm(QWidget):
         self.layout.addRow("Docelowa liczba personelu: ", self.empCount)
 
     def confirm(self):
-        sign = self.sign.text()
         empCount = self.empCount.text()
         role = self.role.text()
         if self.oznaczenie is not None:
@@ -46,6 +45,7 @@ class BuildingForm(QWidget):
                 self.commited.emit()
                 self.close()
         else:
+            sign = self.sign.text()
             if(Connector.insert_row("budynki", ["oznaczenie", "liczba_personelu", "rola_budynku", "id_jednostki"],
                                      [sign, empCount, role, self.id_jednostki])):
                 self.commited.emit()
