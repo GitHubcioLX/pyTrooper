@@ -42,7 +42,8 @@ class UnitManagement(QTabWidget):
                                              Connector.get_filtered("budynki", ["oznaczenie", "rola_budynku"],
                                                                     " WHERE id_jednostki = " + self.unit_id +
                                                                     " AND UPPER(oznaczenie) LIKE UPPER('%" +
-                                                                    self.filter_budynki.text() + "%')"),
+                                                                    self.filter_budynki.text() + "%')" +
+                                                                    " ORDER BY oznaczenie ASC"),
                                              "budynki")
         self.insertTab(1, self.listTab1, "Budynki")
         self.setCurrentIndex(1)
@@ -55,7 +56,8 @@ class UnitManagement(QTabWidget):
                                                                     " AND (UPPER(model) LIKE UPPER('%" +
                                                                     self.filter_pojazdy.text() + "%')" +
                                                                     " OR UPPER(producent) LIKE UPPER('%" +
-                                                                    self.filter_pojazdy.text() + "%'))"),
+                                                                    self.filter_pojazdy.text() + "%'))" +
+                                                                    " ORDER BY id_pojazdu ASC"),
                                              "pojazdy")
         self.insertTab(2, self.listTab2, "Pojazdy")
         self.setCurrentIndex(2)
@@ -70,7 +72,8 @@ class UnitManagement(QTabWidget):
                                                                     " OR UPPER(nazwisko) LIKE UPPER('%" +
                                                                     self.filter_oficerowie.text() + "%')" +
                                                                     " OR UPPER(pesel) LIKE UPPER('%" +
-                                                                    self.filter_oficerowie.text() + "%'))"),
+                                                                    self.filter_oficerowie.text() + "%'))" +
+                                                                    " ORDER BY nazwisko, imie ASC"),
                                              "oficerowie")
         self.insertTab(3, self.listTab3, "Oficerowie")
         self.setCurrentIndex(3)
@@ -109,7 +112,6 @@ class UnitManagement(QTabWidget):
             self.filter_budynki = filter
             self.filter_budynki.returnPressed.connect(self.refresh_buildings)
             layout.addWidget(self.filter_budynki)
-            print("test")
             self.tabela_budynki = tabela
             self.tabela_budynki.cellDoubleClicked.connect(self.building_preview)
         if type == "pojazdy":
