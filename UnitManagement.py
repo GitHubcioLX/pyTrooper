@@ -43,8 +43,10 @@ class UnitManagement(QTabWidget):
         self.listTab1 = self.create_list_tab(["Oznaczenie", "Rola"],
                                              Connector.get_filtered("budynki", ["oznaczenie", "rola_budynku"],
                                                                     " WHERE id_jednostki = " + self.unit_id +
-                                                                    " AND UPPER(oznaczenie) LIKE UPPER('%" +
+                                                                    " AND (UPPER(oznaczenie) LIKE UPPER('%" +
                                                                     self.filter_budynki.text() + "%')" +
+                                                                    " OR UPPER(rola_budynku) LIKE UPPER('%" +
+                                                                    self.filter_budynki.text() + "%'))" +
                                                                     " ORDER BY oznaczenie ASC"),
                                              "budynki")
         self.insertTab(1, self.listTab1, "Budynki")
