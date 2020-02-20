@@ -17,10 +17,13 @@ create_view = None
     create_view.show()'''
 
 
-def create_info_box(tablename, id, idname, idtype):
+def create_info_box(tablename, id, idname, idtype, columns=None):
     box = QGroupBox("Informacje")
     layout = QFormLayout()
-    data = Connector.get_dict(tablename, column_names[tablename], id, idname, idtype)
+    if columns is not None:
+        data = Connector.get_dict(tablename, columns, id, idname, idtype)
+    else:
+        data = Connector.get_dict(tablename, column_names[tablename], id, idname, idtype)
     font = QFont()
     font.setBold(True)
     for k, v in data.items():
