@@ -28,8 +28,10 @@ class VehicleForm(QWidget):
         self.rodzaj = QComboBox()
         self.rodzaj.addItems(Connector.get_enum("rodzaj_pojazdu_type"))
         self.producent = QLineEdit()
+        self.producent.setMaxLength(15)
         self.producent.setValidator(QRegExpValidator(QRegExp(rx)))
         self.model = QLineEdit()
+        self.model.setMaxLength(20)
         self.model.setValidator(QRegExpValidator(QRegExp(rx)))
         self.masa = QLineEdit()
         self.masa.setValidator(QIntValidator())
@@ -40,6 +42,7 @@ class VehicleForm(QWidget):
         self.rok = QLineEdit()
         self.rok.setValidator(QIntValidator())
         self.rejestracja = QLineEdit()
+        self.rejestracja.setMaxLength(7)
         self.rejestracja.setValidator(QRegExpValidator(QRegExp(rx)))
         if self.id_pojazdu is not None:
             oldData = Connector.get_record("pojazdy", ["rodzaj", "producent", "model", "rok_produkcji", "masa",

@@ -25,6 +25,7 @@ class BuildingForm(QWidget):
 
     def set_form(self):
         self.role = QLineEdit()
+        self.role.setMaxLength(20)
         self.role.setValidator(QRegExpValidator(QRegExp(rx)))
         self.empCount = QLineEdit()
         self.empCount.setValidator(QIntValidator())
