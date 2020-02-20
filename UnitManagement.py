@@ -9,13 +9,9 @@ from OfficerPreview import OfficerPreview
 from Utilities import set_info_tab, create_table
 from connector import Connector
 
-# GUI
-# app = QApplication([])
-
 
 class UnitManagement(QTabWidget):
     def __init__(self, id_jednostki):
-        global budynki, oficerowie, pojazdy
         super().__init__()
         self.unit_id = id_jednostki
         self.setWindowTitle("Zarządzanie jednostką")
