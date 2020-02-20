@@ -6,6 +6,7 @@ from VehicleForm import VehicleForm
 from VehiclePreview import VehiclePreview
 from OfficerForm import OfficerForm
 from OfficerPreview import OfficerPreview
+from DeletionConfirmation import DeletionConfirmation
 from Utilities import set_info_tab, create_table
 from connector import Connector
 
@@ -26,6 +27,7 @@ class UnitManagement(QTabWidget):
         self.refresh_officers()
         self.addWindow = None
         self.previewWindow = None
+        self.deleteWindow = None
         self.setCurrentIndex(0)
 
     def refresh_buildings(self):
@@ -136,26 +138,43 @@ class UnitManagement(QTabWidget):
             self.addWindow.show()
 
     def delete_buildings(self):
-        selection = self.tabela_budynki.selectedItems()
-        if selection:
-            res = []
-            for x in selection:
-                res.append(self.tabela_budynki.item(x.row(), 0).text())
-            res = list(dict.fromkeys(res))
-            Connector.delete_items("budynki", res, "oznaczenie", str)
-            self.refresh_buildings()
+        self.deleteWindow = DeletionConfirmation()
+        self.deleteWindow.selected.connect(self.delete_building_slot)
+        self.deleteWindow.show()
+
+    def delete_building_slot(self, answer):
+        if answer:
+            selection = self.tabela_budynki.selectedItems()
+            if selection:
+                res = []
+                for x in selection:
+                    res.append(self.tabela_budynki.item(x.row(), 0).text())
+                res = list(dict.fromkeys(res))
+                Connector.delete_items("budynki", res, "oznaczenie", str)
+                self.refresh_buildings()
 
     def delete_vehicles(self):
-        selection = self.tabela_pojazdy.selectedItems()
-        if selection:
-            res = []
-            for x in selection:
-                res.append(self.tabela_pojazdy.item(x.row(), 0).text())
-            res = list(dict.fromkeys(res))
-            Connector.delete_items("pojazdy", res, "id_pojazdu", int)
-            self.refresh_vehicles()
+        self.deleteWindow = DeletionConfirmation()
+        self.deleteWindow.selected.connect(self.delete_vehicles_slot)
+        self.deleteWindow.show()
+
+    def delete_vehicles_slot(self, answer):
+        if answer:
+            selection = self.tabela_pojazdy.selectedItems()
+            if selection:
+                res = []
+                for x in selection:
+                    res.append(self.tabela_pojazdy.item(x.row(), 0).text())
+                res = list(dict.fromkeys(res))
+                Connector.delete_items("pojazdy", res, "id_pojazdu", int)
+                self.refresh_vehicles()
 
     def delete_officers(self):
+        self.deleteWindow = DeletionConfirmation()
+        self.deleteWindow.selected.connect(self.delete_officers_slot)
+        self.deleteWindow.show()
+
+    def delete_officers_slot(self, answer):
         selection = self.tabela_oficerowie.selectedItems()
         if selection:
             res = []

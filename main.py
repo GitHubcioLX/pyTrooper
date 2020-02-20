@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from EquipmentListWindow import EquipmentListWindow
 from UnitManagement import UnitManagement
+from DeletionConfirmation import DeletionConfirmation
 from connector import Connector
 from Utilities import create_table
 from UnitForm import UnitForm
@@ -48,6 +49,7 @@ class MainWindow(QWidget):
 
         self.unitwindow = None
         self.unitcreation = None
+        self.deleteWindow = None
         self.equipment_window = EquipmentListWindow()
         self.rankWindow = RankManagement()
 
@@ -71,14 +73,20 @@ class MainWindow(QWidget):
         self.rankWindow.show()
 
     def delete_items(self):
-        selection = self.jednostki.selectedItems()
-        if selection:
-            res = []
-            for x in selection:
-                res.append(self.jednostki.item(x.row(), 0).text())
-            res = list(dict.fromkeys(res))
-            Connector.delete_items("jednostki", res, "identyfikator", int)
-            self.set_jednostki()
+        self.deleteWindow = DeletionConfirmation()
+        self.deleteWindow.selected.connect(self.delete_items_slot)
+        self.deleteWindow.show()
+
+    def delete_items_slot(self, answer):
+        if answer:
+            selection = self.jednostki.selectedItems()
+            if selection:
+                res = []
+                for x in selection:
+                    res.append(self.jednostki.item(x.row(), 0).text())
+                res = list(dict.fromkeys(res))
+                Connector.delete_items("jednostki", res, "identyfikator", int)
+                self.set_jednostki()
 
     def refresh_unit_box(self):
         if self.unit_box_layout:
