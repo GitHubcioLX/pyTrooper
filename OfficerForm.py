@@ -2,7 +2,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from connector import Connector
-
+from config import rx
 
 class OfficerForm(QWidget):
     commited = pyqtSignal()
@@ -24,10 +24,13 @@ class OfficerForm(QWidget):
 
     def set_form(self):
         self.imie = QLineEdit()
+        self.imie.setValidator(QRegExpValidator(QRegExp(rx)))
         self.nazwisko = QLineEdit()
+        self.nazwisko.setValidator(QRegExpValidator(QRegExp(rx)))
         self.data_ur = QLineEdit()
         self.data_ur.setInputMask("9999-99-99")
         self.wyznanie = QLineEdit()
+        self.wyznanie.setValidator(QRegExpValidator(QRegExp(rx)))
         self.grupa_krwi = QComboBox()
         self.grupa_krwi.addItems(Connector.get_enum("grupa_krwi_type"))
         self.ranga = QComboBox()
@@ -55,6 +58,7 @@ class OfficerForm(QWidget):
             self.budynek.setCurrentText(oldData[6])
         else:
             self.pesel = QLineEdit()
+            self.pesel.setValidator(QIntValidator())
         self.layout.addRow("Imię: ", self.imie)
         self.layout.addRow("Nazwisko: ", self.nazwisko)
         self.layout.addRow("PESEL: ", self.pesel)
