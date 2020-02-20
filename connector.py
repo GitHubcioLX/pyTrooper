@@ -23,7 +23,10 @@ class Connector:
     def value_formatter(values):
         output = ""
         for field in values:
-            output += "'" + field + "', "
+            if type(field) is str and field == "":
+                output += "NULL, "
+            else:
+                output += "'" + field + "', "
         output = output[:-2]
         return output
 
@@ -44,7 +47,10 @@ class Connector:
         output = ""
         for i, x in enumerate(columns, 0):
             if type(values[i]) is str:
-                temp = "'" + values[i] + "'"
+                if values[i] == "":
+                    temp = "NULL"
+                else:
+                    temp = "'" + values[i] + "'"
             else:
                 temp = values[i]
             output += x + " = " + temp + ", "
