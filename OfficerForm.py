@@ -26,6 +26,7 @@ class OfficerForm(QWidget):
         self.imie = QLineEdit()
         self.nazwisko = QLineEdit()
         self.data_ur = QLineEdit()
+        self.data_ur.setInputMask("9999-99-99")
         self.wyznanie = QLineEdit()
         self.grupa_krwi = QComboBox()
         self.grupa_krwi.addItems(Connector.get_enum("grupa_krwi_type"))
