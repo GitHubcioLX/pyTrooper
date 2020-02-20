@@ -1,6 +1,7 @@
 import PyQt5
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
 from connector import Connector
 
 
@@ -25,12 +26,15 @@ class RankEditForm(QWidget):
     def set_form(self):
         self.layout.addRow("Nazwa: ", QLabel(self.nazwa))
         self.przepustki = QLineEdit()
+        self.przepustki.setValidator(QIntValidator())
         self.przepustki.setText(str(self.oldData[0]))
         self.layout.addRow("Liczba przepustek: ", self.przepustki)
         self.uprawnienia = QLineEdit()
+        self.uprawnienia.setValidator(QIntValidator())
         self.uprawnienia.setText(str(self.oldData[1]))
         self.layout.addRow("Poziom uprawnień: ", self.uprawnienia)
         self.zold = QLineEdit()
+        self.zold.setValidator(QIntValidator())
         self.zold.setText(str(self.oldData[2]))
         self.layout.addRow("Żołd: ", self.zold)
 
