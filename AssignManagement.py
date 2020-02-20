@@ -13,8 +13,8 @@ class AssignManagement(QTabWidget):
         self.setMinimumSize(400, 350)
         self.listTab1 = None
         self.refresh_eq_assignments()
-        #self.listTab2 = None
-        #self.refresh_vh_assignments()
+        self.listTab2 = None
+        self.refresh_vh_assignments()
         self.addWindow = None
         self.previewWindow = None
         self.setCurrentIndex(0)
@@ -25,7 +25,7 @@ class AssignManagement(QTabWidget):
                                              Connector.get_filtered('"Przydzial-ekwipunek"', ["data_od", "data_do", "pesel_oficera", "numer_seryjny"],
                                                                     " WHERE (SELECT id_jednostki FROM oficerowie WHERE pesel LIKE pesel_oficera) = " + self.unit_id),
                                              "ekwipunek")
-        self.insertTab(1, self.listTab1, "Ekwipunek")
+        self.insertTab(0, self.listTab1, "Ekwipunek")
         self.setCurrentIndex(0)
 
     def refresh_vh_assignments(self):
@@ -34,7 +34,7 @@ class AssignManagement(QTabWidget):
                                              Connector.get_filtered('"Przydzial-pojazd"', ["data_od", "data_do", "pesel_oficera", "id_pojazdu"],
                                                                     " WHERE (SELECT id_jednostki FROM oficerowie WHERE pesel LIKE pesel_oficera) = " + self.unit_id),
                                              "pojazdy")
-        self.insertTab(1, self.listTab1, "Pojazdy")
+        self.insertTab(1, self.listTab2, "Pojazdy")
         self.setCurrentIndex(1)
 
     def create_list_tab(self, column_names, items, type):
@@ -48,25 +48,21 @@ class AssignManagement(QTabWidget):
         boxLayout = QHBoxLayout()
         addButton = QPushButton("Dodaj")
         rmvButton = QPushButton("Usuń")
-        editButton = QPushButton("Edytuj")
         boxLayout.addWidget(addButton)
         boxLayout.addWidget(rmvButton)
-        boxLayout.addWidget(editButton)
         buttons.setLayout(boxLayout)
 
         # addButton.clicked.connect(show_add_windows(type, id))
         if type == "ekwipunek":
             addButton.clicked.connect(self.add_assignment)
             rmvButton.clicked.connect(self.delete_assignments)
-            editButton.clicked.connect(self.edit_assignment)
-            self.tabela_budynki = tabela
-            self.tabela_budynki.cellDoubleClicked.connect(self.assignment_preview)
+            self.tabela_eq = tabela
+            self.tabela_eq.cellDoubleClicked.connect(self.eq_assignment_preview)
         if type == "pojazdy":
-            addButton.clicked.connect(self.add_vehicle)
-            rmvButton.clicked.connect(self.delete_vehicles)
-            editButton.clicked.connect(self.edit_vehicle)
+            addButton.clicked.connect(self.add_assignment)
+            rmvButton.clicked.connect(self.delete_assignments)
             self.tabela_pojazdy = tabela
-            self.tabela_pojazdy.cellDoubleClicked.connect(self.vehicle_preview)
+            self.tabela_pojazdy.cellDoubleClicked.connect(self.vh_assignment_preview)
 
         layout.addWidget(buttons)
         tab.setLayout(layout)
@@ -76,14 +72,6 @@ class AssignManagement(QTabWidget):
         self.addWindow = BuildingForm(self.unit_id)
         self.addWindow.commited.connect(self.refresh_buildings)
         self.addWindow.show()
-
-    def edit_assignment(self):
-        selection = self.tabela_budynki.selectedItems()
-        if len(selection) == 1:
-            id = self.tabela_budynki.item(selection[0].row(), 0).text()
-            self.addWindow = BuildingForm(self.unit_id, id)
-            self.addWindow.commited.connect(self.refresh_buildings)
-            self.addWindow.show()
 
     def delete_assignments(self):
         selection = self.tabela_budynki.selectedItems()
@@ -95,8 +83,13 @@ class AssignManagement(QTabWidget):
             Connector.delete_items("budynki", res, "oznaczenie", str)
             self.refresh_buildings()
 
-    def assignment_preview(self, rowid):
-        item = self.tabela_budynki.item(rowid, 0)
+    def eq_assignment_preview(self, rowid):
+        item = self.tabela_eq.item(rowid, 0)
+        self.previewWindow = BuildingPreview(item.text())
+        self.previewWindow.show()
+
+    def vh_assignment_preview(self, rowid):
+        item = self.tabela_pojazdy.item(rowid, 0)
         self.previewWindow = BuildingPreview(item.text())
         self.previewWindow.show()
 
