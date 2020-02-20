@@ -1,9 +1,9 @@
 from PyQt5.QtCore import QRegExp
 
-host = 'localhost'
+host = 'dbs.cjha2rbtxsjk.eu-central-1.rds.amazonaws.com'
 database = 'DBS'
 user = 'postgres'
-password = 'konstantynopol'
+password = 'sR4kDeXDYtrRQG9g'
 
 formatter = {"identyfikator": "Identyfikator",
              "nazwa": "Nazwa",
