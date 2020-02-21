@@ -18,7 +18,7 @@ class ErrorPopUp(QWidget):
         self.naglowek.setFont(font)
 
         self.okButton = QPushButton("OK")
-
+        self.setMinimumSize(300, 100)
         self.set_layout()
 
         self.okButton.clicked.connect(self.close)

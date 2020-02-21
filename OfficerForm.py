@@ -62,7 +62,7 @@ class OfficerForm(QWidget):
         else:
             self.pesel = QLineEdit()
             self.pesel.setMaxLength(11)
-            self.pesel.setInputMask("99999999999")
+            self.pesel.setValidator(QRegExpValidator(QRegExp("\d{11}")))
         self.layout.addRow("Imię: ", self.imie)
         self.layout.addRow("Nazwisko: ", self.nazwisko)
         self.layout.addRow("PESEL: ", self.pesel)

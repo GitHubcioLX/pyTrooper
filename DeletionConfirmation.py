@@ -19,8 +19,8 @@ class DeletionConfirmation(QWidget):
         self.naglowek.setAlignment(Qt.AlignCenter)
         self.naglowek.setFont(font)
 
-        self.yesButton = QPushButton("TAK")
-        self.noButton = QPushButton("NIE")
+        self.yesButton = QPushButton("Tak")
+        self.noButton = QPushButton("Nie")
 
         self.set_layout()
 
