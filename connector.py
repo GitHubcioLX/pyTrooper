@@ -54,6 +54,8 @@ class Connector:
                     temp = "NULL"
                 else:
                     temp = "'" + values[i] + "'"
+            elif values[i] is None:
+                temp = "NULL"
             else:
                 temp = values[i]
             output += x + " = " + temp + ", "

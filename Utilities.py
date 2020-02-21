@@ -28,8 +28,9 @@ def create_info_box(tablename, id, idname, idtype, columns=None):
     font.setBold(True)
     for k, v in data.items():
         if v is None:
-            v = ""
-        label = QLabel(str(v))
+            label = QLabel(str(""))
+        else:
+            label = QLabel(str(v))
         label.setFont(font)
         layout.addRow(formatter[k] + ": ", label)
     box.setLayout(layout)
