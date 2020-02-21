@@ -83,7 +83,7 @@ class MainWindow(QWidget):
         self.rankWindow.show()
 
     def delete_items(self):
-        self.deleteWindow = DeletionConfirmation()
+        self.deleteWindow = DeletionConfirmation("jednostki")
         self.deleteWindow.selected.connect(self.delete_items_slot)
         self.deleteWindow.show()
 
