@@ -190,7 +190,7 @@ class Connector:
     def create_vehicle(input):
         correct = True
         for i, x in enumerate(input):
-            if x is "":
+            if x == "":
                 input[i] = None
         cur = Connector.conn.cursor()
         try:
