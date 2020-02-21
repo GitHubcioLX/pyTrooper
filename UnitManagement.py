@@ -25,6 +25,7 @@ class UnitManagement(QTabWidget):
         self.insertTab(0, self.infoTab, "Ogólne")
         self.listTab1 = None
         self.filter_budynki = QLineEdit()
+        self.initiation = True
         self.refresh_buildings()
         self.listTab2 = None
         self.filter_pojazdy = QLineEdit()
@@ -32,6 +33,7 @@ class UnitManagement(QTabWidget):
         self.listTab3 = None
         self.filter_oficerowie = QLineEdit()
         self.refresh_officers()
+        self.initiation = False
         self.addWindow = None
         self.previewWindow = None
         self.deleteWindow = None
@@ -52,7 +54,7 @@ class UnitManagement(QTabWidget):
                                              "budynki")
         self.insertTab(1, self.listTab1, "Budynki")
         self.setCurrentIndex(1)
-        if self.c_box_layout is not None:
+        if not self.initiation:
             self.refresh_c_box()
 
     def refresh_vehicles(self):
@@ -68,7 +70,7 @@ class UnitManagement(QTabWidget):
                                              "pojazdy")
         self.insertTab(2, self.listTab2, "Pojazdy")
         self.setCurrentIndex(2)
-        if self.c_box_layout is not None:
+        if not self.initiation:
             self.refresh_c_box()
 
     def refresh_officers(self):
@@ -86,7 +88,7 @@ class UnitManagement(QTabWidget):
                                              "oficerowie")
         self.insertTab(3, self.listTab3, "Oficerowie")
         self.setCurrentIndex(3)
-        if self.c_box_layout is not None:
+        if not self.initiation:
             self.refresh_c_box()
 
     def create_list_tab(self, column_names, items, type):
@@ -237,14 +239,15 @@ class UnitManagement(QTabWidget):
         self.deleteWindow.show()
 
     def delete_officers_slot(self, answer):
-        selection = self.tabela_oficerowie.selectedItems()
-        if selection:
-            res = []
-            for x in selection:
-                res.append(self.tabela_oficerowie.item(x.row(), 2).text())
-            res = list(dict.fromkeys(res))
-            Connector.delete_items("oficerowie", res, "pesel", str)
-            self.refresh_officers()
+        if answer:
+            selection = self.tabela_oficerowie.selectedItems()
+            if selection:
+                res = []
+                for x in selection:
+                    res.append(self.tabela_oficerowie.item(x.row(), 2).text())
+                res = list(dict.fromkeys(res))
+                Connector.delete_items("oficerowie", res, "pesel", str)
+                self.refresh_officers()
 
     def building_preview(self, rowid):
         item = self.tabela_budynki.item(rowid, 0)
@@ -263,18 +266,15 @@ class UnitManagement(QTabWidget):
 
     def set_info_tab(self):
         tab = QWidget()
-        layout = QVBoxLayout()
+        self.infoLayout = QGridLayout()
         info = create_info_box("jednostki", self.unit_id, "identyfikator", int)
-        layout.addWidget(info)
+        self.infoLayout.addWidget(info, 0, 0)
 
         self.counters = QGroupBox("Stan")
         self.c_box_layout = QFormLayout()
-        counters_dict = Connector.get_count_data(self.unit_id)
-        self.c_box_layout.addRow("Liczba budynków: ", QLabel("<b>" + str(counters_dict["b_count"]) + "<\b>"))
-        self.c_box_layout.addRow("Liczba pojazdów: ", QLabel("<b>" + str(counters_dict["p_count"]) + "<\b>"))
-        self.c_box_layout.addRow("Liczba oficerów: ", QLabel("<b>" + str(counters_dict["o_count"]) + "<\b>"))
+        self.refresh_c_box()
         self.counters.setLayout(self.c_box_layout)
-        layout.addWidget(self.counters)
+        self.infoLayout.addWidget(self.counters, 1, 0)
 
         buttons = QGroupBox("Zarządzanie")
         buttonsLayout = QHBoxLayout()
@@ -284,18 +284,24 @@ class UnitManagement(QTabWidget):
         buttonsLayout.addWidget(self.przydzialy)
         buttonsLayout.addWidget(self.zamowienia)
         buttons.setLayout(buttonsLayout)
-        layout.addWidget(buttons)
-        tab.setLayout(layout)
+        self.infoLayout.addWidget(buttons, 2, 0)
+        tab.setLayout(self.infoLayout)
         return tab
 
     def refresh_c_box(self):
-        if self.c_box_layout is not None:
-            counters_dict = Connector.get_count_data(self.unit_id)
-            while self.c_box_layout.takeAt(0):
-                self.c_box_layout.removeWidget(self.unit_box_layout.takeAt(0))
-            self.c_box_layout.addRow("Liczba budynków: ", QLabel("<b>" + str(counters_dict["b_count"]) + "<\b>"))
-            self.c_box_layout.addRow("Liczba pojazdów: ", QLabel("<b>" + str(counters_dict["p_count"]) + "<\b>"))
-            self.c_box_layout.addRow("Liczba oficerów: ", QLabel("<b>" + str(counters_dict["o_count"]) + "<\b>"))
+        counters_dict = Connector.get_count_data(self.unit_id)
+        self.c_box_layout = QFormLayout()
+        b_count = QLabel("<b>" + str(counters_dict["b_count"]) + "<\b>")
+        self.c_box_layout.addRow("Liczba budynków: ", b_count)
+        p_count = QLabel("<b>" + str(counters_dict["p_count"]) + "<\b>")
+        self.c_box_layout.addRow("Liczba pojazdów: ", p_count)
+        o_count = QLabel("<b>" + str(counters_dict["o_count"]) + "<\b>")
+        self.c_box_layout.addRow("Liczba oficerów: ", o_count)
+        self.counters.setParent(None)
+        self.counters = QGroupBox("Stan")
+        self.counters.setLayout(self.c_box_layout)
+        self.infoLayout.removeWidget(self.counters)
+        self.infoLayout.addWidget(self.counters, 1, 0)
 
     def assignment_window(self):
         self.assignmentWindow = AssignManagement(self.unit_id)
