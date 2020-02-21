@@ -38,7 +38,6 @@ class UnitManagement(QTabWidget):
         self.previewWindow = None
         self.deleteWindow = None
         self.assignmentWindow = None
-        self.c_box_layout = None
         self.setCurrentIndex(0)
 
     def refresh_buildings(self):
