@@ -75,6 +75,8 @@ class VehicleForm(QWidget):
         zasieg = self.zasieg.text()
         rok = self.rok.text()
         rejestracja = self.rejestracja.text()
+        if rejestracja == "":
+            rejestracja = None
         id_zamowienia = None
         if self.id_pojazdu is not None:
             if(Connector.update_row("pojazdy", ["rodzaj", "producent", "model", "rok_produkcji", "masa",
