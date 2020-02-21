@@ -6,14 +6,24 @@ from PyQt5.QtWidgets import *
 class DeletionConfirmation(QWidget):
     selected = pyqtSignal(bool)
 
-    def __init__(self):
+    def __init__(self, object = "nocascade"):
         super().__init__()
         self.setWindowTitle("Usuń obiekt")
         self.layout = QGridLayout()
 
+        self.messages = {
+            "jednostki": "Usunięcie zaznaczonych jednostek spowoduje usunięcie\nwszystkich obiektów przypisanych do nich,\nczy na pewno chcesz kontynuować?",
+            "przydzialy": "Czy na pewno chcesz usunąć zaznaczone przydziały?",
+            "budynki": "Usunięcie zaznaczonych budynków spowoduje\nusunięcie przypisanych do nich oficerów.\nczy na pewno chcesz kontynuować?",
+            "oficerowie": "Usunięcie zaznaczonych oficerów spowoduje usunięcie ich przydziałów.\nczy na pewno chcesz kontynuować?",
+            "pojazdy": "Usunięcie zaznaczonych pojazdów spowoduje\nusunięcie ich przydziałów i zamówień.\nczy na pewno chcesz kontynuować?",
+            "zamowienia": "Czy na pewno chcesz usnąć zaznaczone zamówienia?",
+            "ekwipunek": "Usunięcie zaznaczonego ewkipunku spowoduje\nusunięcie jego przydziałów i zamówień.\nczy na pewno chcesz kontynuować?",
+            "nocascade": "Czy na pewno chesz usunąć zaznaczone obiekty?"
+        }
+
         self.naglowek = QLabel()
-        self.naglowek.setText("Usunięcie tego obiektu spowoduje usunięcie\nwszystkich obiektów przypisanych do niego,\n"
-                              + "czy na pewno chcesz kontynuować?")
+        self.naglowek.setText(self.messages.get(object))
         font = QFont()
         font.setBold(True)
         self.naglowek.setAlignment(Qt.AlignCenter)

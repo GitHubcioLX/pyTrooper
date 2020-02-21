@@ -200,7 +200,7 @@ class UnitManagement(QTabWidget):
             self.addWindow.show()
 
     def delete_buildings(self):
-        self.deleteWindow = DeletionConfirmation()
+        self.deleteWindow = DeletionConfirmation("budynki")
         self.deleteWindow.selected.connect(self.delete_building_slot)
         self.deleteWindow.show()
 
@@ -216,7 +216,7 @@ class UnitManagement(QTabWidget):
                 self.refresh_buildings()
 
     def delete_vehicles(self):
-        self.deleteWindow = DeletionConfirmation()
+        self.deleteWindow = DeletionConfirmation("pojazdy")
         self.deleteWindow.selected.connect(self.delete_vehicles_slot)
         self.deleteWindow.show()
 
@@ -232,7 +232,7 @@ class UnitManagement(QTabWidget):
                 self.refresh_vehicles()
 
     def delete_officers(self):
-        self.deleteWindow = DeletionConfirmation()
+        self.deleteWindow = DeletionConfirmation("oficerowie")
         self.deleteWindow.selected.connect(self.delete_officers_slot)
         self.deleteWindow.show()
 
