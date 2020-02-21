@@ -69,6 +69,19 @@ class Connector:
         return arr
 
     @staticmethod
+    def get_count_data(id):
+        cur = Connector.conn.cursor()
+        res = {}
+        cur.execute("SELECT count_budynki(1);")
+        res["b_count"] = cur.fetchone()[0]
+        cur.execute("SELECT count_pojazdy(1);")
+        res["p_count"] = cur.fetchone()[0]
+        cur.execute("SELECT count_oficerowie(1);")
+        res["o_count"] = cur.fetchone()[0]
+        cur.close()
+        return res
+
+    @staticmethod
     def get_table_data(tablename, columns):
         cur = Connector.conn.cursor()
         columns = Connector.column_formatter(columns)
@@ -215,4 +228,5 @@ if __name__ == "__main__":
     # print(Connector.get_dict("jednostki", ["identyfikator"], 1, "identyfikator", int))
     # Connector.create_vehicle(['Samochód', 'Jeep', 'Wrangler2', 2340, 5, 600, 'Dostępny', 2015, 'UA54320', 1, None])
     #print(Connector.get_enum("status_type"))
-    Connector.update_row("pojazdy", ["model", "masa"], ["Mały", "2"], 0, "id_pojazdu", int)
+    #Connector.update_row("pojazdy", ["model", "masa"], ["Mały", "2"], 0, "id_pojazdu", int)
+    print(Connector.get_count_data(1))
