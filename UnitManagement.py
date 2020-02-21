@@ -271,9 +271,15 @@ class UnitManagement(QTabWidget):
         self.infoLayout.addWidget(info, 0, 0)
 
         self.counters = QGroupBox("Stan")
-        self.c_box_layout = QFormLayout()
-        self.refresh_c_box()
-        self.counters.setLayout(self.c_box_layout)
+        counters_dict = Connector.get_count_data(self.unit_id)
+        c_box_layout = QFormLayout()
+        b_count = QLabel("<b>" + str(counters_dict["b_count"]) + "<\b>")
+        c_box_layout.addRow("Liczba budynków: ", b_count)
+        p_count = QLabel("<b>" + str(counters_dict["p_count"]) + "<\b>")
+        c_box_layout.addRow("Liczba pojazdów: ", p_count)
+        o_count = QLabel("<b>" + str(counters_dict["o_count"]) + "<\b>")
+        c_box_layout.addRow("Liczba oficerów: ", o_count)
+        self.counters.setLayout(c_box_layout)
         self.infoLayout.addWidget(self.counters, 1, 0)
 
         buttons = QGroupBox("Zarządzanie")
@@ -290,17 +296,16 @@ class UnitManagement(QTabWidget):
 
     def refresh_c_box(self):
         counters_dict = Connector.get_count_data(self.unit_id)
-        self.c_box_layout = QFormLayout()
+        c_box_layout = QFormLayout()
         b_count = QLabel("<b>" + str(counters_dict["b_count"]) + "<\b>")
-        self.c_box_layout.addRow("Liczba budynków: ", b_count)
+        c_box_layout.addRow("Liczba budynków: ", b_count)
         p_count = QLabel("<b>" + str(counters_dict["p_count"]) + "<\b>")
-        self.c_box_layout.addRow("Liczba pojazdów: ", p_count)
+        c_box_layout.addRow("Liczba pojazdów: ", p_count)
         o_count = QLabel("<b>" + str(counters_dict["o_count"]) + "<\b>")
-        self.c_box_layout.addRow("Liczba oficerów: ", o_count)
+        c_box_layout.addRow("Liczba oficerów: ", o_count)
         self.counters.setParent(None)
         self.counters = QGroupBox("Stan")
-        self.counters.setLayout(self.c_box_layout)
-        self.infoLayout.removeWidget(self.counters)
+        self.counters.setLayout(c_box_layout)
         self.infoLayout.addWidget(self.counters, 1, 0)
 
     def assignment_window(self):
