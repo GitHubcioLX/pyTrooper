@@ -158,7 +158,11 @@ class UnitManagement(QTabWidget):
 
     def edit_building(self):
         selection = self.tabela_budynki.selectedItems()
-        if len(selection) == 1:
+        res = []
+        for x in selection:
+            res.append(self.tabela_budynki.item(x.row(), 0).text())
+        res = list(dict.fromkeys(res))
+        if len(res) == 1:
             id = self.tabela_budynki.item(selection[0].row(), 0).text()
             self.addWindow = BuildingForm(self.unit_id, id)
             self.addWindow.commited.connect(self.refresh_buildings)
@@ -166,7 +170,11 @@ class UnitManagement(QTabWidget):
 
     def edit_vehicle(self):
         selection = self.tabela_pojazdy.selectedItems()
-        if len(selection) == 1:
+        res = []
+        for x in selection:
+            res.append(self.tabela_pojazdy.item(x.row(), 0).text())
+        res = list(dict.fromkeys(res))
+        if len(res) == 1:
             id = self.tabela_pojazdy.item(selection[0].row(), 0).text()
             self.addWindow = VehicleForm(self.unit_id, None, id)
             self.addWindow.commited.connect(self.refresh_vehicles)
@@ -174,7 +182,11 @@ class UnitManagement(QTabWidget):
 
     def edit_officer(self):
         selection = self.tabela_oficerowie.selectedItems()
-        if len(selection) == 1:
+        res = []
+        for x in selection:
+            res.append(self.tabela_oficerowie.item(x.row(), 0).text())
+        res = list(dict.fromkeys(res))
+        if len(res) == 1:
             pesel = self.tabela_oficerowie.item(selection[0].row(), 2).text()
             self.addWindow = OfficerForm(self.unit_id, pesel)
             self.addWindow.commited.connect(self.refresh_officers)
