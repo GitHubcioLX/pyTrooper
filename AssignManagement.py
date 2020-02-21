@@ -2,6 +2,8 @@ from PyQt5.QtWidgets import *
 
 from Utilities import create_table
 from AssignmentPreview import AssignmentPreview
+from AssignmentForm import AssignmentForm
+from DeletionConfirmation import DeletionConfirmation
 from connector import Connector
 
 
@@ -17,6 +19,7 @@ class AssignManagement(QTabWidget):
         self.listTab2 = None
         self.refresh_vh_assignments()
         self.addWindow = None
+        self.deleteWindow = None
         self.previewWindow = None
         self.setCurrentIndex(0)
 
@@ -25,7 +28,7 @@ class AssignManagement(QTabWidget):
         self.listTab1 = self.create_list_tab(["Od", "Do", "PESEL oficera", "Numer seryjny"],
                                              Connector.get_filtered('"Przydzial-ekwipunek"', ["data_od", "data_do", "pesel_oficera", "numer_seryjny"],
                                                                     " WHERE (SELECT id_jednostki FROM oficerowie WHERE pesel LIKE pesel_oficera) = " + self.unit_id
-                                                                    + " ORDER BY data_od ASC"),
+                                                                    + " ORDER BY data_od DESC"),
                                              "ekwipunek")
         self.insertTab(0, self.listTab1, "Ekwipunek")
         self.setCurrentIndex(0)
@@ -35,7 +38,7 @@ class AssignManagement(QTabWidget):
         self.listTab2 = self.create_list_tab(["Od", "Do", "PESEL oficera", "ID pojazdu"],
                                              Connector.get_filtered('"Przydzial-pojazd"', ["data_od", "data_do", "pesel_oficera", "id_pojazdu"],
                                                                     " WHERE (SELECT id_jednostki FROM oficerowie WHERE pesel LIKE pesel_oficera) = " + self.unit_id
-                                                                    + " ORDER BY data_od ASC"),
+                                                                    + " ORDER BY data_od DESC"),
                                              "pojazdy")
         self.insertTab(1, self.listTab2, "Pojazdy")
         self.setCurrentIndex(1)
@@ -57,7 +60,7 @@ class AssignManagement(QTabWidget):
 
         # addButton.clicked.connect(show_add_windows(type, id))
         if type == "ekwipunek":
-            #addButton.clicked.connect(self.add_assignment)
+            addButton.clicked.connect(self.add_assignment)
             #rmvButton.clicked.connect(self.delete_assignments)
             self.tabela_eq = tabela
             self.tabela_eq.cellDoubleClicked.connect(self.eq_assignment_preview)
@@ -72,8 +75,8 @@ class AssignManagement(QTabWidget):
         return tab
 
     def add_assignment(self):
-        self.addWindow = BuildingForm(self.unit_id)
-        self.addWindow.commited.connect(self.refresh_buildings)
+        self.addWindow = AssignmentForm(self.unit_id)
+        self.addWindow.commited.connect(self.refresh_eq_assignments)
         self.addWindow.show()
 
     def delete_assignments(self):
@@ -85,6 +88,22 @@ class AssignManagement(QTabWidget):
             res = list(dict.fromkeys(res))
             Connector.delete_items("budynki", res, "oznaczenie", str)
             self.refresh_buildings()
+
+    def delete_eq_assignments(self):
+        self.deleteWindow = DeletionConfirmation()
+        self.deleteWindow.selected.connect(self.delete_eq_assignment_slot)
+        self.deleteWindow.show()
+
+    def delete_eq_assignment_slot(self, answer):
+        if answer:
+            selection = self.tabela_eq.selectedItems()
+            if selection:
+                res = []
+                for x in selection:
+                    res.append(self.tabela_eq.item(x.row(), 0).text())
+                res = list(dict.fromkeys(res))
+                Connector.delete_items("budynki", res, "oznaczenie", str)
+                self.refresh_buildings()
 
     def eq_assignment_preview(self, rowid):
         data_od = self.tabela_eq.item(rowid, 0)

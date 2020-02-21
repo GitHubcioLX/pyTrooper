@@ -13,7 +13,7 @@ class DeletionConfirmation(QWidget):
 
         self.naglowek = QLabel()
         self.naglowek.setText("Usunięcie tego obiektu spowoduje usunięcie\nwszystkich obiektów przypisanych do niego,\n"
-                              "czy na pewno kontynuaować?")
+                              + "czy na pewno chcesz kontynuować?")
         font = QFont()
         font.setBold(True)
         self.naglowek.setAlignment(Qt.AlignCenter)

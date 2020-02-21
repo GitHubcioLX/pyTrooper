@@ -26,8 +26,10 @@ class Connector:
         for field in values:
             if type(field) is str and field == "":
                 output += "NULL, "
-            else:
+            elif type(field) is str:
                 output += "'" + field + "', "
+            else:
+                output += "'" + str(field) + "', "
         output = output[:-2]
         return output
 
