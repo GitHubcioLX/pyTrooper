@@ -18,6 +18,7 @@ from connector import Connector
 class UnitManagement(QTabWidget):
     def __init__(self, id_jednostki):
         super().__init__()
+        self.abbys = QWidget()
         self.unit_id = id_jednostki
         self.setWindowTitle("Zarządzanie jednostką")
         self.setMinimumSize(400, 350)
@@ -297,10 +298,10 @@ class UnitManagement(QTabWidget):
         self.c_box_layout.addRow("Liczba pojazdów: ", p_count)
         o_count = QLabel("<b>" + str(counters_dict["o_count"]) + "<\b>")
         self.c_box_layout.addRow("Liczba oficerów: ", o_count)
-        self.counters.setParent(None)
+        self.counters.setParent(self.abbys)
+        del self.counters
         self.counters = QGroupBox("Stan")
         self.counters.setLayout(self.c_box_layout)
-        self.infoLayout.removeWidget(self.counters)
         self.infoLayout.addWidget(self.counters, 1, 0)
 
     def assignment_window(self):
