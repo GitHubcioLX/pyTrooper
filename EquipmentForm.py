@@ -12,7 +12,6 @@ class EquipmentForm(QWidget):
         super().__init__()
         self.numer_seryjny_old = numer_seryjny
         self.status = status
-        print(self.status)
         self.setWindowTitle("Formularz (ekwipunek)")
         self.layout = QFormLayout()
         self.set_form()
