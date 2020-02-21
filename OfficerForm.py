@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import *
 from connector import Connector
 from config import rx
 
+
 class OfficerForm(QWidget):
     commited = pyqtSignal()
 
