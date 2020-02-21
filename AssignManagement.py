@@ -60,13 +60,13 @@ class AssignManagement(QTabWidget):
 
         # addButton.clicked.connect(show_add_windows(type, id))
         if type == "ekwipunek":
-            addButton.clicked.connect(self.add_assignment)
-            #rmvButton.clicked.connect(self.delete_assignments)
+            addButton.clicked.connect(self.add_eq_assignment)
+            rmvButton.clicked.connect(self.delete_eq_assignments)
             self.tabela_eq = tabela
             self.tabela_eq.cellDoubleClicked.connect(self.eq_assignment_preview)
         if type == "pojazdy":
-            #addButton.clicked.connect(self.add_assignment)
-            #rmvButton.clicked.connect(self.delete_assignments)
+            addButton.clicked.connect(self.add_vh_assignment)
+            rmvButton.clicked.connect(self.delete_vh_assignments)
             self.tabela_pojazdy = tabela
             self.tabela_pojazdy.cellDoubleClicked.connect(self.vh_assignment_preview)
 
@@ -74,20 +74,15 @@ class AssignManagement(QTabWidget):
         tab.setLayout(layout)
         return tab
 
-    def add_assignment(self):
-        self.addWindow = AssignmentForm(self.unit_id)
+    def add_eq_assignment(self):
+        self.addWindow = AssignmentForm(self.unit_id, "ekwipunek")
         self.addWindow.commited.connect(self.refresh_eq_assignments)
         self.addWindow.show()
 
-    def delete_assignments(self):
-        selection = self.tabela_budynki.selectedItems()
-        if selection:
-            res = []
-            for x in selection:
-                res.append(self.tabela_budynki.item(x.row(), 0).text())
-            res = list(dict.fromkeys(res))
-            Connector.delete_items("budynki", res, "oznaczenie", str)
-            self.refresh_buildings()
+    def add_vh_assignment(self):
+        self.addWindow = AssignmentForm(self.unit_id, "pojazd")
+        self.addWindow.commited.connect(self.refresh_vh_assignments)
+        self.addWindow.show()
 
     def delete_eq_assignments(self):
         self.deleteWindow = DeletionConfirmation()
@@ -98,12 +93,42 @@ class AssignManagement(QTabWidget):
         if answer:
             selection = self.tabela_eq.selectedItems()
             if selection:
-                res = []
+                rows = []
                 for x in selection:
-                    res.append(self.tabela_eq.item(x.row(), 0).text())
-                res = list(dict.fromkeys(res))
-                Connector.delete_items("budynki", res, "oznaczenie", str)
-                self.refresh_buildings()
+                    rows.append(x.row())
+                rows = list(dict.fromkeys(rows))
+                res = []
+                for x in rows:
+                    res.append("'" + self.tabela_eq.item(x, 0).text() + "' AND pesel_oficera = '"
+                               + self.tabela_eq.item(x, 2).text() + "' AND numer_seryjny = "
+                               + self.tabela_eq.item(x, 3).text())
+                Connector.delete_items('"Przydzial-ekwipunek"', res, "data_od", int)
+                for x in rows:
+                    Connector.update_row("ekwipunek", ["status"], ["Dostępny"], self.tabela_eq.item(x, 3).text(), "numer_seryjny", int)
+                self.refresh_eq_assignments()
+
+    def delete_vh_assignments(self):
+        self.deleteWindow = DeletionConfirmation()
+        self.deleteWindow.selected.connect(self.delete_vh_assignment_slot)
+        self.deleteWindow.show()
+
+    def delete_vh_assignment_slot(self, answer):
+        if answer:
+            selection = self.tabela_pojazdy.selectedItems()
+            if selection:
+                rows = []
+                for x in selection:
+                    rows.append(x.row())
+                rows = list(dict.fromkeys(rows))
+                res = []
+                for x in rows:
+                    res.append("'" + self.tabela_pojazdy.item(x, 0).text() + "' AND pesel_oficera = '"
+                               + self.tabela_pojazdy.item(x, 2).text() + "' AND id_pojazdu = "
+                               + self.tabela_pojazdy.item(x, 3).text())
+                Connector.delete_items('"Przydzial-pojazd"', res, "data_od", int)
+                for x in rows:
+                    Connector.update_row("pojazdy", ["status"], ["Dostępny"], self.tabela_pojazdy.item(x, 3).text(), "id_pojazdu", int)
+                self.refresh_vh_assignments()
 
     def eq_assignment_preview(self, rowid):
         data_od = self.tabela_eq.item(rowid, 0)
