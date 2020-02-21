@@ -26,7 +26,7 @@ class EquipmentForm(QWidget):
 
     def set_form(self):
         self.producent = QLineEdit()
-        self.producent.setMaxLength(15)
+        self.producent.setMaxLength(20)
         self.producent.setValidator(QRegExpValidator(QRegExp(rx)))
         self.model = QLineEdit()
         self.model.setMaxLength(20)
