@@ -6,7 +6,7 @@ class ErrorFormatter:
         "22001": "Podany ciąg znaków jest za długi",
         "22008": "Podano datę w złym formacie",
         "42601": "Wprowadzono niedozowlone znaki: ', *. /. \\, \"",
-        "23502": "Pola wymaganie nie mogą być puste",
+        "23502": "Pola wymagane nie mogą być puste",
         "22007": "Podaj datę"
     }
 

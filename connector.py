@@ -189,10 +189,9 @@ class Connector:
     @staticmethod
     def create_vehicle(input):
         correct = True
-        for x in input:
-            if x is None:
-                x = "NULL"
-            x = str(x)
+        for i, x in enumerate(input):
+            if x is "":
+                input[i] = None
         cur = Connector.conn.cursor()
         try:
             cur.execute("CALL public.create_vehicle(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);", input)
