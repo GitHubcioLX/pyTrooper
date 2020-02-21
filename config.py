@@ -52,7 +52,7 @@ column_names = {"jednostki": ["identyfikator", "nazwa", "rodzaj", "miasto"],
                 "oficerowie": ["imie", "nazwisko", "ranga", "pesel", "data_ur", "grupa_krwi", "wyznanie",
                                "id_jednostki", "budynek"],
                 "budynki": ["oznaczenie", "rola_budynku", "liczba_personelu", "id_jednostki"],
-                "ekwipunek": ["typ", "producent", "model", "numer_seryjny", "data_produkcji", "data_waznosci"],
+                "ekwipunek": ["typ", "producent", "model", "numer_seryjny", "data_produkcji", "data_waznosci", "status"],
                 "pojazdy": ["rodzaj", "producent", "model", "rok_produkcji", "masa", "liczba_zalogi", "zasieg",
                             "rejestracja", "id_jednostki", "status"],
                 "rangi": ["nazwa_rangi", "liczba_przepustek", "poziom_upr", "zold"]}
