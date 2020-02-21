@@ -36,6 +36,7 @@ class UnitManagement(QTabWidget):
         self.previewWindow = None
         self.deleteWindow = None
         self.assignmentWindow = None
+        self.c_box_layout = None
         self.setCurrentIndex(0)
 
     def refresh_buildings(self):
@@ -51,6 +52,8 @@ class UnitManagement(QTabWidget):
                                              "budynki")
         self.insertTab(1, self.listTab1, "Budynki")
         self.setCurrentIndex(1)
+        if self.c_box_layout is not None:
+            self.refresh_c_box()
 
     def refresh_vehicles(self):
         self.removeTab(2)
@@ -65,6 +68,8 @@ class UnitManagement(QTabWidget):
                                              "pojazdy")
         self.insertTab(2, self.listTab2, "Pojazdy")
         self.setCurrentIndex(2)
+        if self.c_box_layout is not None:
+            self.refresh_c_box()
 
     def refresh_officers(self):
         self.removeTab(3)
@@ -81,6 +86,8 @@ class UnitManagement(QTabWidget):
                                              "oficerowie")
         self.insertTab(3, self.listTab3, "Oficerowie")
         self.setCurrentIndex(3)
+        if self.c_box_layout is not None:
+            self.refresh_c_box()
 
     def create_list_tab(self, column_names, items, type):
         tab = QWidget()
@@ -260,6 +267,15 @@ class UnitManagement(QTabWidget):
         info = create_info_box("jednostki", self.unit_id, "identyfikator", int)
         layout.addWidget(info)
 
+        self.counters = QGroupBox("Stan")
+        self.c_box_layout = QFormLayout()
+        counters_dict = Connector.get_count_data(self.unit_id)
+        self.c_box_layout.addRow("Liczba budynków: ", QLabel("<b>" + str(counters_dict["b_count"]) + "<\b>"))
+        self.c_box_layout.addRow("Liczba pojazdów: ", QLabel("<b>" + str(counters_dict["p_count"]) + "<\b>"))
+        self.c_box_layout.addRow("Liczba oficerów: ", QLabel("<b>" + str(counters_dict["o_count"]) + "<\b>"))
+        self.counters.setLayout(self.c_box_layout)
+        layout.addWidget(self.counters)
+
         buttons = QGroupBox("Zarządzanie")
         buttonsLayout = QHBoxLayout()
         self.przydzialy = QPushButton("Przydziały")
@@ -271,6 +287,15 @@ class UnitManagement(QTabWidget):
         layout.addWidget(buttons)
         tab.setLayout(layout)
         return tab
+
+    def refresh_c_box(self):
+        if self.c_box_layout is not None:
+            counters_dict = Connector.get_count_data(self.unit_id)
+            while self.c_box_layout.takeAt(0):
+                self.c_box_layout.removeWidget(self.unit_box_layout.takeAt(0))
+            self.c_box_layout.addRow("Liczba budynków: ", QLabel("<b>" + str(counters_dict["b_count"]) + "<\b>"))
+            self.c_box_layout.addRow("Liczba pojazdów: ", QLabel("<b>" + str(counters_dict["p_count"]) + "<\b>"))
+            self.c_box_layout.addRow("Liczba oficerów: ", QLabel("<b>" + str(counters_dict["o_count"]) + "<\b>"))
 
     def assignment_window(self):
         self.assignmentWindow = AssignManagement(self.unit_id)

@@ -19,13 +19,6 @@ class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.naglowek = QLabel()
-        self.naglowek.setText("Zarządzanie jednostką")
-        font = QFont()
-        font.setBold(True)
-        self.naglowek.setAlignment(Qt.AlignCenter)
-        self.naglowek.setFont(font)
-
         self.filter = QLineEdit()
         self.filter.setValidator(QRegExpValidator(QRegExp(rx)))
         self.filter.setPlaceholderText("Wyszukaj nazwę...")
@@ -36,11 +29,6 @@ class MainWindow(QWidget):
 
         self.addButton = QPushButton("Dodaj")
         self.delButton = QPushButton("Usuń")
-
-        self.equipLabel = QLabel()
-        self.equipLabel.setText("Zarządzanie ekwipunkiem")
-        self.equipLabel.setAlignment(Qt.AlignCenter)
-        self.equipLabel.setFont(font)
 
         self.ekwipunek = QPushButton("Ekwipunek wojska")
         self.rangi = QPushButton("Rangi")
@@ -70,8 +58,8 @@ class MainWindow(QWidget):
     def set_jednostki(self):
         self.jednostki = create_table(['Identyfikator', 'Nazwa'],
                                       Connector.get_filtered("jednostki", ["identyfikator", "nazwa"],
-                                                             " WHERE UPPER(nazwa) LIKE UPPER('%" + self.filter.text() + "%')" +
-                                                             " ORDER BY identyfikator ASC"))
+                                                             " WHERE UPPER(nazwa) LIKE UPPER('%" + self.filter.text() +
+                                                             "%')" + " ORDER BY identyfikator ASC"))
         self.refresh_unit_box()
 
     def open_jednostki(self, rowid):
@@ -112,7 +100,7 @@ class MainWindow(QWidget):
     def set_layout(self):
         #self.layout.addWidget(self.naglowek)
         #self.layout.addWidget(self.jednostki)
-        self.unit_box = QGroupBox("Zarządzanie jednostką")
+        self.unit_box = QGroupBox("Zarządzanie jednostkami")
         self.unit_box_layout = QGridLayout()
         self.unit_box_layout.addWidget(self.jednostki, 0, 0, 1, 2)
         self.unit_box_layout.addWidget(self.filter, 1, 0, 1, 2)
