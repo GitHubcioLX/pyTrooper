@@ -217,7 +217,7 @@ class Connector:
                 input[i] = None
         cur = Connector.conn.cursor()
         try:
-            cur.execute("CALL public.create_zamowienie_ekwipunek(%s, %s, %s);", input)
+            cur.execute("CALL public.create_zamowienie_ekwipunek(%s, %s, %s, %s);", input)
         except psycopg2.Error as err:
             correct = False
             global error_window
@@ -236,7 +236,7 @@ class Connector:
                 input[i] = None
         cur = Connector.conn.cursor()
         try:
-            cur.execute("CALL public.create_zamowienie_pojazd(%s, %s, %s);", input)
+            cur.execute("CALL public.create_zamowienie_pojazd(%s, %s, %s, %s);", input)
         except psycopg2.Error as err:
             correct = False
             global error_window
