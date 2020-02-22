@@ -24,6 +24,14 @@ def create_info_box(tablename, id, idname, idtype, columns=None):
         data = Connector.get_dict(tablename, columns, id, idname, idtype)
     else:
         data = Connector.get_dict(tablename, column_names[tablename], id, idname, idtype)
+        if tablename == "pojazdy" and data["status"] == "Zamówiony":
+            ex_columns = ["rodzaj", "producent", "model", "rok_produkcji", "masa", "liczba_zalogi", "zasieg",
+                          "rejestracja", "id_jednostki", "status", "id_zamowienia"]
+            data = Connector.get_dict(tablename, ex_columns, id, idname, idtype)
+        if tablename == "ekwipunek" and data["status"] == "Zamówiony":
+            ex_columns = ["typ", "producent", "model", "numer_seryjny", "data_produkcji", "data_waznosci", "status",
+                          "id_zamowienia"]
+            data = Connector.get_dict(tablename, ex_columns, id, idname, idtype)
     font = QFont()
     font.setBold(True)
     for k, v in data.items():
