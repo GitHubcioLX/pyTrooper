@@ -227,7 +227,7 @@ class Connector:
 
         cur.close
         Connector.conn.commit()
-        return correct, res[0]
+        return res[0]
 
     @staticmethod
     def create_zamowienie_pojazd(input):
