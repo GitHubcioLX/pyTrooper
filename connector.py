@@ -211,41 +211,43 @@ class Connector:
 
     @staticmethod
     def create_zamowienie_ekwipunek(input):
-        correct = True
+        res = None
         for i, x in enumerate(input):
             if x == "":
                 input[i] = None
         cur = Connector.conn.cursor()
         try:
-            cur.execute("CALL public.create_zamowienie_ekwipunek(%s, %s, %s, %s);", input)
+            cur.execute("CALL public.create_zamowienie_ekwipunek(%s, %s, %s);", input)
+            cur.execute("SELECT currval('zamowienie_eq_id_sequence')")
+            res = cur.fetchone()
         except psycopg2.Error as err:
-            correct = False
             global error_window
             error_window = ErrorPopUp(ErrorFormatter.get_error(err.pgcode))
             error_window.show()
 
         cur.close
         Connector.conn.commit()
-        return correct
+        return correct, res[0]
 
     @staticmethod
     def create_zamowienie_pojazd(input):
-        correct = True
+        res = None
         for i, x in enumerate(input):
             if x == "":
                 input[i] = None
         cur = Connector.conn.cursor()
         try:
-            cur.execute("CALL public.create_zamowienie_pojazd(%s, %s, %s, %s);", input)
+            cur.execute("CALL public.create_zamowienie_pojazd(%s, %s, %s);", input)
+            cur.execute("SELECT currval('zamowienie_poj_id_sequence')")
+            res = cur.fetchone()
         except psycopg2.Error as err:
-            correct = False
             global error_window
             error_window = ErrorPopUp(ErrorFormatter.get_error(err.pgcode))
             error_window.show()
 
         cur.close
         Connector.conn.commit()
-        return correct
+        return res[0]
 
     @staticmethod
     def delete_items(tablename, ids, idname, idtype):
@@ -271,4 +273,4 @@ if __name__ == "__main__":
     # Connector.create_vehicle(['Samochód', 'Jeep', 'Wrangler2', 2340, 5, 600, 'Dostępny', 2015, 'UA54320', 1, None])
     # print(Connector.get_enum("status_type"))
     # Connector.update_row("pojazdy", ["model", "masa"], ["Mały", "2"], 0, "id_pojazdu", int)
-    print(Connector.get_count_data(1))
+    Connector.create_zamowienie_ekwipunek(['1','1111-11-11','1111-11-11'])
