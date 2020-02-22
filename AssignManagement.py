@@ -9,7 +9,6 @@ from connector import Connector
 
 class AssignManagement(QTabWidget):
     def __init__(self, id_jednostki):
-        global budynki, oficerowie, pojazdy
         super().__init__()
         self.unit_id = id_jednostki
         self.setWindowTitle("Przydziały")

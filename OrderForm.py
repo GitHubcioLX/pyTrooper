@@ -23,9 +23,6 @@ class OrderForm(QWidget):
         self.addButton.clicked.connect(self.confirm)
 
     def set_form(self):
-        #Projekt:
-        #Pierwszy GroupBox "Zamówienie" - koszt i deadline
-        #Drugi GroupBox "Pojazd"/"Wyposażenie"  - formularz tworzenia takowego
         zamowienie = QGroupBox("Zamówienie")
         z_box_layout = QFormLayout()
         self.koszt = QLineEdit()

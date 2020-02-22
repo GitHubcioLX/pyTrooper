@@ -16,7 +16,6 @@ class OrderPreview(QWidget):
                                                                                                    "deadline"])
             numer_seryjny = Connector.get_filtered("ekwipunek", ["numer_seryjny"],
                                                    " WHERE id_zamowienia = " + str(id_zamowienia))[0][0]
-            print(numer_seryjny)
             ekwipunek = create_info_box("ekwipunek", numer_seryjny, "numer_seryjny", int,
                                         ["typ", "producent", "model", "numer_seryjny"])
             ekwipunek.setTitle("Ekwipunek")
@@ -40,6 +39,6 @@ class OrderPreview(QWidget):
 
 if __name__ == "__main__":
     app = QApplication([])
-    window = OrderPreview("pojazd", 2)
+    window = OrderPreview("pojazd", "2")
     window.show()
     app.exec_()

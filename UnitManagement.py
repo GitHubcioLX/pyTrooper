@@ -11,6 +11,7 @@ from Utilities import create_table, create_info_box
 from VehicleForm import VehicleForm
 from VehiclePreview import VehiclePreview
 from AssignManagement import AssignManagement
+from OrderManagement import OrderManagement
 from config import rx
 from connector import Connector
 
@@ -38,6 +39,7 @@ class UnitManagement(QTabWidget):
         self.previewWindow = None
         self.deleteWindow = None
         self.assignmentWindow = None
+        self.ordersWindow = None
         self.setCurrentIndex(0)
 
     def refresh_buildings(self):
@@ -286,6 +288,7 @@ class UnitManagement(QTabWidget):
         self.przydzialy = QPushButton("Przydziały")
         self.przydzialy.clicked.connect(self.assignment_window)
         self.zamowienia = QPushButton("Zamówienia")
+        self.zamowienia.clicked.connect(self.orders_window)
         buttonsLayout.addWidget(self.przydzialy)
         buttonsLayout.addWidget(self.zamowienia)
         buttons.setLayout(buttonsLayout)
@@ -310,3 +313,7 @@ class UnitManagement(QTabWidget):
     def assignment_window(self):
         self.assignmentWindow = AssignManagement(self.unit_id)
         self.assignmentWindow.show()
+
+    def orders_window(self):
+        self.ordersWindow = OrderManagement(self.unit_id)
+        self.ordersWindow.show()
