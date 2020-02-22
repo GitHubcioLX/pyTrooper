@@ -95,7 +95,6 @@ class EquipmentListWindow(QWidget):
             self.addWindow.show()
 
     def open_eq(self, rowid):
-        print(rowid)
         item = self.equipment.item(rowid, 0)
         self.previewWindow = EquipmentPreview(item.text())
         self.previewWindow.show()
