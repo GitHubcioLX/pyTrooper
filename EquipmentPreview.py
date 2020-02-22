@@ -7,7 +7,7 @@ from Utilities import create_info_box
 class EquipmentPreview(QWidget):
     def __init__(self, numer_seryjny):
         super().__init__()
-        self.setWindowTitle("Dane pojazdu")
+        self.setWindowTitle("Dane wyposażenia")
         self.layout = QVBoxLayout()
         info = create_info_box("ekwipunek", numer_seryjny, "numer_seryjny", int)
         self.layout.addWidget(info)

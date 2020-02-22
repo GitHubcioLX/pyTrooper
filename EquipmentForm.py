@@ -52,13 +52,13 @@ class EquipmentForm(QWidget):
             self.numer_seryjny = QLineEdit()
             self.numer_seryjny.setValidator(QIntValidator())
 
-        self.layout.addRow("Numer seryjny: ", self.numer_seryjny)
+        self.layout.addRow("Typ: ", self.typ)
         self.layout.addRow("Producent: ", self.producent)
         self.layout.addRow("Model: ", self.model)
+        self.layout.addRow("Numer seryjny: ", self.numer_seryjny)
         self.layout.addRow("Data produkcji: ", self.data_produkcji)
         self.layout.addRow("Data ważności: ", self.data_waznosci)
         self.layout.addRow("", QLabel("Format daty: <b>RRRR-MM-DD<\b>"))
-        self.layout.addRow("Typ: ", self.typ)
 
     def confirm(self):
         producent = self.producent.text()

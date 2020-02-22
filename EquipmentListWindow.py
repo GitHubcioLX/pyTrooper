@@ -44,7 +44,7 @@ class EquipmentListWindow(QWidget):
         self.set_layout()
 
     def refresh_eq(self):
-        self.equipment = create_table(['Numer Seryjny', 'Producent', 'Model'],
+        self.equipment = create_table(['Numer seryjny', 'Producent', 'Model'],
                                       Connector.get_filtered("ekwipunek", ["numer_seryjny", "producent", "model"],
                                                              " WHERE UPPER(producent) LIKE UPPER('%" + self.filter.text() + "%')" +
                                                              " OR UPPER(model) LIKE UPPER('%" + self.filter.text() + "%')" +
