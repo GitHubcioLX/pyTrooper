@@ -35,7 +35,7 @@ class OrderManagement(QTabWidget):
         self.removeTab(1)
         self.listTab2 = self.create_list_tab(["ID zamówienia", "Data złożenia", "Koszt"],
                                              Connector.get_filtered('"Zamowienie-pojazd"', ["id_zamowienia", "data_zam", "koszt"],
-                                                                    " WHERE (SELECT p.id_jednostki FROM pojazdy p WHERE p.id_zamowienia = id_zamowienia) = " + self.unit_id
+                                                                    " WHERE " + self.unit_id + "IN (SELECT p.id_jednostki FROM pojazdy p WHERE p.id_zamowienia = id_zamowienia)"
                                                                     + " ORDER BY id_zamowienia ASC"),
                                              "pojazdy")
         self.insertTab(1, self.listTab2, "Pojazdy")
@@ -61,12 +61,14 @@ class OrderManagement(QTabWidget):
         # addButton.clicked.connect(show_add_windows(type, id))
         if type == "ekwipunek":
             addButton.clicked.connect(self.add_eq_order)
-            #rmvButton.clicked.connect(self.delete_eq_assignments)
+            rmvButton.clicked.connect(self.delete_eq_order)
+            finishButton.clicked.connect(self.finish_eq_order)
             self.tabela_eq = tabela
             self.tabela_eq.cellDoubleClicked.connect(self.eq_order_preview)
         if type == "pojazdy":
             addButton.clicked.connect(self.add_vh_order)
-            #rmvButton.clicked.connect(self.delete_vh_assignments)
+            rmvButton.clicked.connect(self.delete_vh_order)
+            finishButton.clicked.connect(self.finish_vh_order)
             self.tabela_pojazdy = tabela
             self.tabela_pojazdy.cellDoubleClicked.connect(self.vh_order_preview)
 
@@ -75,11 +77,8 @@ class OrderManagement(QTabWidget):
         return tab
 
     def add_eq_order(self):
-        print(1)
         self.addWindow = OrderForm(self.unit_id, "ekwipunek")
-        print(2)
         self.addWindow.commited.connect(self.refresh_eq_orders)
-        print(3)
         self.addWindow.show()
 
     def add_vh_order(self):
@@ -87,12 +86,12 @@ class OrderManagement(QTabWidget):
         self.addWindow.commited.connect(self.refresh_vh_orders)
         self.addWindow.show()
 
-    def delete_eq_assignments(self):
-        self.deleteWindow = DeletionConfirmation()
-        self.deleteWindow.selected.connect(self.delete_eq_assignment_slot)
+    def delete_eq_order(self):
+        self.deleteWindow = DeletionConfirmation("zamowienie_anuluj")
+        self.deleteWindow.selected.connect(self.delete_eq_order_slot)
         self.deleteWindow.show()
 
-    def delete_eq_assignment_slot(self, answer):
+    def delete_eq_order_slot(self, answer):
         if answer:
             selection = self.tabela_eq.selectedItems()
             if selection:
@@ -102,20 +101,17 @@ class OrderManagement(QTabWidget):
                 rows = list(dict.fromkeys(rows))
                 res = []
                 for x in rows:
-                    res.append("'" + self.tabela_eq.item(x, 0).text() + "' AND pesel_oficera = '"
-                               + self.tabela_eq.item(x, 2).text() + "' AND numer_seryjny = "
-                               + self.tabela_eq.item(x, 3).text())
-                Connector.delete_items('"Przydzial-ekwipunek"', res, "data_od", int)
-                for x in rows:
-                    Connector.update_row("ekwipunek", ["status"], ["Dostępny"], self.tabela_eq.item(x, 3).text(), "numer_seryjny", int)
-                self.refresh_eq_assignments()
+                    res.append(self.tabela_eq.item(x, 0).text())
+                Connector.delete_items('ekwipunek', res, "id_zamowienia", int)
+                Connector.delete_items('"Zamowienie-ekwipunek"', res, "id_zamowienia", int)
+                self.refresh_eq_orders()
 
-    def delete_vh_assignments(self):
+    def delete_vh_order(self):
         self.deleteWindow = DeletionConfirmation()
-        self.deleteWindow.selected.connect(self.delete_vh_assignment_slot)
+        self.deleteWindow.selected.connect(self.delete_vh_order_slot)
         self.deleteWindow.show()
 
-    def delete_vh_assignment_slot(self, answer):
+    def delete_vh_order_slot(self, answer):
         if answer:
             selection = self.tabela_pojazdy.selectedItems()
             if selection:
@@ -125,13 +121,52 @@ class OrderManagement(QTabWidget):
                 rows = list(dict.fromkeys(rows))
                 res = []
                 for x in rows:
-                    res.append("'" + self.tabela_pojazdy.item(x, 0).text() + "' AND pesel_oficera = '"
-                               + self.tabela_pojazdy.item(x, 2).text() + "' AND id_pojazdu = "
-                               + self.tabela_pojazdy.item(x, 3).text())
-                Connector.delete_items('"Przydzial-pojazd"', res, "data_od", int)
+                    res.append(self.tabela_pojazdy.item(x, 0).text())
+                Connector.delete_items('pojazdy', res, "id_zamowienia", int)
+                Connector.delete_items('"Zamowienie-pojazd"', res, "id_zamowienia", int)
+                self.refresh_vh_orders()
+
+    def finish_eq_order(self):
+        self.deleteWindow = DeletionConfirmation("zamowienie_anuluj")
+        self.deleteWindow.selected.connect(self.finish_eq_order_slot)
+        self.deleteWindow.show()
+
+    def finish_eq_order_slot(self, answer):
+        if answer:
+            selection = self.tabela_eq.selectedItems()
+            if selection:
+                rows = []
+                for x in selection:
+                    rows.append(x.row())
+                rows = list(dict.fromkeys(rows))
+                res = []
                 for x in rows:
-                    Connector.update_row("pojazdy", ["status"], ["Dostępny"], self.tabela_pojazdy.item(x, 3).text(), "id_pojazdu", int)
-                self.refresh_vh_assignments()
+                    res.append(self.tabela_eq.item(x, 0).text())
+                if len(res) == 1:
+                    Connector.update_row('ekwipunek', ["id_zamowienia", "status"], [None, "Dostępny"], res[0], "id_zamowienia", int)
+                    Connector.delete_items('"Zamowienie-ekwipunek"', res, "id_zamowienia", int)
+                self.refresh_eq_orders()
+
+    def finish_vh_order(self):
+        self.deleteWindow = DeletionConfirmation("zamowienie_anuluj")
+        self.deleteWindow.selected.connect(self.finish_vh_order_slot)
+        self.deleteWindow.show()
+
+    def finish_vh_order_slot(self, answer):
+        if answer:
+            selection = self.tabela_pojazdy.selectedItems()
+            if selection:
+                rows = []
+                for x in selection:
+                    rows.append(x.row())
+                rows = list(dict.fromkeys(rows))
+                res = []
+                for x in rows:
+                    res.append(self.tabela_pojazdy.item(x, 0).text())
+                if len(res) == 1:
+                    Connector.update_row('pojazdy', ["id_zamowienia", "status"], [None, "Dostępny"], res[0], "id_zamowienia", int)
+                    Connector.delete_items('"Zamowienie-pojazd"', res, "id_zamowienia", int)
+                self.refresh_vh_orders()
 
     def eq_order_preview(self, rowid):
         id_zamowienia = self.tabela_eq.item(rowid, 0)
