@@ -36,7 +36,7 @@ class RankEditForm(QWidget):
         self.zold = QLineEdit()
         self.zold.setValidator(QIntValidator())
         self.zold.setText(str(self.oldData[2]))
-        self.layout.addRow("Żołd: ", self.zold)
+        self.layout.addRow("Żołd [zł]: ", self.zold)
 
     def confirm(self):
         przepustki = self.przepustki.text()
