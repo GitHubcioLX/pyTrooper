@@ -210,6 +210,44 @@ class Connector:
         return correct
 
     @staticmethod
+    def create_zamowienie_ekwipunek(input):
+        correct = True
+        for i, x in enumerate(input):
+            if x == "":
+                input[i] = None
+        cur = Connector.conn.cursor()
+        try:
+            cur.execute("CALL public.create_zamowienie_ekwipunek(%s, %s, %s);", input)
+        except psycopg2.Error as err:
+            correct = False
+            global error_window
+            error_window = ErrorPopUp(ErrorFormatter.get_error(err.pgcode))
+            error_window.show()
+
+        cur.close
+        Connector.conn.commit()
+        return correct
+
+    @staticmethod
+    def create_zamowienie_pojazd(input):
+        correct = True
+        for i, x in enumerate(input):
+            if x == "":
+                input[i] = None
+        cur = Connector.conn.cursor()
+        try:
+            cur.execute("CALL public.create_zamowienie_pojazd(%s, %s, %s);", input)
+        except psycopg2.Error as err:
+            correct = False
+            global error_window
+            error_window = ErrorPopUp(ErrorFormatter.get_error(err.pgcode))
+            error_window.show()
+
+        cur.close
+        Connector.conn.commit()
+        return correct
+
+    @staticmethod
     def delete_items(tablename, ids, idname, idtype):
         if ids:
             cur = Connector.conn.cursor()
