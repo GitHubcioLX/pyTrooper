@@ -149,6 +149,20 @@ class Connector:
         return res
 
     @staticmethod
+    def get_cur_date():
+        cur = Connector.conn.cursor()
+        try:
+            cur.execute("SELECT current_date;")
+        except psycopg2.Error as err:
+            global error_window
+            error_window = ErrorPopUp(ErrorFormatter.get_error(err.pgcode))
+            error_window.show()
+
+        res = cur.fetchone()
+        cur.close()
+        return res[0]
+
+    @staticmethod
     def insert_row(tablename, columns, values):
         correct = True
         cur = Connector.conn.cursor()
@@ -273,4 +287,5 @@ if __name__ == "__main__":
     # Connector.create_vehicle(['Samochód', 'Jeep', 'Wrangler2', 2340, 5, 600, 'Dostępny', 2015, 'UA54320', 1, None])
     # print(Connector.get_enum("status_type"))
     # Connector.update_row("pojazdy", ["model", "masa"], ["Mały", "2"], 0, "id_pojazdu", int)
-    Connector.create_zamowienie_ekwipunek(['1','1111-11-11','1111-11-11'])
+    #Connector.create_zamowienie_ekwipunek(['1','1111-11-11','1111-11-11'])
+    print(Connector.get_cur_date())
