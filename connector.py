@@ -230,6 +230,8 @@ class Connector:
             if x == "":
                 input[i] = None
         cur = Connector.conn.cursor()
+        input[0] = input[0].replace(",", ".")
+        input[0] = float(input[0])
         try:
             cur.execute("CALL public.create_zamowienie_ekwipunek(%s, %s, %s);", input)
             cur.execute("SELECT currval('zamowienie_eq_id_sequence')")
@@ -250,6 +252,8 @@ class Connector:
             if x == "":
                 input[i] = None
         cur = Connector.conn.cursor()
+        input[0] = input[0].replace(",", ".")
+        input[0] = float(input[0])
         try:
             cur.execute("CALL public.create_zamowienie_pojazd(%s, %s, %s);", input)
             cur.execute("SELECT currval('zamowienie_poj_id_sequence')")

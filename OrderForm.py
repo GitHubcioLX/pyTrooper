@@ -103,17 +103,20 @@ class OrderForm(QWidget):
         deadline = self.deadline.text()
         koszt = self.koszt.text()
         producent = self.producent.text()
-        model = self.producent.text()
-        if self.type == "ekwipunek:":
+        model = self.model.text()
+        if self.type == "ekwipunek":
             numer_seryjny = self.numer_seryjny.text()
             typ = self.typ.currentText()
             data_produkcji = self.data_produkcji.text()
             data_waznosci = self.data_waznosci.text()
             if data_waznosci == "--":
                 data_waznosci = ""
-            if (Connector.insert_row('"Przydzial-ekwipunek"', ["data_od", "data_do", "pesel_oficera", "numer_seryjny"],
-                                        [data_od, data_do, oficer, ekwipunek])):
-                if Connector.update_row("ekwipunek", ["status"], ["Przydzielony"], ekwipunek, "numer_seryjny", int):
+            id = Connector.create_zamowienie_ekwipunek([koszt, data_zam, deadline])
+            if id is not None:
+                if Connector.insert_row("ekwipunek", ["numer_seryjny", "producent", "model", "data_produkcji",
+                                                       "data_waznosci", "typ", "status", "id_zamowienia"],
+                                     [numer_seryjny, producent, model, data_produkcji, data_waznosci, typ, "Zamówiony",
+                                      id]):
                     self.commited.emit()
                     self.close()
         else:
@@ -123,8 +126,7 @@ class OrderForm(QWidget):
             zasieg = self.zasieg.text()
             rok = self.rok.text()
             id = Connector.create_zamowienie_pojazd([koszt, data_zam, deadline])
-            print("ID: " + str(id))
-            if id:
+            if id is not None:
                 if Connector.create_vehicle([rodzaj, producent, model, masa, zaloga, zasieg, "Zamówiony", rok, None,
                                              self.id_jednostki, id]):
                     self.commited.emit()
@@ -133,6 +135,6 @@ class OrderForm(QWidget):
 
 if __name__ == "__main__":
     app = QApplication([])
-    window = OrderForm("1", "pojazd")
+    window = OrderForm("1", "ekwipunek")
     window.show()
     app.exec_()
