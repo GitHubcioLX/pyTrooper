@@ -18,6 +18,12 @@ class EquipmentForm(QWidget):
         self.addButton = QPushButton("Zapisz")
         self.layout.addRow(QLabel())
         self.layout.addRow(self.addButton)
+        gap = QLabel()
+        gap.setFixedHeight(1)
+        disclaimer = QLabel('<i><font color="#707070">tekst</font> - pole nieobowiązkowe</i>')
+        disclaimer.setAlignment(Qt.AlignRight)
+        self.layout.addRow(gap)
+        self.layout.addRow(disclaimer)
         self.setLayout(self.layout)
         self.setMinimumSize(280, 200)
 
@@ -57,7 +63,7 @@ class EquipmentForm(QWidget):
         self.layout.addRow("Model: ", self.model)
         self.layout.addRow("Numer seryjny: ", self.numer_seryjny)
         self.layout.addRow("Data produkcji: ", self.data_produkcji)
-        self.layout.addRow("Data ważności: ", self.data_waznosci)
+        self.layout.addRow(QLabel('<font color="#707070">Data ważności: </font>'), self.data_waznosci)
         self.layout.addRow("", QLabel("Format daty: <b>RRRR-MM-DD<\b>"))
 
     def confirm(self):

@@ -19,6 +19,12 @@ class VehicleForm(QWidget):
         self.addButton = QPushButton("Zapisz")
         self.layout.addRow(QLabel())
         self.layout.addRow(self.addButton)
+        gap = QLabel()
+        gap.setFixedHeight(1)
+        disclaimer = QLabel('<i><font color="#707070">tekst</font> - pole nieobowiązkowe</i>')
+        disclaimer.setAlignment(Qt.AlignRight)
+        self.layout.addRow(gap)
+        self.layout.addRow(disclaimer)
         self.setLayout(self.layout)
         self.setMinimumSize(280, 200)
 
@@ -64,7 +70,7 @@ class VehicleForm(QWidget):
         self.layout.addRow("Liczba załogi: ", self.zaloga)
         self.layout.addRow("Zasięg [km]: ", self.zasieg)
         self.layout.addRow("Rok produkcji: ", self.rok)
-        self.layout.addRow("Rejestracja: ", self.rejestracja)
+        self.layout.addRow(QLabel('<font color="#707070">Rejestracja: </font>'), self.rejestracja)
 
     def confirm(self):
         rodzaj = self.rodzaj.currentText()

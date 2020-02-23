@@ -18,6 +18,12 @@ class AssignmentForm(QWidget):
         self.addButton = QPushButton("Zapisz")
         self.layout.addRow(QLabel())
         self.layout.addRow(self.addButton)
+        gap = QLabel()
+        gap.setFixedHeight(1)
+        disclaimer = QLabel('<i><font color="#707070">tekst</font> - pole nieobowiązkowe</i>')
+        disclaimer.setAlignment(Qt.AlignRight)
+        self.layout.addRow(gap)
+        self.layout.addRow(disclaimer)
         self.setLayout(self.layout)
         self.setMinimumSize(250, 190)
 
@@ -58,7 +64,7 @@ class AssignmentForm(QWidget):
             self.layout.addRow("Pojazd: ", self.pojazdy)
 
         self.layout.addRow("Data rozpoczęcia: ", self.data_od)
-        self.layout.addRow("Data zakończenia: ", self.data_do)
+        self.layout.addRow(QLabel('<font color="#707070">Data zakończenia: </font>'), self.data_do)
         self.layout.addRow("", QLabel("Format daty: <b>RRRR-MM-DD<\b>"))
 
     def confirm(self):

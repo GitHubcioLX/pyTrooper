@@ -20,7 +20,7 @@ class OfficerForm(QWidget):
         self.layout.addRow(self.addButton)
         gap = QLabel()
         gap.setFixedHeight(1)
-        disclaimer = QLabel('<i><font color="gray">tekst</font> - pole nieobowiązkowe</i>')
+        disclaimer = QLabel('<i><font color="#707070">tekst</font> - pole nieobowiązkowe</i>')
         disclaimer.setAlignment(Qt.AlignRight)
         self.layout.addRow(gap)
         self.layout.addRow(disclaimer)
@@ -74,10 +74,10 @@ class OfficerForm(QWidget):
         self.layout.addRow("PESEL: ", self.pesel)
         self.layout.addRow("Data urodzenia: ", self.data_ur)
         self.layout.addRow("", QLabel("Format daty: <b>RRRR-MM-DD<\b>"))
-        self.layout.addRow(QLabel('<font color="#707070">Wyznanie: </font>'), self.wyznanie)
         self.layout.addRow("Grupa krwi: ", self.grupa_krwi)
         self.layout.addRow("Ranga: ", self.ranga)
         self.layout.addRow("Budynek: ", self.budynek)
+        self.layout.addRow(QLabel('<font color="#707070">Wyznanie: </font>'), self.wyznanie)
 
     def confirm(self):
         imie = self.imie.text()
