@@ -7,7 +7,8 @@ class ErrorFormatter:
         "22008": "Podano datę w złym formacie",
         "42601": "Wprowadzono niedozowlone znaki: ', *. /. \\, \"",
         "23502": "Pola wymagane nie mogą być puste",
-        "22007": "Pola wymagane nie mogą być puste"
+        "22007": "Pola wymagane nie mogą być puste",
+        "22003": "Podana wartość liczbowa jest za duża"
     }
 
     @staticmethod

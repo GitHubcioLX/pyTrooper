@@ -7,7 +7,7 @@ from PyQt5.QtGui import *
 class ErrorPopUp(QWidget):
     def __init__(self, message):
         super().__init__()
-        self.setWindowTitle("ERROR")
+        self.setWindowTitle("Wystąpił błąd")
         self.layout = QVBoxLayout()
 
         self.naglowek = QLabel()
@@ -18,7 +18,7 @@ class ErrorPopUp(QWidget):
         self.naglowek.setFont(font)
 
         self.okButton = QPushButton("OK")
-        self.setMinimumSize(300, 100)
+        self.setMinimumSize(270, 100)
         self.set_layout()
 
         self.okButton.clicked.connect(self.close)
