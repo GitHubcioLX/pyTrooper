@@ -19,7 +19,7 @@ class RankManagement(QWidget):
         self.set_layout()
 
     def set_ranks(self):
-        data = Connector.get_table_data("rangi", ["nazwa_rangi"])
+        data = Connector.get_table_data("rangi ORDER BY zold ASC", ["nazwa_rangi"])
         for item in data:
             name = item[0]
             self.ranks.addItem(name)
