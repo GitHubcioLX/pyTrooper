@@ -169,9 +169,6 @@ class Connector:
         columns = Connector.column_formatter(columns)
         values = Connector.value_formatter(values)
         try:
-            print("INSERT INTO " + tablename +
-                        " (" + columns + ") " +
-                        "VALUES (" + values + ");")
             cur.execute("INSERT INTO " + tablename +
                         " (" + columns + ") " +
                         "VALUES (" + values + ");")
