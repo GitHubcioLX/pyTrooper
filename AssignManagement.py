@@ -22,14 +22,14 @@ class AssignManagement(QTabWidget):
                                                                     ["data_od", "data_do", "pesel_oficera",
                                                                      "numer_seryjny"],
                                                                     " WHERE (SELECT id_jednostki FROM oficerowie WHERE pesel LIKE pesel_oficera) = " + self.unit_id
-                                                                    + " AND data_do >= current_date "
+                                                                    + " AND (data_do >= current_date OR data_do is NULL) "
                                                                     + " ORDER BY data_od DESC"),
                                              "ekwipunek")
         self.insertTab(0, self.listTab1, "Ekwipunek")
         self.listTab2 = self.create_list_tab(["Od", "Do", "PESEL oficera", "ID pojazdu"],
                                              Connector.get_filtered('"Przydzial-pojazd"', ["data_od", "data_do", "pesel_oficera", "id_pojazdu"],
                                                                     " WHERE (SELECT id_jednostki FROM oficerowie WHERE pesel LIKE pesel_oficera) = " + self.unit_id
-                                                                    +  " AND data_do >= current_date "
+                                                                    +  " AND (data_do >= current_date OR data_do is NULL) "
                                                                     + " ORDER BY data_od DESC"),
                                              "pojazdy")
         self.insertTab(1, self.listTab2, "Pojazdy")
@@ -51,7 +51,7 @@ class AssignManagement(QTabWidget):
             check = self.eq_check.isChecked()
             filter = ""
             if not check:
-                filter = " AND data_do >= current_date "
+                filter = " AND (data_do >= current_date OR data_do is NULL) "
             layout = self.listTab1.layout()
             layout.removeWidget(self.tabela_eq)
             self.tabela_eq = create_table(["Od", "Do", "PESEL oficera", "Numer seryjny"],
@@ -75,7 +75,7 @@ class AssignManagement(QTabWidget):
             check = self.vh_check.isChecked()
             filter = ""
             if not check:
-                filter = " AND data_do >= current_date "
+                filter = " AND (data_do >= current_date OR data_do is NULL) "
             layout = self.listTab2.layout()
             layout.removeWidget(self.tabela_pojazdy)
             self.tabela_pojazdy = create_table(["Od", "Do", "PESEL oficera", "ID pojazdu"],

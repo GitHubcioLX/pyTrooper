@@ -86,7 +86,10 @@ def create_table(column_names, items):
 
     for nr, item in enumerate(items):
         for i in range(n_columns):
-            temp[i] = QTableWidgetItem(str(item[i]))
+            if item[i] is None:
+                temp[i] = QTableWidgetItem("")
+            else:
+                temp[i] = QTableWidgetItem(str(item[i]))
             temp[i].setFlags(temp[i].flags() & ~Qt.ItemIsEditable)
             table.setItem(nr, i, temp[i])
 
