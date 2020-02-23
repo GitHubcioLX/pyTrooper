@@ -74,7 +74,7 @@ class OfficerForm(QWidget):
         self.layout.addRow("PESEL: ", self.pesel)
         self.layout.addRow("Data urodzenia: ", self.data_ur)
         self.layout.addRow("", QLabel("Format daty: <b>RRRR-MM-DD<\b>"))
-        self.layout.addRow(QLabel('<font color="gray">Wyznanie: </font>'), self.wyznanie)
+        self.layout.addRow(QLabel('<font color="#707070">Wyznanie: </font>'), self.wyznanie)
         self.layout.addRow("Grupa krwi: ", self.grupa_krwi)
         self.layout.addRow("Ranga: ", self.ranga)
         self.layout.addRow("Budynek: ", self.budynek)
