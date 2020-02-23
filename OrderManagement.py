@@ -110,7 +110,7 @@ class OrderManagement(QTabWidget):
                 self.refresh_eq_orders()
 
     def delete_vh_order(self):
-        self.deleteWindow = DeletionConfirmation()
+        self.deleteWindow = DeletionConfirmation("zamowienie_anuluj")
         self.deleteWindow.selected.connect(self.delete_vh_order_slot)
         self.deleteWindow.show()
 
@@ -130,7 +130,7 @@ class OrderManagement(QTabWidget):
                 self.refresh_vh_orders()
 
     def finish_eq_order(self):
-        self.deleteWindow = DeletionConfirmation("zamowienie_anuluj")
+        self.deleteWindow = DeletionConfirmation("zamowienie_zakoncz")
         self.deleteWindow.selected.connect(self.finish_eq_order_slot)
         self.deleteWindow.show()
 
@@ -151,7 +151,7 @@ class OrderManagement(QTabWidget):
                 self.refresh_eq_orders()
 
     def finish_vh_order(self):
-        self.deleteWindow = DeletionConfirmation("zamowienie_anuluj")
+        self.deleteWindow = DeletionConfirmation("zamowienie_zakoncz")
         self.deleteWindow.selected.connect(self.finish_vh_order_slot)
         self.deleteWindow.show()
 

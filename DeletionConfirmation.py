@@ -17,9 +17,11 @@ class DeletionConfirmation(QWidget):
             "budynki": "Usunięcie zaznaczonych budynków spowoduje\nusunięcie przypisanych do nich oficerów,\nczy na pewno chcesz kontynuować?",
             "oficerowie": "Usunięcie zaznaczonych oficerów spowoduje usunięcie ich \nprzydziałów, czy na pewno chcesz kontynuować?",
             "pojazdy": "Usunięcie zaznaczonych pojazdów spowoduje\nusunięcie ich przydziałów i zamówień,\nczy na pewno chcesz kontynuować?",
-            "zamowienia": "Czy na pewno chcesz usnąć zaznaczone zamówienia?",
+            "zamowienia": "Czy na pewno chcesz usunąć zaznaczone zamówienia?",
             "ekwipunek": "Usunięcie zaznaczonego ewkipunku spowoduje\nusunięcie jego przydziałów i zamówień,\nczy na pewno chcesz kontynuować?",
-            "nocascade": "Czy na pewno chesz usunąć zaznaczone obiekty?"
+            "zamowienie_anuluj": "Anulowanie zaznaczonych zamówień spowoduje\nusunięcie także zamawianych produktów,\nczy na pewno chcesz kontynuować?",
+            "zamowienie_zakoncz": "Zakończenie zamówienia powinno nastąpić\npo pomyślnej jego realizacji,\nczy na pewno chcesz kontynuować?",
+            "nocascade": "Czy na pewno chcesz usunąć zaznaczone obiekty?"
         }
 
         self.naglowek = QLabel()
