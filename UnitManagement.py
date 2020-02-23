@@ -24,16 +24,17 @@ class UnitManagement(QTabWidget):
         self.setMinimumSize(400, 350)
         self.infoTab = self.set_info_tab()
         self.insertTab(0, self.infoTab, "Ogólne")
+        self.initiation = True
         self.listTab1 = None
         self.filter_budynki = QLineEdit()
-        self.initiation = True
-        self.refresh_buildings()
+        #self.refresh_buildings()
         self.listTab2 = None
         self.filter_pojazdy = QLineEdit()
-        self.refresh_vehicles()
+        #self.refresh_vehicles()
         self.listTab3 = None
         self.filter_oficerowie = QLineEdit()
-        self.refresh_officers()
+        #self.refresh_officers()
+        self.create_tabs()
         self.initiation = False
         self.addWindow = None
         self.previewWindow = None
@@ -42,8 +43,7 @@ class UnitManagement(QTabWidget):
         self.ordersWindow = None
         self.setCurrentIndex(0)
 
-    def refresh_buildings(self):
-        self.removeTab(1)
+    def create_tabs(self):
         self.listTab1 = self.create_list_tab(["Oznaczenie", "Rola"],
                                              Connector.get_filtered("budynki", ["oznaczenie", "rola_budynku"],
                                                                     " WHERE id_jednostki = " + self.unit_id +
@@ -54,12 +54,6 @@ class UnitManagement(QTabWidget):
                                                                     " ORDER BY oznaczenie ASC"),
                                              "budynki")
         self.insertTab(1, self.listTab1, "Budynki")
-        self.setCurrentIndex(1)
-        if not self.initiation:
-            self.refresh_c_box()
-
-    def refresh_vehicles(self):
-        self.removeTab(2)
         self.listTab2 = self.create_list_tab(["ID", "Producent", "Model"],
                                              Connector.get_filtered("pojazdy", ["id_pojazdu", "producent", "model"],
                                                                     " WHERE id_jednostki = " + self.unit_id +
@@ -70,12 +64,6 @@ class UnitManagement(QTabWidget):
                                                                     " ORDER BY id_pojazdu ASC"),
                                              "pojazdy")
         self.insertTab(2, self.listTab2, "Pojazdy")
-        self.setCurrentIndex(2)
-        if not self.initiation:
-            self.refresh_c_box()
-
-    def refresh_officers(self):
-        self.removeTab(3)
         self.listTab3 = self.create_list_tab(["Imię", "Nazwisko", "PESEL"],
                                              Connector.get_filtered("oficerowie", ["imie", "nazwisko", "pesel"],
                                                                     " WHERE id_jednostki = " + self.unit_id +
@@ -88,35 +76,119 @@ class UnitManagement(QTabWidget):
                                                                     " ORDER BY nazwisko, imie ASC"),
                                              "oficerowie")
         self.insertTab(3, self.listTab3, "Oficerowie")
-        self.setCurrentIndex(3)
+
+
+    def refresh_buildings(self):
+        '''self.removeTab(1)
+        self.listTab1 = self.create_list_tab(["Oznaczenie", "Rola"],
+                                             Connector.get_filtered("budynki", ["oznaczenie", "rola_budynku"],
+                                                                    " WHERE id_jednostki = " + self.unit_id +
+                                                                    " AND (UPPER(oznaczenie) LIKE UPPER('%" +
+                                                                    self.filter_budynki.text() + "%')" +
+                                                                    " OR UPPER(rola_budynku) LIKE UPPER('%" +
+                                                                    self.filter_budynki.text() + "%'))" +
+                                                                    " ORDER BY oznaczenie ASC"),
+                                             "budynki")
+        self.insertTab(1, self.listTab1, "Budynki")
+        self.setCurrentIndex(1)'''
+        if self.tabela_budynki is not None:
+            layout = self.listTab1.layout()
+            layout.removeWidget(self.tabela_budynki)
+            self.tabela_budynki = create_table(["Oznaczenie", "Rola"],
+                                               Connector.get_filtered("budynki", ["oznaczenie", "rola_budynku"],
+                                                                      " WHERE id_jednostki = " + self.unit_id +
+                                                                      " AND (UPPER(oznaczenie) LIKE UPPER('%" +
+                                                                      self.filter_budynki.text() + "%')" +
+                                                                      " OR UPPER(rola_budynku) LIKE UPPER('%" +
+                                                                      self.filter_budynki.text() + "%'))" +
+                                                                      " ORDER BY oznaczenie ASC"))
+            self.tabela_budynki.cellDoubleClicked.connect(self.building_preview)
+            layout.addWidget(self.tabela_budynki, 0, 0, 1, 3)
+        if not self.initiation:
+            self.refresh_c_box()
+
+    def refresh_vehicles(self):
+        '''self.removeTab(2)
+        self.listTab2 = self.create_list_tab(["ID", "Producent", "Model"],
+                                             Connector.get_filtered("pojazdy", ["id_pojazdu", "producent", "model"],
+                                                                    " WHERE id_jednostki = " + self.unit_id +
+                                                                    " AND (UPPER(model) LIKE UPPER('%" +
+                                                                    self.filter_pojazdy.text() + "%')" +
+                                                                    " OR UPPER(producent) LIKE UPPER('%" +
+                                                                    self.filter_pojazdy.text() + "%'))" +
+                                                                    " ORDER BY id_pojazdu ASC"),
+                                             "pojazdy")
+        self.insertTab(2, self.listTab2, "Pojazdy")
+        self.setCurrentIndex(2)'''
+        if self.tabela_pojazdy is not None:
+            layout = self.listTab2.layout()
+            layout.removeWidget(self.tabela_pojazdy)
+            self.tabela_pojazdy = create_table(["ID", "Producent", "Model"],
+                                               Connector.get_filtered("pojazdy", ["id_pojazdu", "producent", "model"],
+                                                                      " WHERE id_jednostki = " + self.unit_id +
+                                                                      " AND (UPPER(model) LIKE UPPER('%" +
+                                                                      self.filter_pojazdy.text() + "%')" +
+                                                                      " OR UPPER(producent) LIKE UPPER('%" +
+                                                                      self.filter_pojazdy.text() + "%'))" +
+                                                                      " ORDER BY id_pojazdu ASC"))
+            self.tabela_pojazdy.cellDoubleClicked.connect(self.vehicle_preview)
+            layout.addWidget(self.tabela_pojazdy, 0, 0, 1, 3)
+        if not self.initiation:
+            self.refresh_c_box()
+
+    def refresh_officers(self):
+        '''self.removeTab(3)
+        self.listTab3 = self.create_list_tab(["Imię", "Nazwisko", "PESEL"],
+                                             Connector.get_filtered("oficerowie", ["imie", "nazwisko", "pesel"],
+                                                                    " WHERE id_jednostki = " + self.unit_id +
+                                                                    " AND (UPPER(imie) LIKE UPPER('%" +
+                                                                    self.filter_oficerowie.text() + "%')" +
+                                                                    " OR UPPER(nazwisko) LIKE UPPER('%" +
+                                                                    self.filter_oficerowie.text() + "%')" +
+                                                                    " OR UPPER(pesel) LIKE UPPER('%" +
+                                                                    self.filter_oficerowie.text() + "%'))" +
+                                                                    " ORDER BY nazwisko, imie ASC"),
+                                             "oficerowie")
+        self.insertTab(3, self.listTab3, "Oficerowie")
+        self.setCurrentIndex(3)'''
+        if self.tabela_oficerowie is not None:
+            layout = self.listTab3.layout()
+            layout.removeWidget(self.tabela_oficerowie)
+            self.tabela_oficerowie = create_table(["Imię", "Nazwisko", "PESEL"],
+                                                  Connector.get_filtered("oficerowie", ["imie", "nazwisko", "pesel"],
+                                                                         " WHERE id_jednostki = " + self.unit_id +
+                                                                         " AND (UPPER(imie) LIKE UPPER('%" +
+                                                                         self.filter_oficerowie.text() + "%')" +
+                                                                         " OR UPPER(nazwisko) LIKE UPPER('%" +
+                                                                         self.filter_oficerowie.text() + "%')" +
+                                                                         " OR UPPER(pesel) LIKE UPPER('%" +
+                                                                         self.filter_oficerowie.text() + "%'))" +
+                                                                         " ORDER BY nazwisko, imie ASC"))
+            self.tabela_oficerowie.cellDoubleClicked.connect(self.officer_preview)
+            layout.addWidget(self.tabela_oficerowie, 0, 0, 1, 3)
         if not self.initiation:
             self.refresh_c_box()
 
     def create_list_tab(self, column_names, items, type):
         tab = QWidget()
-        layout = QVBoxLayout()
-
+        #layout = QVBoxLayout()
+        layout = QGridLayout()
         tabela = create_table(column_names, items)
-        # lista = QListWidget()
-        # for item in items:
-        #    lista.addItem(item)
-        # layout.addWidget(lista)
-        layout.addWidget(tabela)
+        layout.addWidget(tabela, 0, 0, 1, 3)
 
         filter = QLineEdit()
         filter.setValidator(QRegExpValidator(QRegExp(rx)))
         filter.setPlaceholderText("Wyszukaj...")
 
-        buttons = QGroupBox("Zarządzanie")
-        boxLayout = QHBoxLayout()
+        #buttons = QGroupBox("Zarządzanie")
+        #boxLayout = QHBoxLayout()
         addButton = QPushButton("Dodaj")
         rmvButton = QPushButton("Usuń")
         editButton = QPushButton("Edytuj")
-
-        boxLayout.addWidget(addButton)
-        boxLayout.addWidget(rmvButton)
-        boxLayout.addWidget(editButton)
-        buttons.setLayout(boxLayout)
+        #boxLayout.addWidget(addButton)
+        #boxLayout.addWidget(rmvButton)
+        #boxLayout.addWidget(editButton)
+        #buttons.setLayout(boxLayout)
 
         # addButton.clicked.connect(show_add_windows(type, id))
         if type == "budynki":
@@ -125,7 +197,7 @@ class UnitManagement(QTabWidget):
             editButton.clicked.connect(self.edit_building)
             self.filter_budynki = filter
             self.filter_budynki.returnPressed.connect(self.refresh_buildings)
-            layout.addWidget(self.filter_budynki)
+            layout.addWidget(self.filter_budynki, 1, 0, 1, 3)
             self.tabela_budynki = tabela
             self.tabela_budynki.cellDoubleClicked.connect(self.building_preview)
         if type == "pojazdy":
@@ -134,7 +206,7 @@ class UnitManagement(QTabWidget):
             editButton.clicked.connect(self.edit_vehicle)
             self.filter_pojazdy = filter
             self.filter_pojazdy.returnPressed.connect(self.refresh_vehicles)
-            layout.addWidget(self.filter_pojazdy)
+            layout.addWidget(self.filter_pojazdy, 1, 0, 1, 3)
             self.tabela_pojazdy = tabela
             self.tabela_pojazdy.cellDoubleClicked.connect(self.vehicle_preview)
         if type == "oficerowie":
@@ -143,11 +215,14 @@ class UnitManagement(QTabWidget):
             editButton.clicked.connect(self.edit_officer)
             self.filter_oficerowie = filter
             self.filter_oficerowie.returnPressed.connect(self.refresh_officers)
-            layout.addWidget(self.filter_oficerowie)
+            layout.addWidget(self.filter_oficerowie, 1, 0, 1, 3)
             self.tabela_oficerowie = tabela
             self.tabela_oficerowie.cellDoubleClicked.connect(self.officer_preview)
 
-        layout.addWidget(buttons)
+        #layout.addWidget(buttons)
+        layout.addWidget(addButton, 2, 0)
+        layout.addWidget(rmvButton, 2, 1)
+        layout.addWidget(editButton, 2, 2)
         tab.setLayout(layout)
         return tab
 

@@ -38,12 +38,12 @@ class OfficerForm(QWidget):
         self.grupa_krwi = QComboBox()
         self.grupa_krwi.addItems(Connector.get_enum("grupa_krwi_type"))
         self.ranga = QComboBox()
-        rangi = Connector.get_table_data("rangi", ["nazwa_rangi"])
+        rangi = Connector.get_table_data("rangi ORDER BY zold ASC", ["nazwa_rangi"])
         for i in range(len(rangi)):
             rangi[i] = rangi[i][0]
         self.ranga.addItems(rangi)
         self.budynek = QComboBox()
-        filter = " WHERE id_jednostki = " + str(self.id_jednostki);
+        filter = " WHERE id_jednostki = " + str(self.id_jednostki) + " ORDER BY oznaczenie ASC";
         budynki = Connector.get_filtered("budynki", ["oznaczenie"], filter)
         for i in range(len(budynki)):
             budynki[i] = budynki[i][0]
