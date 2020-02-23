@@ -43,20 +43,23 @@ class OrderManagement(QTabWidget):
 
     def create_list_tab(self, column_names, items, type):
         tab = QWidget()
-        layout = QVBoxLayout()
+        layout = QGridLayout()
 
         tabela = create_table(column_names, items)
-        layout.addWidget(tabela)
+        layout.addWidget(tabela, 0, 0, 1, 3)
 
-        buttons = QGroupBox("Zarządzanie")
-        boxLayout = QHBoxLayout()
+        #buttons = QGroupBox("Zarządzanie")
+        #boxLayout = QHBoxLayout()
         addButton = QPushButton("Dodaj")
         rmvButton = QPushButton("Anuluj")
         finishButton = QPushButton("Zakończ")
-        boxLayout.addWidget(addButton)
-        boxLayout.addWidget(rmvButton)
-        boxLayout.addWidget(finishButton)
-        buttons.setLayout(boxLayout)
+        #boxLayout.addWidget(addButton)
+        #boxLayout.addWidget(rmvButton)
+        #boxLayout.addWidget(finishButton)
+        #buttons.setLayout(boxLayout)
+        layout.addWidget(addButton, 1, 0)
+        layout.addWidget(rmvButton, 1, 1)
+        layout.addWidget(finishButton, 1, 2)
 
         # addButton.clicked.connect(show_add_windows(type, id))
         if type == "ekwipunek":
@@ -72,7 +75,7 @@ class OrderManagement(QTabWidget):
             self.tabela_pojazdy = tabela
             self.tabela_pojazdy.cellDoubleClicked.connect(self.vh_order_preview)
 
-        layout.addWidget(buttons)
+        #layout.addWidget(buttons)
         tab.setLayout(layout)
         return tab
 
