@@ -22,12 +22,14 @@ class AssignManagement(QTabWidget):
                                                                     ["data_od", "data_do", "pesel_oficera",
                                                                      "numer_seryjny"],
                                                                     " WHERE (SELECT id_jednostki FROM oficerowie WHERE pesel LIKE pesel_oficera) = " + self.unit_id
+                                                                    + " AND data_do >= current_date "
                                                                     + " ORDER BY data_od DESC"),
                                              "ekwipunek")
         self.insertTab(0, self.listTab1, "Ekwipunek")
         self.listTab2 = self.create_list_tab(["Od", "Do", "PESEL oficera", "ID pojazdu"],
                                              Connector.get_filtered('"Przydzial-pojazd"', ["data_od", "data_do", "pesel_oficera", "id_pojazdu"],
                                                                     " WHERE (SELECT id_jednostki FROM oficerowie WHERE pesel LIKE pesel_oficera) = " + self.unit_id
+                                                                    +  " AND data_do >= current_date "
                                                                     + " ORDER BY data_od DESC"),
                                              "pojazdy")
         self.insertTab(1, self.listTab2, "Pojazdy")
@@ -46,14 +48,19 @@ class AssignManagement(QTabWidget):
         self.insertTab(0, self.listTab1, "Ekwipunek")
         self.setCurrentIndex(0)'''
         if self.tabela_eq is not None:
+            check = self.eq_check.isChecked()
+            filter = ""
+            if not check:
+                filter = " AND data_do >= current_date "
             layout = self.listTab1.layout()
             layout.removeWidget(self.tabela_eq)
             self.tabela_eq = create_table(["Od", "Do", "PESEL oficera", "Numer seryjny"],
                                       Connector.get_filtered('"Przydzial-ekwipunek"', ["data_od", "data_do", "pesel_oficera", "numer_seryjny"],
                                                              " WHERE (SELECT id_jednostki FROM oficerowie WHERE pesel LIKE pesel_oficera) = " + self.unit_id
+                                                             + filter
                                                              + " ORDER BY data_od DESC"))
             self.tabela_eq.cellDoubleClicked.connect(self.eq_assignment_preview)
-            layout.addWidget(self.tabela_eq, 0, 0, 1, 2)
+            layout.addWidget(self.tabela_eq, 1, 0, 1, 2)
 
     def refresh_vh_assignments(self):
         '''self.removeTab(1)
@@ -65,41 +72,54 @@ class AssignManagement(QTabWidget):
         self.insertTab(1, self.listTab2, "Pojazdy")
         self.setCurrentIndex(1)'''
         if self.tabela_pojazdy is not None:
+            check = self.vh_check.isChecked()
+            filter = ""
+            if not check:
+                filter = " AND data_do >= current_date "
             layout = self.listTab2.layout()
             layout.removeWidget(self.tabela_pojazdy)
             self.tabela_pojazdy = create_table(["Od", "Do", "PESEL oficera", "ID pojazdu"],
                                              Connector.get_filtered('"Przydzial-pojazd"', ["data_od", "data_do", "pesel_oficera", "id_pojazdu"],
                                                                     " WHERE (SELECT id_jednostki FROM oficerowie WHERE pesel LIKE pesel_oficera) = " + self.unit_id
+                                                                    + filter
                                                                     + " ORDER BY data_od DESC"))
             self.tabela_pojazdy.cellDoubleClicked.connect(self.vh_assignment_preview)
-            layout.addWidget(self.tabela_pojazdy, 0, 0, 1, 2)
+            layout.addWidget(self.tabela_pojazdy, 1, 0, 1, 2)
 
     def create_list_tab(self, column_names, items, type):
         tab = QWidget()
         layout = QGridLayout()
 
+        showExpired = QLabel("Pokaż przedawnione:")
+        checkExpired = QCheckBox()
+        layout.addWidget(showExpired, 0, 0)
+        layout.addWidget(checkExpired, 0, 1)
         tabela = create_table(column_names, items)
-        layout.addWidget(tabela, 0, 0, 1, 2)
+        layout.addWidget(tabela, 1, 0, 1, 2)
 
         #buttons = QGroupBox("Zarządzanie")
         #boxLayout = QHBoxLayout()
         addButton = QPushButton("Dodaj")
         rmvButton = QPushButton("Usuń")
-        layout.addWidget(addButton, 1, 0)
-        layout.addWidget(rmvButton, 1, 1)
+        layout.addWidget(addButton, 2, 0)
+        layout.addWidget(rmvButton, 2, 1)
         #boxLayout.addWidget(addButton)
         #boxLayout.addWidget(rmvButton)
         #buttons.setLayout(boxLayout)
 
         # addButton.clicked.connect(show_add_windows(type, id))
         if type == "ekwipunek":
+            checkExpired.stateChanged.connect(self.refresh_eq_assignments)
             addButton.clicked.connect(self.add_eq_assignment)
             rmvButton.clicked.connect(self.delete_eq_assignments)
+            self.eq_check = checkExpired
             self.tabela_eq = tabela
             self.tabela_eq.cellDoubleClicked.connect(self.eq_assignment_preview)
         if type == "pojazdy":
+            checkExpired.stateChanged.connect(self.refresh_vh_assignments)
             addButton.clicked.connect(self.add_vh_assignment)
             rmvButton.clicked.connect(self.delete_vh_assignments)
+            self.vh_check = checkExpired
             self.tabela_pojazdy = tabela
             self.tabela_pojazdy.cellDoubleClicked.connect(self.vh_assignment_preview)
 
