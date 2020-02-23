@@ -90,10 +90,10 @@ class AssignManagement(QTabWidget):
         tab = QWidget()
         layout = QGridLayout()
 
-        showExpired = QLabel("Pokaż przedawnione:")
-        checkExpired = QCheckBox()
-        layout.addWidget(showExpired, 0, 0)
-        layout.addWidget(checkExpired, 0, 1)
+        #showExpired = QLabel("")
+        checkExpired = QCheckBox("Pokaż przedawnione")
+        #layout.addWidget(showExpired, 0, 0)
+        layout.addWidget(checkExpired, 0, 0)
         tabela = create_table(column_names, items)
         layout.addWidget(tabela, 1, 0, 1, 2)
 

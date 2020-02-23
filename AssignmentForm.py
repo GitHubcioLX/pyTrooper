@@ -19,7 +19,7 @@ class AssignmentForm(QWidget):
         self.layout.addRow(QLabel())
         self.layout.addRow(self.addButton)
         self.setLayout(self.layout)
-        self.setMinimumSize(250, 200)
+        self.setMinimumSize(250, 190)
 
         self.addButton.clicked.connect(self.confirm)
 
