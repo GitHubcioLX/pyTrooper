@@ -13,49 +13,83 @@ class AssignManagement(QTabWidget):
         self.unit_id = id_jednostki
         self.setWindowTitle("Przydziały")
         self.setMinimumSize(400, 350)
-        self.listTab1 = None
-        self.refresh_eq_assignments()
-        self.listTab2 = None
-        self.refresh_vh_assignments()
-        self.addWindow = None
-        self.deleteWindow = None
-        self.previewWindow = None
-        self.setCurrentIndex(0)
-
-    def refresh_eq_assignments(self):
-        self.removeTab(0)
+        #self.listTab1 = None
+        #self.refresh_eq_assignments()
+        #self.listTab2 = None
+        #self.refresh_vh_assignments()
         self.listTab1 = self.create_list_tab(["Od", "Do", "PESEL oficera", "Numer seryjny"],
-                                             Connector.get_filtered('"Przydzial-ekwipunek"', ["data_od", "data_do", "pesel_oficera", "numer_seryjny"],
+                                             Connector.get_filtered('"Przydzial-ekwipunek"',
+                                                                    ["data_od", "data_do", "pesel_oficera",
+                                                                     "numer_seryjny"],
                                                                     " WHERE (SELECT id_jednostki FROM oficerowie WHERE pesel LIKE pesel_oficera) = " + self.unit_id
                                                                     + " ORDER BY data_od DESC"),
                                              "ekwipunek")
         self.insertTab(0, self.listTab1, "Ekwipunek")
-        self.setCurrentIndex(0)
-
-    def refresh_vh_assignments(self):
-        self.removeTab(1)
         self.listTab2 = self.create_list_tab(["Od", "Do", "PESEL oficera", "ID pojazdu"],
                                              Connector.get_filtered('"Przydzial-pojazd"', ["data_od", "data_do", "pesel_oficera", "id_pojazdu"],
                                                                     " WHERE (SELECT id_jednostki FROM oficerowie WHERE pesel LIKE pesel_oficera) = " + self.unit_id
                                                                     + " ORDER BY data_od DESC"),
                                              "pojazdy")
         self.insertTab(1, self.listTab2, "Pojazdy")
-        self.setCurrentIndex(1)
+        self.addWindow = None
+        self.deleteWindow = None
+        self.previewWindow = None
+        self.setCurrentIndex(0)
+
+    def refresh_eq_assignments(self):
+        '''self.removeTab(0)
+        self.listTab1 = self.create_list_tab(["Od", "Do", "PESEL oficera", "Numer seryjny"],
+                                             Connector.get_filtered('"Przydzial-ekwipunek"', ["data_od", "data_do", "pesel_oficera", "numer_seryjny"],
+                                                                    " WHERE (SELECT id_jednostki FROM oficerowie WHERE pesel LIKE pesel_oficera) = " + self.unit_id
+                                                                    + " ORDER BY data_od DESC"),
+                                             "ekwipunek")
+        self.insertTab(0, self.listTab1, "Ekwipunek")
+        self.setCurrentIndex(0)'''
+        if self.tabela_eq is not None:
+            layout = self.listTab1.layout()
+            layout.removeWidget(self.tabela_eq)
+            self.tabela_eq = create_table(["Od", "Do", "PESEL oficera", "Numer seryjny"],
+                                      Connector.get_filtered('"Przydzial-ekwipunek"', ["data_od", "data_do", "pesel_oficera", "numer_seryjny"],
+                                                             " WHERE (SELECT id_jednostki FROM oficerowie WHERE pesel LIKE pesel_oficera) = " + self.unit_id
+                                                             + " ORDER BY data_od DESC"))
+            self.tabela_eq.cellDoubleClicked.connect(self.eq_assignment_preview)
+            layout.addWidget(self.tabela_eq, 0, 0, 1, 2)
+
+    def refresh_vh_assignments(self):
+        '''self.removeTab(1)
+        self.listTab2 = self.create_list_tab(["Od", "Do", "PESEL oficera", "ID pojazdu"],
+                                             Connector.get_filtered('"Przydzial-pojazd"', ["data_od", "data_do", "pesel_oficera", "id_pojazdu"],
+                                                                    " WHERE (SELECT id_jednostki FROM oficerowie WHERE pesel LIKE pesel_oficera) = " + self.unit_id
+                                                                    + " ORDER BY data_od DESC"),
+                                             "pojazdy")
+        self.insertTab(1, self.listTab2, "Pojazdy")
+        self.setCurrentIndex(1)'''
+        if self.tabela_pojazdy is not None:
+            layout = self.listTab2.layout()
+            layout.removeWidget(self.tabela_pojazdy)
+            self.tabela_pojazdy = create_table(["Od", "Do", "PESEL oficera", "ID pojazdu"],
+                                             Connector.get_filtered('"Przydzial-pojazd"', ["data_od", "data_do", "pesel_oficera", "id_pojazdu"],
+                                                                    " WHERE (SELECT id_jednostki FROM oficerowie WHERE pesel LIKE pesel_oficera) = " + self.unit_id
+                                                                    + " ORDER BY data_od DESC"))
+            self.tabela_pojazdy.cellDoubleClicked.connect(self.vh_assignment_preview)
+            layout.addWidget(self.tabela_pojazdy, 0, 0, 1, 2)
 
     def create_list_tab(self, column_names, items, type):
         tab = QWidget()
-        layout = QVBoxLayout()
+        layout = QGridLayout()
 
         tabela = create_table(column_names, items)
-        layout.addWidget(tabela)
+        layout.addWidget(tabela, 0, 0, 1, 2)
 
-        buttons = QGroupBox("Zarządzanie")
-        boxLayout = QHBoxLayout()
+        #buttons = QGroupBox("Zarządzanie")
+        #boxLayout = QHBoxLayout()
         addButton = QPushButton("Dodaj")
         rmvButton = QPushButton("Usuń")
-        boxLayout.addWidget(addButton)
-        boxLayout.addWidget(rmvButton)
-        buttons.setLayout(boxLayout)
+        layout.addWidget(addButton, 1, 0)
+        layout.addWidget(rmvButton, 1, 1)
+        #boxLayout.addWidget(addButton)
+        #boxLayout.addWidget(rmvButton)
+        #buttons.setLayout(boxLayout)
 
         # addButton.clicked.connect(show_add_windows(type, id))
         if type == "ekwipunek":
@@ -69,7 +103,7 @@ class AssignManagement(QTabWidget):
             self.tabela_pojazdy = tabela
             self.tabela_pojazdy.cellDoubleClicked.connect(self.vh_assignment_preview)
 
-        layout.addWidget(buttons)
+        #layout.addWidget(buttons)
         tab.setLayout(layout)
         return tab
 

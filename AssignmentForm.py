@@ -65,7 +65,7 @@ class AssignmentForm(QWidget):
         data_od = self.data_od.text()
         data_do = self.data_do.text()
         oficer = self.oficerowie[self.oficer.currentIndex()][2]
-        if self.type == "ekwipunek:":
+        if self.type == "ekwipunek":
             ekwipunek = self.eq[self.ekwipunek.currentIndex()][3]
             if(Connector.insert_row('"Przydzial-ekwipunek"', ["data_od", "data_do", "pesel_oficera", "numer_seryjny"],
                                         [data_od, data_do, oficer, ekwipunek])):
