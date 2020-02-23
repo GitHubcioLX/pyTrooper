@@ -244,7 +244,9 @@ class Connector:
 
         cur.close
         Connector.conn.commit()
-        return res[0]
+        if res is not None:
+            return res[0]
+        return None
 
     @staticmethod
     def create_zamowienie_pojazd(input):
@@ -267,7 +269,9 @@ class Connector:
 
         cur.close
         Connector.conn.commit()
-        return res[0]
+        if res is not None:
+            return res[0]
+        return None
 
     @staticmethod
     def delete_items(tablename, ids, idname, idtype):
