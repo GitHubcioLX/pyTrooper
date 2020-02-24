@@ -11,7 +11,7 @@ class EquipmentPreview(QWidget):
         self.layout = QVBoxLayout()
         info = create_info_box("ekwipunek", numer_seryjny, "numer_seryjny", int)
         self.layout.addWidget(info)
-        self.setMinimumSize(280, 180)
+        self.setMinimumSize(280, 190)
         self.setLayout(self.layout)
 
 
