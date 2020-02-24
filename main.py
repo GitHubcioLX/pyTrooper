@@ -12,6 +12,8 @@ from RankManagement import RankManagement
 from config import rx
 
 # GUI
+QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
+QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
 app = QApplication([])
 
 
