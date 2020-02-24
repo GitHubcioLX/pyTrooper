@@ -35,7 +35,7 @@ class OrderManagement(QTabWidget):
         self.removeTab(1)
         self.listTab2 = self.create_list_tab(["ID zamówienia", "Data złożenia", "Koszt"],
                                              Connector.get_filtered('"Zamowienie-pojazd"', ["id_zamowienia", "data_zam", "koszt"],
-                                                                    " WHERE " + self.unit_id + " IN (SELECT p.id_jednostki FROM pojazdy p WHERE p.id_zamowienia = id_zamowienia)"
+                                                                    " WHERE id_zamowienia IN (SELECT p.id_zamowienia FROM pojazdy p WHERE p.id_jednostki = " + self.unit_id + ")"
                                                                     + " ORDER BY id_zamowienia ASC"),
                                              "pojazdy")
         self.insertTab(1, self.listTab2, "Pojazdy")
